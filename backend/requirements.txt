@@ -1,0 +1,14 @@
+fastapi
+uvicorn[standard]
+sqlalchemy
+pydantic-settings
+python-dotenv
+email-validator
+PyJWT
+python-multipart
+pytest
+httpx
+alembic
+motor
+redis
+celery
