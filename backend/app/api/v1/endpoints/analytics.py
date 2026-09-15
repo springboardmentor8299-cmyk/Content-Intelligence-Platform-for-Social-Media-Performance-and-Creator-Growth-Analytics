@@ -49,7 +49,7 @@ def get_analytics_overview(
     total_revenue = sum(rec.amount for rec in revenue_records)
 
     # Platforms breakdown (honest stats)
-    all_platforms = ["youtube", "instagram", "tiktok", "facebook", "linkedin", "twitter"]
+    all_platforms = ["youtube", "instagram"]
     platform_breakdowns: List[PlatformBreakdown] = []
     
     for p in all_platforms:

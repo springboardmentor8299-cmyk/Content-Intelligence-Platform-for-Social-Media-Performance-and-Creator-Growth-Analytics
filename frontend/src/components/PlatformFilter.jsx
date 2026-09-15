@@ -1,16 +1,12 @@
 import React from 'react';
 import { Globe } from 'lucide-react';
-import { YoutubeIcon, InstagramIcon, LinkedinIcon, TwitterIcon, TikTokIcon, FacebookIcon } from './SocialIcons';
+import { YoutubeIcon, InstagramIcon } from './SocialIcons';
 
 export default function PlatformFilter({ selectedPlatform, onSelectPlatform }) {
   const platforms = [
     { id: 'all', label: 'All Platforms', icon: Globe, color: 'text-indigo-600' },
     { id: 'youtube', label: 'YouTube', icon: YoutubeIcon, color: 'text-red-600' },
     { id: 'instagram', label: 'Instagram', icon: InstagramIcon, color: 'text-pink-600' },
-    { id: 'tiktok', label: 'TikTok', icon: TikTokIcon, color: 'text-slate-800' },
-    { id: 'facebook', label: 'Facebook', icon: FacebookIcon, color: 'text-blue-700' },
-    { id: 'linkedin', label: 'LinkedIn', icon: LinkedinIcon, color: 'text-blue-600' },
-    { id: 'twitter', label: 'X (Twitter)', icon: TwitterIcon, color: 'text-sky-600' },
   ];
 
   return (

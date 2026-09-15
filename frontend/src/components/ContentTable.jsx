@@ -7,7 +7,7 @@ import {
   CheckCircle2,
   Play
 } from 'lucide-react';
-import { YoutubeIcon, InstagramIcon, LinkedinIcon, TwitterIcon, TikTokIcon, FacebookIcon } from './SocialIcons';
+import { YoutubeIcon, InstagramIcon } from './SocialIcons';
 
 export default function ContentTable({ 
   contentList, 
@@ -21,10 +21,6 @@ export default function ContentTable({
     switch (platform) {
       case 'youtube': return <YoutubeIcon className="w-4 h-4 text-red-600" />;
       case 'instagram': return <InstagramIcon className="w-4 h-4 text-pink-600" />;
-      case 'tiktok': return <TikTokIcon className="w-4 h-4 text-slate-800" />;
-      case 'linkedin': return <LinkedinIcon className="w-4 h-4 text-blue-600" />;
-      case 'twitter': return <TwitterIcon className="w-4 h-4 text-sky-600" />;
-      case 'facebook': return <FacebookIcon className="w-4 h-4 text-blue-700" />;
       default: return <Film className="w-4 h-4 text-indigo-600" />;
     }
   };

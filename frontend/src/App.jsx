@@ -349,8 +349,10 @@ export default function App() {
                     </button>
                   </div>
 
-                  <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
-                    {overview.platforms.map((p) => (
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    {overview.platforms
+                      .filter((p) => ['youtube', 'instagram'].includes(p.platform.toLowerCase()))
+                      .map((p) => (
                       <div
                         key={p.platform}
                         onClick={() => setSelectedPlatform(p.platform)}
@@ -365,9 +367,9 @@ export default function App() {
                           <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded border ${
                             p.platform === 'youtube'
                               ? 'text-emerald-700 bg-emerald-50 border-emerald-200'
-                              : 'text-slate-500 bg-slate-100 border-slate-200'
+                              : 'text-amber-700 bg-amber-50 border-amber-200'
                           }`}>
-                            {p.platform === 'youtube' ? `${p.engagement_rate}%` : 'Private'}
+                            {p.platform === 'youtube' ? `${p.engagement_rate}%` : 'Creator Access Required'}
                           </span>
                         </div>
                         <div className="mt-2 text-base font-extrabold text-slate-900 font-display">
@@ -376,7 +378,7 @@ export default function App() {
                         <div className="text-[10px] text-slate-400 mt-0.5 truncate">
                           {p.platform === 'youtube' 
                             ? `${(p.views / 1000000).toFixed(1)}M public views • ${p.posts_count} items` 
-                            : 'Public data unavailable'}
+                            : 'Public data unavailable • Requires Instagram OAuth'}
                         </div>
                       </div>
                     ))}

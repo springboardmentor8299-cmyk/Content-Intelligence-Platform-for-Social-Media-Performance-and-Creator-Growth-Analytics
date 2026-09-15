@@ -7,7 +7,7 @@ import {
   ShieldCheck,
   Info
 } from 'lucide-react';
-import { YoutubeIcon, InstagramIcon, LinkedinIcon, TwitterIcon, TikTokIcon, FacebookIcon } from './SocialIcons';
+import { YoutubeIcon, InstagramIcon } from './SocialIcons';
 import { fetchSocialAccounts, syncSocialAccount, toggleSocialAccount } from '../api';
 
 export default function SocialIntegrations() {
@@ -20,7 +20,10 @@ export default function SocialIntegrations() {
     setLoading(true);
     try {
       const res = await fetchSocialAccounts();
-      setAccounts(res.data);
+      const visibleAccounts = (res.data || []).filter(a => 
+        ['youtube', 'instagram'].includes(a.platform?.toLowerCase())
+      );
+      setAccounts(visibleAccounts);
     } catch (err) {
       console.error("Failed to load accounts:", err);
     } finally {
@@ -76,42 +79,6 @@ export default function SocialIntegrations() {
           bg: 'bg-pink-50',
           border: 'border-pink-100'
         };
-      case 'tiktok':
-        return {
-          name: 'TikTok Creator Account',
-          connectorLabel: 'Demo TikTok Connector',
-          icon: TikTokIcon,
-          color: 'text-slate-800',
-          bg: 'bg-slate-100',
-          border: 'border-slate-200'
-        };
-      case 'facebook':
-        return {
-          name: 'Facebook Page & Community',
-          connectorLabel: 'Demo Facebook Connector',
-          icon: FacebookIcon,
-          color: 'text-blue-700',
-          bg: 'bg-blue-50',
-          border: 'border-blue-100'
-        };
-      case 'twitter':
-        return {
-          name: 'X (Twitter) Handle',
-          connectorLabel: 'Demo X Connector',
-          icon: TwitterIcon,
-          color: 'text-sky-600',
-          bg: 'bg-sky-50',
-          border: 'border-sky-100'
-        };
-      case 'linkedin':
-        return {
-          name: 'LinkedIn Media Page',
-          connectorLabel: 'Demo LinkedIn Connector',
-          icon: LinkedinIcon,
-          color: 'text-blue-600',
-          bg: 'bg-blue-50',
-          border: 'border-blue-100'
-        };
       default:
         return {
           name: 'Social Media Account',
@@ -147,7 +114,7 @@ export default function SocialIntegrations() {
             </span>
           </div>
           <p className="text-xs text-slate-500 mt-1">
-            Connect and synchronize channel analytics across the 6 supported platforms.
+            Connect and synchronize channel analytics across supported platforms (YouTube & Instagram).
           </p>
         </div>
 
@@ -168,8 +135,8 @@ export default function SocialIntegrations() {
         </div>
       )}
 
-      {/* 6 Required Social Platforms Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+      {/* Supported Social Platforms Grid (YouTube & Instagram) */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
         {accounts.map((acc) => {
           const details = getPlatformDetails(acc.platform);
           const Icon = details.icon;
@@ -221,16 +188,10 @@ export default function SocialIntegrations() {
                         Public Data
                       </span>
                     </div>
-                  ) : acc.platform === 'instagram' ? (
+                  ) : (
                     <div className="text-right">
                       <span className="text-xs font-bold text-amber-700 bg-amber-50 px-2 py-0.5 rounded border border-amber-200">
                         Creator Access Required
-                      </span>
-                    </div>
-                  ) : (
-                    <div className="text-right">
-                      <span className="text-[11px] font-semibold text-slate-400">
-                        Creator access required
                       </span>
                     </div>
                   )}
@@ -241,9 +202,7 @@ export default function SocialIntegrations() {
                   <span>
                     {acc.platform === 'youtube' 
                       ? 'Verified Public Channel' 
-                      : acc.platform === 'instagram'
-                      ? 'Demo Connector • Creator Access Required'
-                      : 'Not connected'}
+                      : 'Demo Connector • Creator Access Required'}
                   </span>
                 </div>
               </div>
