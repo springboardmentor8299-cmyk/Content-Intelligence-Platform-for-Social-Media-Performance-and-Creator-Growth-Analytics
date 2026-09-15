@@ -90,7 +90,7 @@ class SocialAccountCreate(SocialAccountBase):
 
 class SocialAccountResponse(SocialAccountBase):
     id: int
-    last_synced_at: datetime
+    last_synced_at: Optional[datetime] = None
 
     class Config:
         from_attributes = True

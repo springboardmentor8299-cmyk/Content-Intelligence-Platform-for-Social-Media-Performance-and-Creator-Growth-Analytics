@@ -26,7 +26,8 @@ import {
   ShieldCheck, 
   AlertTriangle,
   Zap,
-  Film
+  Film,
+  Lock
 } from 'lucide-react';
 
 export default function App() {
@@ -302,7 +303,7 @@ export default function App() {
                       Welcome back, {currentUser.full_name} 👋
                     </h1>
                     <p className="text-xs sm:text-sm text-slate-500 mt-1 max-w-2xl leading-relaxed">
-                      Channel reach expanded by <strong className="text-emerald-600 font-semibold">+24.5%</strong> this period. Your recent podcast conversation with startup founders is pacing in your top 5% of uploads.
+                      Public channel performance overview based on observed Raw Talks With VK data.
                     </p>
                   </div>
 
@@ -361,15 +362,21 @@ export default function App() {
                       >
                         <div className="flex items-center justify-between">
                           <span className="text-xs font-bold text-slate-800 capitalize">{p.platform}</span>
-                          <span className="text-[10px] font-bold text-emerald-700 bg-emerald-50 px-1.5 py-0.5 rounded border border-emerald-200">
-                            {p.engagement_rate}%
+                          <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded border ${
+                            p.platform === 'youtube'
+                              ? 'text-emerald-700 bg-emerald-50 border-emerald-200'
+                              : 'text-slate-500 bg-slate-100 border-slate-200'
+                          }`}>
+                            {p.platform === 'youtube' ? `${p.engagement_rate}%` : 'Private'}
                           </span>
                         </div>
-                        <div className="mt-2 text-lg font-extrabold text-slate-900 font-display">
-                          {p.followers >= 1000 ? `${(p.followers / 1000).toFixed(0)}k` : p.followers}
+                        <div className="mt-2 text-base font-extrabold text-slate-900 font-display">
+                          {p.platform === 'youtube' ? '1.42M' : 'Creator Access Required'}
                         </div>
-                        <div className="text-[10px] text-slate-400 mt-0.5">
-                          {(p.views / 1000).toFixed(0)}k views • {p.posts_count} items
+                        <div className="text-[10px] text-slate-400 mt-0.5 truncate">
+                          {p.platform === 'youtube' 
+                            ? `${(p.views / 1000000).toFixed(1)}M public views • ${p.posts_count} items` 
+                            : 'Public data unavailable'}
                         </div>
                       </div>
                     ))}
@@ -451,8 +458,8 @@ export default function App() {
                       <div className="text-[10px] font-semibold text-slate-500 uppercase flex items-center justify-center gap-1">
                         <Bookmark className="w-3 h-3 text-amber-600" /> Saves
                       </div>
-                      <div className="text-base font-extrabold text-slate-900 mt-1 font-display">
-                        {(contentStats.saves / 1000).toFixed(1)}k
+                      <div className="text-xs font-bold text-amber-700 mt-1.5 font-display flex items-center justify-center gap-1">
+                        <Lock className="w-3 h-3" /> Private
                       </div>
                     </div>
 
@@ -460,8 +467,8 @@ export default function App() {
                       <div className="text-[10px] font-semibold text-slate-500 uppercase flex items-center justify-center gap-1">
                         <Clock className="w-3 h-3 text-purple-600" /> Watch Time
                       </div>
-                      <div className="text-base font-extrabold text-slate-900 mt-1 font-display">
-                        {(contentStats.watchTime / 1000).toFixed(1)}k h
+                      <div className="text-xs font-bold text-amber-700 mt-1.5 font-display flex items-center justify-center gap-1">
+                        <Lock className="w-3 h-3" /> Private
                       </div>
                     </div>
 
@@ -469,8 +476,8 @@ export default function App() {
                       <div className="text-[10px] font-semibold text-slate-500 uppercase flex items-center justify-center gap-1">
                         <Compass className="w-3 h-3 text-blue-600" /> Reach
                       </div>
-                      <div className="text-base font-extrabold text-slate-900 mt-1 font-display">
-                        {(contentStats.reach / 1000).toFixed(0)}k
+                      <div className="text-xs font-bold text-amber-700 mt-1.5 font-display flex items-center justify-center gap-1">
+                        <Lock className="w-3 h-3" /> Private
                       </div>
                     </div>
 
@@ -512,7 +519,10 @@ export default function App() {
 
           {/* TAB 3: AUDIENCE ANALYTICS */}
           {currentTab === 'audience' && (
-            <AudienceInsights platform={selectedPlatform} />
+            <AudienceInsights 
+              platform={selectedPlatform} 
+              onNavigateToIntegrations={() => setCurrentTab('integrations')}
+            />
           )}
 
           {/* TAB 4: GROWTH & TRENDS */}

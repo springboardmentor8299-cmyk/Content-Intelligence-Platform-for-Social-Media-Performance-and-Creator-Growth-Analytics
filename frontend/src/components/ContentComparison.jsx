@@ -89,8 +89,10 @@ export default function ContentComparison({ allContent, selectedIds, onToggleSel
                   }`}
                 >
                   <img
-                    src={item.thumbnail_url || 'https://images.unsplash.com/photo-1590602847861-f357a9332bbc?w=200'}
+                    src={item.thumbnail_url || '/rawtalks_avatar.jpg'}
                     alt={item.title}
+                    referrerPolicy="no-referrer"
+                    onError={(e) => { e.target.src = '/rt_logo.svg'; }}
                     className="w-full h-18 rounded-lg object-cover border border-slate-200"
                   />
                   <div className="mt-2 text-[11px] font-semibold line-clamp-1">{item.title}</div>
@@ -166,8 +168,10 @@ export default function ContentComparison({ allContent, selectedIds, onToggleSel
 
                   <div>
                     <img
-                      src={item.thumbnail_url || 'https://images.unsplash.com/photo-1590602847861-f357a9332bbc?w=400'}
+                      src={item.thumbnail_url || '/rawtalks_avatar.jpg'}
                       alt={item.title}
+                      referrerPolicy="no-referrer"
+                      onError={(e) => { e.target.src = '/rt_logo.svg'; }}
                       className="w-full h-36 rounded-xl object-cover border border-slate-200"
                     />
 
@@ -183,7 +187,7 @@ export default function ContentComparison({ allContent, selectedIds, onToggleSel
                     {/* Metric Comparison Rows */}
                     <div className="mt-4 space-y-2 text-xs divide-y divide-slate-100">
                       <div className="flex justify-between py-1">
-                        <span className="text-slate-500 flex items-center gap-1.5"><Eye className="w-3.5 h-3.5" /> Views:</span>
+                        <span className="text-slate-500 flex items-center gap-1.5"><Eye className="w-3.5 h-3.5" /> Public Views:</span>
                         <span className="font-bold text-slate-900">{item.views.toLocaleString()}</span>
                       </div>
                       <div className="flex justify-between py-1">
@@ -191,7 +195,7 @@ export default function ContentComparison({ allContent, selectedIds, onToggleSel
                         <span className="font-bold text-emerald-700 bg-emerald-50 px-1.5 py-0.2 rounded border border-emerald-200">{item.engagement_rate}%</span>
                       </div>
                       <div className="flex justify-between py-1">
-                        <span className="text-slate-500 flex items-center gap-1.5"><Heart className="w-3.5 h-3.5" /> Likes:</span>
+                        <span className="text-slate-500 flex items-center gap-1.5"><Heart className="w-3.5 h-3.5" /> Public Likes:</span>
                         <span className="font-bold text-slate-800">{item.likes.toLocaleString()}</span>
                       </div>
                       <div className="flex justify-between py-1">
@@ -200,7 +204,9 @@ export default function ContentComparison({ allContent, selectedIds, onToggleSel
                       </div>
                       <div className="flex justify-between py-1">
                         <span className="text-slate-500 flex items-center gap-1.5"><Clock className="w-3.5 h-3.5" /> Watch Time:</span>
-                        <span className="font-bold text-slate-800">{item.watch_time_hours} hrs</span>
+                        <span className="font-bold text-slate-800">
+                          {item.watch_time_hours > 0 ? `${item.watch_time_hours} hrs` : 'Creator access required'}
+                        </span>
                       </div>
                     </div>
                   </div>

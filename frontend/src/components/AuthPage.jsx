@@ -336,7 +336,7 @@ export default function AuthPage({ onLoginSuccess }) {
       {/* Footer disclaimer */}
       <div className="mt-6 text-center text-slate-400 text-xs max-w-sm">
         CreatorIQ • Creator Analytics & Content Performance Dashboard
-        <div className="text-[11px] text-slate-400 mt-0.5">Demo Project • Sample Analytics Data</div>
+        <div className="text-[11px] text-slate-400 mt-0.5">Raw Talks With VK • Creator Analytics Workspace</div>
       </div>
     </div>
   );

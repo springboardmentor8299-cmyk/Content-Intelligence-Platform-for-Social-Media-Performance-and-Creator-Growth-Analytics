@@ -73,12 +73,15 @@ export default function Navbar({
 
           <div className="h-6 w-px bg-slate-200 hidden md:block" />
 
-          {/* Sample Creator Indicator */}
+          {/* Raw Talks Creator Workspace Indicator */}
           <div className="hidden md:flex items-center gap-2 px-2.5 py-1 rounded-lg bg-slate-50 border border-slate-200">
             <span className="w-2 h-2 rounded-full bg-emerald-500" />
-            <span className="text-xs font-semibold text-slate-700">Raw Talks With VK</span>
-            <span className="text-[10px] px-1.5 py-0.2 bg-amber-50 text-amber-700 border border-amber-200 rounded font-medium">
-              Demo Channel
+            <span className="text-xs font-bold text-slate-800">Raw Talks With VK</span>
+            <span className="text-[10px] px-1.5 py-0.5 bg-indigo-50 text-indigo-700 border border-indigo-100 rounded font-semibold">
+              Host: Vamshi Kurapati / VK
+            </span>
+            <span className="text-[10px] px-1.5 py-0.5 bg-amber-50 text-amber-700 border border-amber-200 rounded font-medium">
+              Demo Workspace
             </span>
           </div>
         </div>
@@ -148,11 +151,17 @@ export default function Navbar({
             className="flex items-center gap-2 pl-2 border-l border-slate-200 hover:opacity-85 transition cursor-pointer text-left"
             title="Manage Profile"
           >
-            <img 
-              src={currentUser?.avatar_url || "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&auto=format&fit=crop&q=80"} 
-              alt={currentUser?.full_name || "Raw Talks With VK"} 
-              className="w-8 h-8 rounded-full border border-indigo-200 object-cover"
-            />
+            <div className="w-8 h-8 rounded-full border border-indigo-200 overflow-hidden bg-indigo-50 flex items-center justify-center shrink-0">
+              <img 
+                src={currentUser?.avatar_url || "https://yt3.googleusercontent.com/QMXe3DvDHou2kGpuvaCwnlm6uGwdlG_LrzrT1HHG5XqaUGH49zYbKtwLbMxdGKf95-c1H16W=s900-c-k-c0x00ffffff-no-rj"} 
+                alt={currentUser?.full_name || "Raw Talks With VK"} 
+                className="w-full h-full object-cover"
+                onError={(e) => {
+                  e.target.style.display = 'none';
+                  e.target.parentElement.innerHTML = '<span class="text-xs font-bold text-indigo-700">RT</span>';
+                }}
+              />
+            </div>
             <div className="hidden md:block text-left">
               <div className="text-xs font-bold text-slate-800 leading-tight">
                 {currentUser?.full_name || "Raw Talks With VK"}

@@ -13,9 +13,9 @@ export default function TrendsChart({ trendsData, days, onDaysChange }) {
   const [activeMetric, setActiveMetric] = useState('views');
 
   const metrics = [
-    { id: 'views', label: 'Views & Reach', color: '#6366f1', fill: 'url(#viewsGrad)', unit: '' },
+    { id: 'views', label: 'Public Views', color: '#6366f1', fill: 'url(#viewsGrad)', unit: '' },
     { id: 'engagement_rate', label: 'Engagement Rate', color: '#f43f5e', fill: 'url(#engGrad)', unit: '%' },
-    { id: 'followers', label: 'Follower Growth', color: '#10b981', fill: 'url(#followersGrad)', unit: '' },
+    { id: 'followers', label: 'Public Subscribers', color: '#10b981', fill: 'url(#followersGrad)', unit: '' },
   ];
 
   const currentMetric = metrics.find(m => m.id === activeMetric);
@@ -34,15 +34,15 @@ export default function TrendsChart({ trendsData, days, onDaysChange }) {
         <div className="bg-white p-3 rounded-xl border border-slate-200 shadow-md text-xs space-y-1">
           <div className="font-bold text-slate-800 border-b border-slate-100 pb-1">{label}</div>
           <div className="text-indigo-600 font-semibold">
-            Views: <span className="text-slate-900 font-bold">{data.views.toLocaleString()}</span>
+            Public Views: <span className="text-slate-900 font-bold">{data.views.toLocaleString()}</span>
           </div>
           <div className="text-rose-600 font-semibold">
             Engagement: <span className="text-slate-900 font-bold">{data.engagement_rate}%</span>
           </div>
           <div className="text-emerald-600 font-semibold">
-            Followers: <span className="text-slate-900 font-bold">{data.followers.toLocaleString()}</span>
+            Subscribers: <span className="text-slate-900 font-bold">{data.followers.toLocaleString()}</span>
           </div>
-          <div className="text-[10px] text-slate-400 pt-0.5">Sample Analytics Data</div>
+          <div className="text-[10px] text-slate-400 pt-0.5">Public Channel Snapshot (@RawTalksWithVK)</div>
         </div>
       );
     }
@@ -55,12 +55,12 @@ export default function TrendsChart({ trendsData, days, onDaysChange }) {
         <div>
           <div className="flex items-center gap-2">
             <h3 className="text-base font-bold text-slate-900 font-display">Performance Trends</h3>
-            <span className="px-2 py-0.5 rounded-md text-[10px] font-semibold bg-slate-100 text-slate-600 border border-slate-200">
-              Demo Analytics
+            <span className="px-2 py-0.5 rounded-md text-[10px] font-bold bg-slate-100 text-slate-700 border border-slate-200">
+              Public observed data
             </span>
           </div>
           <p className="text-xs text-slate-500 mt-0.5">
-            Continuous cross-platform views and engagement tracking over time
+            Observed public views and subscriber trajectory for Raw Talks With VK
           </p>
         </div>
 
@@ -145,6 +145,11 @@ export default function TrendsChart({ trendsData, days, onDaysChange }) {
             />
           </AreaChart>
         </ResponsiveContainer>
+      </div>
+
+      <div className="mt-3 pt-3 border-t border-slate-100 flex items-center justify-between text-[11px] text-slate-400">
+        <span>Data Provenance: Public channel observation (@RawTalksWithVK)</span>
+        <span>Historical studio telemetry requires connected creator access</span>
       </div>
     </div>
   );

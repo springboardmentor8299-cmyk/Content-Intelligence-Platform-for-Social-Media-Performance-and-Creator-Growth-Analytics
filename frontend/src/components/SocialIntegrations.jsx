@@ -212,14 +212,39 @@ export default function SocialIntegrations() {
 
                 <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs">
                   <span className="text-slate-500">Followers / Audience</span>
-                  <span className="font-extrabold text-slate-900 text-sm font-display">
-                    {acc.followers_count.toLocaleString()}
-                  </span>
+                  {acc.platform === 'youtube' ? (
+                    <div className="flex items-center gap-1.5">
+                      <span className="font-extrabold text-slate-900 text-sm font-display">
+                        1.42M
+                      </span>
+                      <span className="text-[9px] font-bold px-1.5 py-0.2 rounded bg-slate-100 text-slate-600 border border-slate-200">
+                        Public Data
+                      </span>
+                    </div>
+                  ) : acc.platform === 'instagram' ? (
+                    <div className="text-right">
+                      <span className="text-xs font-bold text-amber-700 bg-amber-50 px-2 py-0.5 rounded border border-amber-200">
+                        Creator Access Required
+                      </span>
+                    </div>
+                  ) : (
+                    <div className="text-right">
+                      <span className="text-[11px] font-semibold text-slate-400">
+                        Creator access required
+                      </span>
+                    </div>
+                  )}
                 </div>
 
-                <div className="mt-1 flex items-center justify-between text-[10px] text-slate-400">
-                  <span>Last Synced</span>
-                  <span>{new Date(acc.last_synced_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
+                <div className="mt-1.5 flex items-center justify-between text-[10px] text-slate-400">
+                  <span>Data Provenance</span>
+                  <span>
+                    {acc.platform === 'youtube' 
+                      ? 'Verified Public Channel' 
+                      : acc.platform === 'instagram'
+                      ? 'Demo Connector • Creator Access Required'
+                      : 'Not connected'}
+                  </span>
                 </div>
               </div>
 
