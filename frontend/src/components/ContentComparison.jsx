@@ -6,7 +6,7 @@ import {
   Eye, 
   Heart, 
   Share2, 
-  Clock, 
+  MessageSquare, 
   Award,
   X,
   CheckCircle2
@@ -199,14 +199,12 @@ export default function ContentComparison({ allContent, selectedIds, onToggleSel
                         <span className="font-bold text-slate-800">{item.likes.toLocaleString()}</span>
                       </div>
                       <div className="flex justify-between py-1">
-                        <span className="text-slate-500 flex items-center gap-1.5"><Share2 className="w-3.5 h-3.5" /> Shares:</span>
-                        <span className="font-bold text-slate-800">{item.shares.toLocaleString()}</span>
+                        <span className="text-slate-500 flex items-center gap-1.5"><MessageSquare className="w-3.5 h-3.5" /> Public Comments:</span>
+                        <span className="font-bold text-slate-800">{(item.comments || 0).toLocaleString()}</span>
                       </div>
                       <div className="flex justify-between py-1">
-                        <span className="text-slate-500 flex items-center gap-1.5"><Clock className="w-3.5 h-3.5" /> Watch Time:</span>
-                        <span className="font-bold text-slate-800">
-                          {item.watch_time_hours > 0 ? `${item.watch_time_hours} hrs` : 'Creator access required'}
-                        </span>
+                        <span className="text-slate-500 flex items-center gap-1.5"><Share2 className="w-3.5 h-3.5" /> Shares:</span>
+                        <span className="font-bold text-slate-800">{item.shares.toLocaleString()}</span>
                       </div>
                     </div>
                   </div>

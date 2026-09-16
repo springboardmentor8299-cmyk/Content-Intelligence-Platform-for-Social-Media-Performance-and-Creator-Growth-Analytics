@@ -464,7 +464,7 @@ def seed_database(db: Session, force: bool = False):
                         if u["role"] == "creator":
                             user.profile.total_followers = 1420000
                             user.profile.total_reach = 0  # Requires connected account
-                            user.profile.avg_engagement_rate = 7.42
+                            user.profile.avg_engagement_rate = 6.18
                             user.profile.website = "https://www.youtube.com/@RawTalksWithVK"
 
             # Sync social accounts to ensure honest verified numbers (no 320k Instagram)
@@ -528,7 +528,7 @@ def seed_database(db: Session, force: bool = False):
                 niche=u["niche"],
                 total_reach=0 if u["role"] == "creator" else 0,  # Honest: private telemetry
                 total_followers=1420000 if u["role"] == "creator" else 0,
-                avg_engagement_rate=7.42 if u["role"] == "creator" else 0.0,
+                avg_engagement_rate=6.18 if u["role"] == "creator" else 0.0,
                 agency_name=None if u["role"] == "creator" else ("Apex Talent Media" if u["role"] == "agency" else None),
                 website="https://www.youtube.com/@RawTalksWithVK" if u["role"] == "creator" else None
             )
@@ -539,7 +539,7 @@ def seed_database(db: Session, force: bool = False):
             if u["role"] == "creator":
                 profile.total_followers = 1420000
                 profile.total_reach = 0
-                profile.avg_engagement_rate = 7.42
+                profile.avg_engagement_rate = 6.18
                 profile.website = "https://www.youtube.com/@RawTalksWithVK"
 
     primary_creator = created_users["creator"]

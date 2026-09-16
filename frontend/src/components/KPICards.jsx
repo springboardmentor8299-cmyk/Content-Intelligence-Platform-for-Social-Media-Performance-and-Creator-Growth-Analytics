@@ -1,5 +1,5 @@
 import React from 'react';
-import { Users, Eye, Compass, HeartHandshake, ArrowUpRight, Lock, CheckCircle2 } from 'lucide-react';
+import { Users, Eye, HeartHandshake, ArrowUpRight, CheckCircle2 } from 'lucide-react';
 
 export default function KPICards({ data }) {
   if (!data) return null;
@@ -11,9 +11,7 @@ export default function KPICards({ data }) {
     return num.toLocaleString();
   };
 
-  const isReachAvailable = Boolean(data.total_reach && data.total_reach > 0);
-
-  // Exactly 4 Milestone 1 & 2 KPI cards with honest data provenance
+  // Core public KPI cards with verified data provenance
   const cards = [
     {
       title: 'Total Subscribers',
@@ -40,18 +38,6 @@ export default function KPICards({ data }) {
       badgeBg: 'bg-slate-100 text-slate-700 border border-slate-200'
     },
     {
-      title: 'Total Reach',
-      value: isReachAvailable ? formatNumber(data.total_reach) : 'Creator access required',
-      change: isReachAvailable ? 'Connected' : 'Private',
-      subtext: isReachAvailable ? 'Audience reached across episodes' : 'Private YouTube Studio metric • OAuth required',
-      provenance: isReachAvailable ? 'Connected Account' : 'Creator Access Required',
-      icon: Compass,
-      isPrivateLocked: !isReachAvailable,
-      cardBg: 'bg-white',
-      iconBg: isReachAvailable ? 'bg-sky-50 text-sky-600 border border-sky-100' : 'bg-amber-50 text-amber-600 border border-amber-100',
-      badgeBg: isReachAvailable ? 'bg-emerald-50 text-emerald-700 border border-emerald-200' : 'bg-amber-50 text-amber-700 border border-amber-200'
-    },
-    {
       title: 'Avg Engagement Rate',
       value: data.avg_engagement_rate ? `${data.avg_engagement_rate}%` : 'Public data unavailable',
       change: 'Calculated Ratio',
@@ -76,7 +62,7 @@ export default function KPICards({ data }) {
         <span className="text-slate-400 font-mono">Public Channel Snapshot</span>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         {cards.map((c, i) => {
           const Icon = c.icon;
           return (
@@ -92,22 +78,18 @@ export default function KPICards({ data }) {
               </div>
 
               <div className="mt-3 flex items-baseline justify-between">
-                <div className={`font-extrabold tracking-tight font-display ${c.isPrivateLocked ? 'text-lg sm:text-xl text-amber-700 font-semibold' : 'text-2xl sm:text-3xl text-slate-900'}`}>
+                <div className="font-extrabold tracking-tight font-display text-2xl sm:text-3xl text-slate-900">
                   {c.value}
                 </div>
                 <div className={`flex items-center gap-1 text-[11px] font-bold px-2 py-0.5 rounded-md ${c.badgeBg}`}>
-                  {c.isPrivateLocked ? <Lock className="w-3 h-3" /> : c.isVerified ? <CheckCircle2 className="w-3 h-3 text-indigo-600" /> : <ArrowUpRight className="w-3.5 h-3.5" />}
+                  {c.isVerified ? <CheckCircle2 className="w-3 h-3 text-indigo-600" /> : <ArrowUpRight className="w-3.5 h-3.5" />}
                   <span>{c.change}</span>
                 </div>
               </div>
 
               <div className="mt-2 text-[11px] text-slate-500 flex items-center justify-between">
                 <span className="truncate">{c.subtext}</span>
-                <span className={`text-[9px] font-semibold px-1.5 py-0.5 rounded border shrink-0 ${
-                  c.provenance === 'Public Data' 
-                    ? 'bg-slate-50 text-slate-600 border-slate-200' 
-                    : 'bg-amber-50 text-amber-700 border-amber-200'
-                }`}>
+                <span className="text-[9px] font-semibold px-1.5 py-0.5 rounded border shrink-0 bg-slate-50 text-slate-600 border-slate-200">
                   {c.provenance}
                 </span>
               </div>

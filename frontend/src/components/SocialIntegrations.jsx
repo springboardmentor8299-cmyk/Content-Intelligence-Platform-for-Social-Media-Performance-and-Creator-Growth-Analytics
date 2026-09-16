@@ -64,7 +64,7 @@ export default function SocialIntegrations() {
       case 'youtube':
         return {
           name: 'YouTube Channel',
-          connectorLabel: 'Demo YouTube Connector',
+          connectorLabel: 'Public Channel Observation',
           icon: YoutubeIcon,
           color: 'text-red-600',
           bg: 'bg-red-50',
@@ -73,7 +73,7 @@ export default function SocialIntegrations() {
       case 'instagram':
         return {
           name: 'Instagram Profile',
-          connectorLabel: 'Demo Instagram Connector',
+          connectorLabel: 'Available Integration',
           icon: InstagramIcon,
           color: 'text-pink-600',
           bg: 'bg-pink-50',
@@ -82,7 +82,7 @@ export default function SocialIntegrations() {
       default:
         return {
           name: 'Social Media Account',
-          connectorLabel: 'Demo Connector',
+          connectorLabel: 'Platform Integration',
           icon: Share2,
           color: 'text-indigo-600',
           bg: 'bg-indigo-50',
@@ -110,17 +110,17 @@ export default function SocialIntegrations() {
             </div>
             <h2 className="text-xl font-bold text-slate-900 font-display">Social Media Integrations</h2>
             <span className="px-2 py-0.5 rounded-md text-[10px] font-semibold bg-slate-100 text-slate-600 border border-slate-200">
-              Simulated Connectors
+              Platform Integrations
             </span>
           </div>
           <p className="text-xs text-slate-500 mt-1">
-            Connect and synchronize channel analytics across supported platforms (YouTube & Instagram).
+            Supported social channel integrations for @RawTalksWithVK (YouTube public data & Instagram integration).
           </p>
         </div>
 
-        <div className="flex items-center gap-2 text-xs text-emerald-700 bg-emerald-50 px-3 py-1.5 rounded-xl border border-emerald-200">
-          <ShieldCheck className="w-4 h-4 text-emerald-600" />
-          <span>Demo Connectors Active</span>
+        <div className="flex items-center gap-2 text-xs text-slate-700 bg-slate-100 px-3 py-1.5 rounded-xl border border-slate-200">
+          <ShieldCheck className="w-4 h-4 text-indigo-600" />
+          <span>Supported Integrations</span>
         </div>
       </div>
 
@@ -140,13 +140,12 @@ export default function SocialIntegrations() {
         {accounts.map((acc) => {
           const details = getPlatformDetails(acc.platform);
           const Icon = details.icon;
-          const isSyncing = syncingId === acc.id;
 
           return (
             <div
               key={acc.id}
               className={`bg-white p-5 rounded-2xl border transition relative flex flex-col justify-between shadow-2xs ${
-                acc.is_connected ? 'border-slate-200' : 'border-slate-200 opacity-60'
+                acc.platform === 'youtube' ? 'border-slate-200' : 'border-slate-200 opacity-90'
               }`}
             >
               <div>
@@ -159,13 +158,13 @@ export default function SocialIntegrations() {
                     <span className="text-[10px] font-medium text-slate-500 bg-slate-100 px-2 py-0.5 rounded-md border border-slate-200">
                       {details.connectorLabel}
                     </span>
-                    {acc.is_connected ? (
+                    {acc.platform === 'youtube' ? (
                       <span className="flex items-center gap-1 text-[10px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200">
-                        <CheckCircle2 className="w-3 h-3 text-emerald-600" /> Connected
+                        <CheckCircle2 className="w-3 h-3 text-emerald-600" /> Public Data
                       </span>
                     ) : (
-                      <span className="flex items-center gap-1 text-[10px] font-bold text-slate-500 bg-slate-100 px-2 py-0.5 rounded-full">
-                        Disconnected
+                      <span className="flex items-center gap-1 text-[10px] font-medium text-slate-600 bg-slate-100 px-2 py-0.5 rounded-full border border-slate-200">
+                        Pending Connection
                       </span>
                     )}
                   </div>
@@ -190,8 +189,8 @@ export default function SocialIntegrations() {
                     </div>
                   ) : (
                     <div className="text-right">
-                      <span className="text-xs font-bold text-amber-700 bg-amber-50 px-2 py-0.5 rounded border border-amber-200">
-                        Creator Access Required
+                      <span className="text-xs font-medium text-slate-500 bg-slate-100 px-2 py-0.5 rounded border border-slate-200">
+                        Pending Connection
                       </span>
                     </div>
                   )}
@@ -201,49 +200,36 @@ export default function SocialIntegrations() {
                   <span>Data Provenance</span>
                   <span>
                     {acc.platform === 'youtube' 
-                      ? 'Verified Public Channel' 
-                      : 'Demo Connector • Creator Access Required'}
+                      ? 'Source: Public YouTube channel observation (@RawTalksWithVK)' 
+                      : 'Available Integration • Pending Connection'}
                   </span>
                 </div>
               </div>
 
-              {/* Action Buttons: Demo Sync and Connect/Disconnect */}
+              {/* Action Information */}
               <div className="mt-5 pt-3 border-t border-slate-100 flex items-center gap-2">
-                <button
-                  disabled={!acc.is_connected || isSyncing}
-                  onClick={() => handleSync(acc.id)}
-                  className={`flex-1 flex items-center justify-center gap-1.5 py-2 rounded-xl text-xs font-semibold border transition cursor-pointer ${
-                    acc.is_connected
-                      ? 'bg-indigo-50 hover:bg-indigo-100 text-indigo-700 border-indigo-200'
-                      : 'bg-slate-100 text-slate-400 border-transparent cursor-not-allowed'
-                  }`}
-                >
-                  <RefreshCw className={`w-3.5 h-3.5 ${isSyncing ? 'animate-spin' : ''}`} />
-                  <span>{isSyncing ? 'Syncing...' : 'Demo Sync'}</span>
-                </button>
-
-                <button
-                  onClick={() => handleToggle(acc.id)}
-                  className={`px-3 py-2 rounded-xl text-xs font-semibold border transition cursor-pointer ${
-                    acc.is_connected
-                      ? 'bg-rose-50 hover:bg-rose-100 text-rose-700 border-rose-200'
-                      : 'bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border-emerald-200'
-                  }`}
-                >
-                  {acc.is_connected ? 'Disconnect' : 'Connect'}
-                </button>
+                {acc.platform === 'youtube' ? (
+                  <div className="w-full py-2 rounded-xl text-xs font-semibold text-center bg-emerald-50 text-emerald-700 border border-emerald-200 flex items-center justify-center gap-1.5">
+                    <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
+                    <span>Public Channel Monitored</span>
+                  </div>
+                ) : (
+                  <div className="w-full py-2 rounded-xl text-xs font-medium text-center bg-slate-50 text-slate-600 border border-slate-200 flex items-center justify-center gap-1.5">
+                    <span>Available Integration • Pending Connection</span>
+                  </div>
+                )}
               </div>
             </div>
           );
         })}
       </div>
 
-      {/* Honest Simulation Disclaimer */}
+      {/* Platform Integration Note */}
       <div className="p-4 rounded-xl bg-slate-50 border border-slate-200 text-xs text-slate-600 flex items-start gap-2.5">
         <Info className="w-4 h-4 text-slate-500 shrink-0 mt-0.5" />
         <div>
-          <span className="font-bold text-slate-800">Demonstration Workflow Note: </span>
-          The connectors above simulate real API telemetry (fetching recent metrics, updating sync timestamps, and toggling active channels) without requiring private OAuth keys during your mentor review.
+          <span className="font-bold text-slate-800">Platform Integration Note: </span>
+          YouTube channel analytics are sourced directly from public channel observation (@RawTalksWithVK). Instagram is presented as an available integration pending account connection without claiming live OAuth or API telemetry.
         </div>
       </div>
     </div>

@@ -35,7 +35,7 @@ export default function Navbar({
   const rolesList = [
     { id: 'creator', label: 'Creator', icon: User, desc: 'Full creator analytics & studio insights' },
     { id: 'agency', label: 'Agency', icon: Briefcase, desc: 'Talent roster & cross-channel management' },
-    { id: 'marketing_team', label: 'Marketing Team', icon: TrendingUp, desc: 'Campaign performance & reach benchmarks' },
+    { id: 'marketing_team', label: 'Marketing Team', icon: TrendingUp, desc: 'Campaign performance & audience benchmarks' },
     { id: 'admin', label: 'Administrator', icon: Shield, desc: 'Full platform oversight & system settings' }
   ];
 

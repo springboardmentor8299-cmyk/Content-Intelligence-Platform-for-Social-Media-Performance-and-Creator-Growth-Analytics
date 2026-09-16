@@ -20,7 +20,6 @@ import {
   Share2, 
   Bookmark, 
   Clock, 
-  Compass, 
   TrendingUp, 
   Sparkles, 
   ShieldCheck, 
@@ -172,10 +171,9 @@ export default function App() {
     const shares = contentList.reduce((acc, x) => acc + (x.shares || 0), 0);
     const saves = contentList.reduce((acc, x) => acc + (x.saves || 0), 0);
     const watchTime = contentList.reduce((acc, x) => acc + (x.watch_time_hours || 0), 0);
-    const reach = contentList.reduce((acc, x) => acc + (x.reach || 0), 0);
     const avgEng = (contentList.reduce((acc, x) => acc + (x.engagement_rate || 0), 0) / contentList.length).toFixed(2);
 
-    return { views, likes, comments, shares, saves, watchTime, reach, avgEng, totalPosts: contentList.length };
+    return { views, likes, comments, shares, saves, watchTime, avgEng, totalPosts: contentList.length };
   }, [contentList]);
 
   // 1. Initial Authentication Check Loader
@@ -273,7 +271,7 @@ export default function App() {
                   </div>
                   <div className="text-[11px] text-indigo-700 mt-0.5">
                     {currentRole === 'agency' && 'Managing channel portfolio for Raw Talks With VK across regional Telugu podcast & video channels.'}
-                    {currentRole === 'marketing_team' && 'Viewing campaign benchmarks, engagement health, and audience reach.'}
+                    {currentRole === 'marketing_team' && 'Viewing campaign benchmarks, engagement health, and performance analytics.'}
                     {currentRole === 'admin' && 'Administrator privileges: verified JWT session, role switching, and database status.'}
                   </div>
                 </div>
@@ -326,7 +324,7 @@ export default function App() {
                 </div>
               </div>
 
-              {/* 4 Core M1/M2 KPI Cards (Followers, Views, Reach, Engagement Rate) */}
+              {/* Core Public KPI Cards (Subscribers, Views, Engagement Rate) */}
               <KPICards data={overview} />
 
               {/* Section 1: Content Performance Trends Chart */}
@@ -367,18 +365,18 @@ export default function App() {
                           <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded border ${
                             p.platform === 'youtube'
                               ? 'text-emerald-700 bg-emerald-50 border-emerald-200'
-                              : 'text-amber-700 bg-amber-50 border-amber-200'
+                              : 'text-slate-600 bg-slate-50 border-slate-200'
                           }`}>
-                            {p.platform === 'youtube' ? `${p.engagement_rate}%` : 'Creator Access Required'}
+                            {p.platform === 'youtube' ? `${p.engagement_rate}%` : 'Available'}
                           </span>
                         </div>
                         <div className="mt-2 text-base font-extrabold text-slate-900 font-display">
-                          {p.platform === 'youtube' ? '1.42M' : 'Creator Access Required'}
+                          {p.platform === 'youtube' ? '1.42M' : 'Connect Account'}
                         </div>
                         <div className="text-[10px] text-slate-400 mt-0.5 truncate">
                           {p.platform === 'youtube' 
                             ? `${(p.views / 1000000).toFixed(1)}M public views • ${p.posts_count} items` 
-                            : 'Public data unavailable • Requires Instagram OAuth'}
+                            : 'Instagram connector available • Manage in Integrations'}
                         </div>
                       </div>
                     ))}
@@ -417,9 +415,9 @@ export default function App() {
                   </div>
                 </div>
 
-                {/* Content Metrics Summary Strip (M2 Content KPI requirement) */}
+                {/* Content Metrics Summary Strip */}
                 {contentStats && (
-                  <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-3 mt-6 pt-5 border-t border-slate-100 text-center">
+                  <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-3 mt-6 pt-5 border-t border-slate-100 text-center">
                     <div className="p-2.5 rounded-xl bg-slate-50 border border-slate-200">
                       <div className="text-[10px] font-semibold text-slate-500 uppercase flex items-center justify-center gap-1">
                         <Eye className="w-3 h-3 text-indigo-600" /> Views
@@ -468,15 +466,6 @@ export default function App() {
                     <div className="p-2.5 rounded-xl bg-slate-50 border border-slate-200">
                       <div className="text-[10px] font-semibold text-slate-500 uppercase flex items-center justify-center gap-1">
                         <Clock className="w-3 h-3 text-purple-600" /> Watch Time
-                      </div>
-                      <div className="text-xs font-bold text-amber-700 mt-1.5 font-display flex items-center justify-center gap-1">
-                        <Lock className="w-3 h-3" /> Private
-                      </div>
-                    </div>
-
-                    <div className="p-2.5 rounded-xl bg-slate-50 border border-slate-200">
-                      <div className="text-[10px] font-semibold text-slate-500 uppercase flex items-center justify-center gap-1">
-                        <Compass className="w-3 h-3 text-blue-600" /> Reach
                       </div>
                       <div className="text-xs font-bold text-amber-700 mt-1.5 font-display flex items-center justify-center gap-1">
                         <Lock className="w-3 h-3" /> Private

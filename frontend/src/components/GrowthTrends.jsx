@@ -6,7 +6,6 @@ import {
   ArrowUpRight, 
   Eye,
   CheckCircle2,
-  Lock,
   Sparkles,
   Info
 } from 'lucide-react';
@@ -106,7 +105,7 @@ export default function GrowthTrends({ platform = 'all' }) {
       </div>
 
       {/* Analytical Estimate Metric Highlights */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         {/* Projected Followers */}
         <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-2xs">
           <div className="flex items-center justify-between text-xs text-slate-500">
@@ -155,20 +154,6 @@ export default function GrowthTrends({ platform = 'all' }) {
             <span className="text-[9px] font-semibold text-slate-500 bg-slate-100 px-1.5 py-0.2 rounded">
               Public Data
             </span>
-          </div>
-        </div>
-
-        {/* Private Reach Telemetry Note */}
-        <div className="bg-white p-4 rounded-xl border border-slate-200 shadow-2xs">
-          <div className="flex items-center justify-between text-xs text-slate-500">
-            <span>Unique Reach Forecast</span>
-            <Lock className="w-4 h-4 text-amber-600" />
-          </div>
-          <div className="text-sm font-bold text-amber-800 font-display mt-3 flex items-center gap-1.5">
-            <span>Creator access required</span>
-          </div>
-          <div className="text-[10px] text-slate-400 mt-2">
-            Private metric • Not fabricated
           </div>
         </div>
       </div>
@@ -253,26 +238,20 @@ export default function GrowthTrends({ platform = 'all' }) {
 
             <div className="mt-4 space-y-3">
               {[
-                { target: "1.5M YouTube Subscribers", eta: "45 days", probability: "92%" },
-                { target: "60M Total Catalog Views", eta: "60 days", probability: "88%" },
-                { target: "2.0M Long-Term Community", eta: "150 days", probability: "74%" }
+                { target: "1.5M YouTube Subscribers", eta: "45 days" },
+                { target: "60M Total Catalog Views", eta: "60 days" },
+                { target: "2.0M Long-Term Community", eta: "150 days" }
               ].map((m, i) => (
                 <div key={i} className="p-3.5 rounded-xl bg-slate-50 border border-slate-200">
                   <div className="flex items-center justify-between">
                     <span className="text-xs font-bold text-slate-900">{m.target}</span>
-                    <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">
-                      {m.probability} prob.
+                    <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-purple-50 text-purple-700 border border-purple-200">
+                      Estimated trend
                     </span>
                   </div>
                   <div className="flex items-center justify-between text-[11px] text-slate-500 mt-2">
                     <span>Estimated Timeline</span>
                     <span className="font-semibold text-indigo-700">in {m.eta}</span>
-                  </div>
-                  <div className="w-full bg-slate-200 rounded-full h-1.5 mt-2 overflow-hidden">
-                    <div 
-                      className="bg-indigo-600 h-full rounded-full" 
-                      style={{ width: `${88 - i * 14}%` }}
-                    />
                   </div>
                 </div>
               ))}
@@ -310,7 +289,7 @@ export default function GrowthTrends({ platform = 'all' }) {
                 <th className="py-3 px-4">Tag / Theme</th>
                 <th className="py-3 px-4">Platform</th>
                 <th className="py-3 px-4 text-right">Avg Public Views</th>
-                <th className="py-3 px-4 text-right">Reach Multiplier</th>
+                <th className="py-3 px-4 text-right">Performance Multiplier</th>
                 <th className="py-3 px-4 text-center">Category Type</th>
               </tr>
             </thead>

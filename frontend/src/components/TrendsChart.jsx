@@ -149,7 +149,7 @@ export default function TrendsChart({ trendsData, days, onDaysChange }) {
 
       <div className="mt-3 pt-3 border-t border-slate-100 flex items-center justify-between text-[11px] text-slate-400">
         <span>Data Provenance: Public channel observation (@RawTalksWithVK)</span>
-        <span>Historical studio telemetry requires connected creator access</span>
+        <span>Daily channel performance telemetry</span>
       </div>
     </div>
   );
