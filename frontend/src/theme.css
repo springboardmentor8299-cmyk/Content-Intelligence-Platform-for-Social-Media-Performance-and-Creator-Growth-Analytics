@@ -1,0 +1,90 @@
+@theme {
+	/* ─── Layout ──────────────────────────────────── */
+	--sidebar-width: 240px;
+	--sidebar-collapsed-width: 64px;
+
+	/* ─── Background ─────────────────────────────── */
+	--color-background: #f8f9ff;
+	--color-background-secondary: #ffffff;
+	--color-surface: #eff4ff;
+	--color-surface-hover: #e5eeff;
+
+	/* ─── Sidebar ────────────────────────────────── */
+	--color-sidebar-bg: #0b1221;
+	--color-sidebar-text: #94a3b8;
+	--color-sidebar-text-active: #ffffff;
+	--color-sidebar-active-bg: rgba(255,255,255,0.12);
+	--color-sidebar-hover-bg: rgba(255,255,255,0.07);
+	--color-sidebar-border: rgba(255,255,255,0.08);
+
+	/* ─── Text ───────────────────────────────────── */
+	--color-foreground: #0b1c30;
+	--color-foreground-secondary: #434655;
+	--color-foreground-muted: #737686;
+
+	/* ─── Primary (Brand Blue) ───────────────────── */
+	--color-primary: #1d4ed8;
+	--color-primary-hover: #1e40af;
+	--color-primary-foreground: #ffffff;
+	--color-primary-light: #dbe1ff;
+
+	/* ─── Secondary ──────────────────────────────── */
+	--color-secondary: #565e74;
+	--color-secondary-foreground: #ffffff;
+
+	/* ─── Accent ─────────────────────────────────── */
+	--color-accent: #3e3fcc;
+	--color-accent-foreground: #ffffff;
+
+	/* ─── Success ────────────────────────────────── */
+	--color-success: #16a34a;
+	--color-success-bg: #dcfce7;
+	--color-success-foreground: #ffffff;
+
+	/* ─── Warning ────────────────────────────────── */
+	--color-warning: #d97706;
+	--color-warning-bg: #fef3c7;
+	--color-warning-foreground: #000000;
+
+	/* ─── Destructive ────────────────────────────── */
+	--color-destructive: #dc2626;
+	--color-destructive-bg: #fee2e2;
+	--color-destructive-foreground: #ffffff;
+
+	/* ─── Muted ──────────────────────────────────── */
+	--color-muted: #e2e8f0;
+	--color-muted-foreground: #737686;
+
+	/* ─── Border ─────────────────────────────────── */
+	--color-border: #dce2f0;
+	--color-border-hover: #c3c6d7;
+	--color-input: #ffffff;
+	--color-ring: #1d4ed8;
+
+	/* ─── Platform Colors ────────────────────────── */
+	--color-youtube: #ff0000;
+	--color-instagram: #e4405f;
+	--color-tiktok: #010101;
+	--color-facebook: #1877f2;
+	--color-twitter: #1da1f2;
+	--color-linkedin: #0a66c2;
+
+	/* ─── Chart Colors ───────────────────────────── */
+	--color-chart-1: #1d4ed8;
+	--color-chart-2: #3e3fcc;
+	--color-chart-3: #7c3aed;
+	--color-chart-4: #d97706;
+	--color-chart-5: #dc2626;
+	--color-chart-6: #16a34a;
+
+	/* ─── Radius ─────────────────────────────────── */
+	--radius-sm: 0.375rem;
+	--radius-md: 0.5rem;
+	--radius-lg: 0.75rem;
+	--radius-xl: 1rem;
+	--radius-2xl: 1.5rem;
+	--radius-full: 9999px;
+
+	/* ─── Typography ─────────────────────────────── */
+	--font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+}

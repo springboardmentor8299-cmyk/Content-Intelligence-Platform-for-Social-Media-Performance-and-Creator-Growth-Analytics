@@ -1,0 +1,15 @@
+[project]
+name = "creatoriq-backend"
+version = "1.0.0"
+description = "FastAPI Backend for CreatorIQ Enterprise Analytics"
+requires-python = ">=3.10"
+dependencies = [
+    "fastapi>=0.115.0",
+    "uvicorn[standard]>=0.30.0",
+    "pydantic[email]>=2.9.0",
+    "python-multipart>=0.0.9",
+    "httpx>=0.28.1",
+    "python-dotenv>=1.2.3",
+    "sqlalchemy>=2.0.52",
+    "pydantic-settings>=2.15.0",
+]
