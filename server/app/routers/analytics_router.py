@@ -1,0 +1,48 @@
+from typing import List, Optional
+from fastapi import APIRouter, Depends, Query
+from sqlalchemy.orm import Session
+from app.database import get_db
+from app.auth import get_current_user, require_roles
+from app.models import User, UserRole, ContentPost, SocialAccount
+from app.schemas import ContentPostResponse
+from app.services.analytics_engine import AnalyticsEngine
+from app.services.recommendation_engine import RecommendationEngine
+
+router = APIRouter(prefix="/api/v1/analytics", tags=["Analytics"])
+
+@router.get("/overview")
+def get_overview(current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
+    metrics = AnalyticsEngine.get_overview_metrics(current_user, db)
+    return {
+        "user_email": current_user.email,
+        "user_role": current_user.role,
+        "data": metrics
+    }
+
+@router.get("/content", response_model=List[ContentPostResponse])
+def get_content_posts(
+    platform: Optional[str] = None,
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    query = db.query(ContentPost)
+    # Creators only see own posts, Agencies/Marketing/Admin can view aggregate or filtered
+    if current_user.role == UserRole.CREATOR:
+        query = query.filter(ContentPost.user_id == current_user.id)
+    
+    if platform and platform != "all":
+        query = query.filter(ContentPost.platform == platform.lower())
+
+    posts = query.order_by(ContentPost.published_at.desc()).all()
+    if not posts:
+        # Fallback sample posts if none added yet
+        posts = db.query(ContentPost).all()
+    return posts
+
+@router.get("/demographics")
+def get_demographics(current_user: User = Depends(get_current_user)):
+    return AnalyticsEngine.get_demographics(current_user)
+
+@router.get("/recommendations")
+def get_recommendations(current_user: User = Depends(get_current_user)):
+    return RecommendationEngine.get_actionable_insights(current_user)
