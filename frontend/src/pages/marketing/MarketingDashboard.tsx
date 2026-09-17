@@ -1,7 +1,22 @@
 import { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router';
 import { DashboardLayout } from '@/components/layout/DashboardLayout';
-import { Target, Megaphone, DollarSign, TrendingUp, ShieldCheck, Download, RefreshCw, Star, CheckCircle, Search, ExternalLink } from 'lucide-react';
+import {
+  Target,
+  Megaphone,
+  DollarSign,
+  TrendingUp,
+  ShieldCheck,
+  Download,
+  RefreshCw,
+  Star,
+  CheckCircle,
+  Search,
+  ExternalLink,
+  X,
+  Send,
+  MailCheck
+} from 'lucide-react';
 import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip, CartesianGrid } from 'recharts';
 
 export default function MarketingDashboard() {
@@ -24,6 +39,14 @@ export default function MarketingDashboard() {
   const [creators, setCreators] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
+  // Invitation Modal State
+  const [selectedCreator, setSelectedCreator] = useState<any>(null);
+  const [selectedCampaignId, setSelectedCampaignId] = useState<string>('');
+  const [offeredRate, setOfferedRate] = useState<number>(2500);
+  const [deliverables, setDeliverables] = useState<string>('1 Dedicated 60s Video Integration + 2 Social Posts');
+  const [customMessage, setCustomMessage] = useState<string>('We love your content and would be thrilled to sponsor an integration for our upcoming brand campaign.');
+  const [inviting, setInviting] = useState(false);
+  const [inviteSuccess, setInviteSuccess] = useState<string | null>(null);
 
   useEffect(() => {
     fetchMarketingData();
@@ -36,7 +59,13 @@ export default function MarketingDashboard() {
         fetch('http://localhost:8000/api/v1/monetization/campaigns'),
         fetch('http://localhost:8000/api/v1/monetization/discovery'),
       ]);
-      if (campRes.ok) setData(await campRes.json());
+      if (campRes.ok) {
+        const campData = await campRes.json();
+        setData(campData);
+        if (campData?.campaigns?.length > 0 && !selectedCampaignId) {
+          setSelectedCampaignId(campData.campaigns[0].id);
+        }
+      }
       if (discRes.ok) setCreators(await discRes.json());
     } catch (err) {
       console.error('Failed to load marketing data:', err);
@@ -47,6 +76,57 @@ export default function MarketingDashboard() {
 
   const summary = data?.summary;
   const campaigns = data?.campaigns || [];
+
+  const handleOpenInvite = (creator: any) => {
+    setSelectedCreator(creator);
+    // Parse suggested rate if available (e.g. "$2,500 / integration")
+    const numericRate = parseInt(creator.suggested_rate?.replace(/[^0-9]/g, '')) || 2500;
+    setOfferedRate(numericRate);
+    if (campaigns.length > 0) {
+      setSelectedCampaignId(campaigns[0].id);
+    }
+    setInviteSuccess(null);
+  };
+
+  const handleSendInvite = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!selectedCreator || !selectedCampaignId) return;
+
+    setInviting(true);
+    try {
+      const res = await fetch('http://localhost:8000/api/v1/monetization/invite', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          creator_id: selectedCreator.id,
+          campaign_id: selectedCampaignId,
+          offered_rate: Number(offeredRate),
+          deliverables: deliverables,
+          message: customMessage,
+        }),
+      });
+
+      if (res.ok) {
+        const respData = await res.json();
+        setInviteSuccess(respData.message || `Invitation sent to ${selectedCreator.name}!`);
+        
+        // Update local creator state
+        setCreators(prev => prev.map(c => c.id === selectedCreator.id ? { ...c, invited: true } : c));
+        
+        // Refresh campaign metrics to reflect updated allocated spend
+        fetchMarketingData();
+
+        setTimeout(() => {
+          setSelectedCreator(null);
+          setInviteSuccess(null);
+        }, 2200);
+      }
+    } catch (err) {
+      console.error('Failed to send invitation:', err);
+    } finally {
+      setInviting(false);
+    }
+  };
 
   return (
     <DashboardLayout
@@ -62,7 +142,9 @@ export default function MarketingDashboard() {
             <RefreshCw className={`h-4 w-4 ${loading ? 'animate-spin' : ''}`} />
             Refresh
           </button>
-          <button className="flex items-center gap-2 px-4 py-2 rounded-lg bg-amber-600 text-white text-sm font-medium hover:bg-amber-700 transition-colors">
+          <button 
+            onClick={() => handleTabChange('campaigns')}
+            className="flex items-center gap-2 px-4 py-2 rounded-lg bg-amber-600 text-white text-sm font-medium hover:bg-amber-700 transition-colors">
             <Megaphone className="h-4 w-4" />
             Launch Campaign
           </button>
@@ -258,7 +340,7 @@ export default function MarketingDashboard() {
         {activeTab === 'discovery' && (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
             {creators.map((cr: any) => (
-              <div key={cr.id} className="bg-white rounded-xl border p-5 shadow-sm flex flex-col justify-between" style={{ borderColor: 'var(--color-border)' }}>
+              <div key={cr.id} className="bg-white rounded-xl border p-5 shadow-sm flex flex-col justify-between transition-all hover:shadow-md" style={{ borderColor: 'var(--color-border)' }}>
                 <div>
                   <div className="flex items-start justify-between">
                     <div className="flex items-center gap-3">
@@ -294,9 +376,18 @@ export default function MarketingDashboard() {
 
                 <div className="mt-5 pt-4 border-t border-gray-100 flex items-center justify-between">
                   <span className="text-xs font-medium text-gray-500">{cr.suggested_rate}</span>
-                  <button className="px-3 py-1.5 bg-amber-600 hover:bg-amber-700 text-white rounded-lg text-xs font-semibold transition-colors">
-                    Invite to Campaign
-                  </button>
+                  {cr.invited ? (
+                    <span className="inline-flex items-center gap-1 text-xs font-semibold px-3 py-1.5 rounded-lg bg-emerald-50 text-emerald-700 border border-emerald-200">
+                      <CheckCircle className="h-3.5 w-3.5" /> Invited
+                    </span>
+                  ) : (
+                    <button
+                      onClick={() => handleOpenInvite(cr)}
+                      className="px-3.5 py-1.5 bg-amber-600 hover:bg-amber-700 text-white rounded-lg text-xs font-semibold transition-colors shadow-sm"
+                    >
+                      Invite to Campaign
+                    </button>
+                  )}
                 </div>
               </div>
             ))}
@@ -332,6 +423,143 @@ export default function MarketingDashboard() {
                 <p className="text-2xl font-bold text-indigo-600 mt-2">Clean</p>
                 <p className="text-xs text-gray-500 mt-1">Zero copyright strikes or claims across all live campaign assets.</p>
               </div>
+            </div>
+          </div>
+        )}
+
+        {/* Modal: Invite Creator to Campaign */}
+        {selectedCreator && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4 backdrop-blur-sm animate-fadeIn">
+            <div className="w-full max-w-lg rounded-2xl bg-white p-6 shadow-2xl border border-gray-100 relative">
+              <button
+                onClick={() => setSelectedCreator(null)}
+                className="absolute right-4 top-4 rounded-full p-1.5 text-gray-400 hover:bg-gray-100 hover:text-gray-700 transition-colors"
+              >
+                <X className="h-5 w-5" />
+              </button>
+
+              <div className="flex items-center gap-3.5 mb-5">
+                <img
+                  src={selectedCreator.avatar}
+                  alt={selectedCreator.name}
+                  className="h-12 w-12 rounded-full object-cover border-2 border-amber-200"
+                />
+                <div>
+                  <h3 className="text-lg font-bold text-gray-900">Invite {selectedCreator.name}</h3>
+                  <p className="text-xs text-gray-500">{selectedCreator.handle} • {selectedCreator.niche}</p>
+                </div>
+              </div>
+
+              {inviteSuccess ? (
+                <div className="rounded-xl bg-emerald-50 border border-emerald-200 p-5 text-center my-4">
+                  <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-emerald-100 mb-3">
+                    <MailCheck className="h-6 w-6 text-emerald-600" />
+                  </div>
+                  <h4 className="text-base font-bold text-emerald-900">Invitation Dispatched!</h4>
+                  <p className="text-sm text-emerald-700 mt-1">{inviteSuccess}</p>
+                  <p className="text-xs text-emerald-600 mt-2">Creator will receive this proposal in their deal pipeline.</p>
+                </div>
+              ) : (
+                <form onSubmit={handleSendInvite} className="flex flex-col gap-4">
+                  <div>
+                    <label className="block text-xs font-semibold uppercase text-gray-600 mb-1.5">
+                      Select Target Campaign
+                    </label>
+                    <select
+                      value={selectedCampaignId}
+                      onChange={(e) => setSelectedCampaignId(e.target.value)}
+                      className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm text-gray-800 bg-white focus:outline-none focus:ring-2 focus:ring-amber-300"
+                      required
+                    >
+                      {campaigns.map((camp: any) => (
+                        <option key={camp.id} value={camp.id}>
+                          {camp.title} ({camp.brand})
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-3">
+                    <div>
+                      <label className="block text-xs font-semibold uppercase text-gray-600 mb-1.5">
+                        Offered Rate ($)
+                      </label>
+                      <input
+                        type="number"
+                        value={offeredRate}
+                        onChange={(e) => setOfferedRate(Number(e.target.value))}
+                        className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm text-gray-800 focus:outline-none focus:ring-2 focus:ring-amber-300"
+                        placeholder="2500"
+                        required
+                      />
+                      <p className="text-[10px] text-gray-400 mt-1">Suggested: {selectedCreator.suggested_rate}</p>
+                    </div>
+
+                    <div>
+                      <label className="block text-xs font-semibold uppercase text-gray-600 mb-1.5">
+                        Match Score
+                      </label>
+                      <div className="flex items-center h-[38px] px-3 rounded-lg bg-emerald-50 border border-emerald-200 text-emerald-700 text-sm font-bold">
+                        {selectedCreator.match_score} Compatibility
+                      </div>
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-semibold uppercase text-gray-600 mb-1.5">
+                      Deliverables & Scope
+                    </label>
+                    <input
+                      type="text"
+                      value={deliverables}
+                      onChange={(e) => setDeliverables(e.target.value)}
+                      className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm text-gray-800 focus:outline-none focus:ring-2 focus:ring-amber-300"
+                      placeholder="e.g. 1 Dedicated Video + 2 YouTube Shorts"
+                      required
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-semibold uppercase text-gray-600 mb-1.5">
+                      Personalized Pitch Message
+                    </label>
+                    <textarea
+                      value={customMessage}
+                      onChange={(e) => setCustomMessage(e.target.value)}
+                      rows={3}
+                      className="w-full rounded-lg border border-gray-200 px-3 py-2 text-sm text-gray-800 focus:outline-none focus:ring-2 focus:ring-amber-300"
+                      placeholder="Add specific instructions or briefing notes for the creator..."
+                    />
+                  </div>
+
+                  <div className="mt-2 flex items-center justify-end gap-2.5 pt-3 border-t border-gray-100">
+                    <button
+                      type="button"
+                      onClick={() => setSelectedCreator(null)}
+                      className="px-4 py-2 text-sm font-medium text-gray-600 hover:bg-gray-100 rounded-lg transition-colors"
+                    >
+                      Cancel
+                    </button>
+                    <button
+                      type="submit"
+                      disabled={inviting}
+                      className="flex items-center gap-2 px-5 py-2 text-sm font-semibold text-white bg-amber-600 hover:bg-amber-700 rounded-lg shadow transition-colors disabled:opacity-50"
+                    >
+                      {inviting ? (
+                        <>
+                          <RefreshCw className="h-4 w-4 animate-spin" />
+                          Sending...
+                        </>
+                      ) : (
+                        <>
+                          <Send className="h-4 w-4" />
+                          Send Campaign Invite
+                        </>
+                      )}
+                    </button>
+                  </div>
+                </form>
+              )}
             </div>
           </div>
         )}

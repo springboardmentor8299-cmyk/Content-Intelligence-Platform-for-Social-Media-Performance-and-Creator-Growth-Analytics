@@ -181,3 +181,40 @@ def list_marketing_campaigns():
 def discover_influencers():
     return DISCOVERY_CREATORS
 
+from pydantic import BaseModel
+
+class InviteRequest(BaseModel):
+    creator_id: str
+    campaign_id: str
+    offered_rate: float
+    deliverables: str
+    message: str
+
+@router.post("/invite")
+def invite_creator_to_campaign(req: InviteRequest):
+    creator = next((c for c in DISCOVERY_CREATORS if c["id"] == req.creator_id), None)
+    campaign = next((cp for cp in CAMPAIGNS_DB if cp["id"] == req.campaign_id), None)
+    
+    if not creator:
+        creator_name = "Creator"
+    else:
+        creator_name = creator["name"]
+        creator["invited"] = True
+        
+    if campaign and creator_name not in campaign["target_creators"]:
+        campaign["target_creators"].append(creator_name)
+        campaign["spend"] = round(campaign["spend"] + req.offered_rate, 2)
+        
+    return {
+        "status": "success",
+        "message": f"Invitation successfully dispatched to {creator_name}.",
+        "invitation": {
+            "creator_name": creator_name,
+            "campaign_title": campaign["title"] if campaign else "Selected Campaign",
+            "offered_rate": req.offered_rate,
+            "deliverables": req.deliverables,
+            "status": "Invitation Sent"
+        }
+    }
+
+
