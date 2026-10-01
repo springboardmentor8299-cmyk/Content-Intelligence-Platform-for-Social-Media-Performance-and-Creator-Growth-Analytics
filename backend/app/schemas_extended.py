@@ -68,3 +68,49 @@ class ReportExportResponse(BaseModel):
     generated_at: str
     size_kb: int
     status: str
+
+class SponsorshipCreate(BaseModel):
+    brand_name: str
+    campaign_title: str
+    platform: str = "YouTube"
+    contract_amount: float
+    paid_amount: float = 0.0
+    deliverables: str = ""
+    due_date: str = ""
+    status: str = "active"
+    roi_multiplier: float = 3.2
+
+class SponsorshipUpdate(BaseModel):
+    brand_name: Optional[str] = None
+    campaign_title: Optional[str] = None
+    platform: Optional[str] = None
+    contract_amount: Optional[float] = None
+    paid_amount: Optional[float] = None
+    deliverables: Optional[str] = None
+    due_date: Optional[str] = None
+    status: Optional[str] = None
+    payment_status: Optional[str] = None
+    roi_multiplier: Optional[float] = None
+
+class NotificationCreate(BaseModel):
+    title: str
+    message: str
+    type: str = "alert"
+    category: str = "revenue"
+    action_url: Optional[str] = None
+
+class ScheduledReportItem(BaseModel):
+    id: str
+    title: str
+    sub: Optional[str] = None
+    frequency: str = "Weekly"
+    format: str = "PDF"
+    enabled: bool = True
+
+class ScheduledReportCreate(BaseModel):
+    title: str
+    sub: Optional[str] = None
+    frequency: str = "Weekly"
+    format: str = "PDF"
+    enabled: bool = True
+

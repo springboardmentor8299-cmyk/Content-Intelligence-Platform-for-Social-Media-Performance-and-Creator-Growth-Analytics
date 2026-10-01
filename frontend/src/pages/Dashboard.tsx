@@ -73,9 +73,11 @@ export default function Dashboard() {
         <RefreshCw className={`h-4 w-4 ${loading ? 'animate-spin' : ''}`} />
         Refresh
       </button>
-      <button className="flex items-center gap-2 px-4 py-2 rounded-lg bg-blue-600 text-white text-sm font-medium hover:bg-blue-700 transition-colors">
+      <button 
+        onClick={() => window.open('http://localhost:8000/api/v1/reports/export-dashboard-csv', '_blank')}
+        className="flex items-center gap-2 px-4 py-2 rounded-lg bg-blue-600 text-white text-sm font-medium hover:bg-blue-700 transition-colors shadow-sm">
         <Download className="h-4 w-4" />
-        Export
+        Export Report
       </button>
     </>
   );

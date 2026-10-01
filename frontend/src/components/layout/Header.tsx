@@ -19,6 +19,25 @@ export function Header({ title, subtitle, actions }: HeaderProps) {
   const displayRole = profile?.role ? profile.role.toUpperCase() : 'CREATOR';
   const displayEmail = profile?.email || 'user@creatoriq.com';
 
+  const [unreadCount, setUnreadCount] = useState<number>(0);
+
+  useEffect(() => {
+    const fetchUnread = async () => {
+      try {
+        const res = await fetch('http://localhost:8000/api/v1/notifications/unread-count');
+        if (res.ok) {
+          const json = await res.json();
+          setUnreadCount(json.unread_count || 0);
+        }
+      } catch (err) {
+        // Silently fail if server rebooting
+      }
+    };
+    fetchUnread();
+    const interval = setInterval(fetchUnread, 15000);
+    return () => clearInterval(interval);
+  }, []);
+
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
@@ -57,9 +76,13 @@ export function Header({ title, subtitle, actions }: HeaderProps) {
       {/* Right side */}
       <div className="flex items-center gap-3 ml-auto">
         {/* Notification bell */}
-        <Link to="/notifications" className="relative p-2 rounded-full hover:bg-gray-100 transition-colors">
+        <Link to="/notifications" className="relative p-2 rounded-full hover:bg-gray-100 transition-colors" title={`${unreadCount} Unread Notifications`}>
           <Bell className="h-5 w-5" style={{ color: 'var(--color-foreground-secondary)' }} />
-          <span className="absolute top-1.5 right-1.5 h-2 w-2 rounded-full bg-red-500 border-2 border-white" />
+          {unreadCount > 0 && (
+            <span className="absolute top-1 right-1 flex items-center justify-center min-w-[18px] h-[18px] text-[10px] font-bold text-white bg-red-500 rounded-full px-1 border-2 border-white">
+              {unreadCount > 9 ? '9+' : unreadCount}
+            </span>
+          )}
         </Link>
 
         {/* Divider */}
