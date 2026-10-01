@@ -1,0 +1,137 @@
+<<<<<<< HEAD
+=======
+https://developers.facebook.com/apps/1390995952569026/settings/advanced/
+
+https://www.linkedin.com/developers/apps/264797271/products?refreshKey=0
+
+https://www.linkedin.com/developers/tools/oauth/token-generator?clientId=77cif63miunt8p&refreshKey=1789639401501
+
+https://developers.google.com/youtube/v3/docs/?apix=true
+
+
+echo "server/.env" >> .gitignore
+echo "client/.env" >> .gitignore
+
+
+git rm --cached server/.env
+git rm --cached client/.env
+
+echo "__pycache__/" >> .gitignore
+git rm -r --cached "server/app/tasks/__pycache__"
+
+>>>>>>> infosys/sandip-creatorIQ
+
+root:
+
+# Ignore Python cache
+echo "__pycache__/" >> .gitignore
+echo "*.pyc" >> .gitignore
+
+# Ignore virtual environment
+echo "venv/" >> .gitignore
+
+# Ignore environment files
+echo ".env" >> .gitignore
+
+# Ignore Node.js modules
+echo "node_modules/" >> .gitignore
+
+# Ignore build outputs
+echo "dist/" >> .gitignore
+echo "build/" >> .gitignore
+
+# Ignore editor configs
+echo ".vscode/" >> .gitignore
+echo ".idea/" >> .gitignore
+
+client:
+npm create vite@latest .
+
+
+server:
+mkdir backend && cd backend
+python -m venv venv
+# On Windows: venv\Scripts\activate | On Mac/Linux: source venv/bin/activate
+
+pip install fastapi uvicorn sqlalchemy alembic pydantic[email] python-jose[cryptography] passlib[bcrypt] pymongo redis celery requests
+
+<<<<<<< HEAD
+creator-iq/
+├── backend/
+│   ├── app/
+│   │   ├── __init__.py
+│   │   ├── main.py                    # FastAPI initialization, middleware & CORS
+│   │   ├── config.py                  # Pydantic v2 settings & environment variables
+│   │   ├── database.py                # Postgres SQLAlchemy, MongoDB & Redis connections
+│   │   ├── models.py                  # Database relational models (Users, Accounts, Revenue)
+│   │   ├── schemas.py                 # Pydantic validation schemas
+│   │   ├── auth.py                    # JWT hashing, OAuth2 flows, RBAC dependencies
+│   │   ├── routers/
+│   │   │   ├── __init__.py
+│   │   │   ├── auth_router.py         # Authentication & profile endpoints
+│   │   │   ├── analytics_router.py    # Content, Audience & Growth APIs
+│   │   │   ├── revenue_router.py      # Monetization & sponsorship tracking
+│   │   │   ├── integration_router.py  # Social media API OAuth & ingestion triggers
+│   │   │   ├── report_router.py       # PDF/CSV export generation endpoints
+│   │   │   └── admin_router.py        # System health & global access endpoints
+│   │   ├── services/
+│   │   │   ├── __init__.py
+│   │   │   ├── analytics_engine.py    # Aggregation & engagement metrics calculations
+│   │   │   ├── export_service.py      # WeasyPrint / Pandas report generators
+│   │   │   └── recommendation_engine.py # Content posting insights logic
+│   │   └── tasks/
+│   │       ├── __init__.py
+│   │       ├── celery_app.py          # Celery configuration
+│   │       └── ingestion_tasks.py     # Background CRON API fetch jobs
+│   ├── requirements.txt
+│   └── Dockerfile
+│
+└── frontend/
+    ├── src/
+    │   ├── api/
+    │   │   └── client.js              # Axios configuration with auth interceptors
+    │   ├── components/
+    │   │   ├── common/
+    │   │   │   ├── Sidebar.jsx        # RBAC-gated navigation sidebar
+    │   │   │   ├── Topbar.jsx         # User profile & notification bell
+    │   │   │   └── MetricCard.jsx     # Reusable KPI tile
+    │   │   ├── charts/
+    │   │   │   ├── TrendChart.jsx     # Recharts multi-line performance chart
+    │   │   │   └── DemographicsChart.jsx # Audience age/gender distribution bar chart
+    │   │   └── ProtectedRoute.jsx     # Role-based route wrapper
+    │   ├── context/
+    │   │   └── AuthContext.jsx        # Global JWT user & role state
+    │   ├── pages/
+    │   │   ├── Login.jsx
+    │   │   ├── Dashboard.jsx          # Overview analytics page
+    │   │   ├── ContentAnalytics.jsx   # Top posts, engagement comparison
+    │   │   ├── AudienceAnalytics.jsx  # Demographics & active hours
+    │   │   ├── RevenueAnalytics.jsx   # Sponsorships, AdSense, affiliate tracking
+    │   │   ├── AgencyWorkspace.jsx   # Client roster management (Agency role)
+    │   │   └── AdminConsole.jsx       # User governance & platform metrics (Admin role)
+    │   ├── App.jsx
+    │   ├── main.jsx
+    │   └── index.css
+    ├── package.json
+    └── tailwind.config.js
+    
+=======
+cd E:\CreatorIQ\server
+& venv\Scripts\Activate.ps1
+uvicorn app.main:app --reload --port 8001
+
+
+>>>>>>> infosys/sandip-creatorIQ
+backend/
+├── app/
+│   ├── __init__.py
+│   ├── main.py
+│   ├── config.py
+│   ├── database.py
+│   ├── models.py
+│   ├── auth.py
+│   └── routers/
+│       ├── __init__.py
+│       ├── auth_router.py
+│       └── analytics_router.py
+└── .env

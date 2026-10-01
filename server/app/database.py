@@ -1,0 +1,47 @@
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker, declarative_base
+from app.config import settings
+
+# Robust Database Engine Setup:
+# Prefer DATABASE_URL (defaults to SQLite), fallback to SQLite if PostgreSQL cannot connect
+db_url = settings.DATABASE_URL
+connect_args = {"check_same_thread": False} if "sqlite" in db_url else {}
+
+try:
+    engine = create_engine(db_url, connect_args=connect_args)
+    # Test connection
+    with engine.connect() as conn:
+        pass
+except Exception as e:
+    # Graceful fallback to SQLite
+    fallback_url = "sqlite:///./creatoriq.db"
+    engine = create_engine(fallback_url, connect_args={"check_same_thread": False})
+
+SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+Base = declarative_base()
+
+def get_db():
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
+
+# Safe MongoDB Mock/Client Setup
+mongo_db = None
+try:
+    from pymongo import MongoClient
+    if settings.MONGO_URL:
+        mongo_client = MongoClient(settings.MONGO_URL, serverSelectionTimeoutMS=800)
+        mongo_db = mongo_client["creatoriq_analytics"]
+except Exception:
+    mongo_db = None
+
+# Safe Redis Mock/Client Setup
+redis_client = None
+try:
+    import redis
+    if settings.REDIS_URL:
+        redis_client = redis.Redis.from_url(settings.REDIS_URL, decode_responses=True, socket_connect_timeout=1)
+except Exception:
+    redis_client = None

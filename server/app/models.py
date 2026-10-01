@@ -1,0 +1,90 @@
+import enum
+import uuid
+from datetime import datetime
+from sqlalchemy import Column, String, Float, Integer, DateTime, Enum, ForeignKey, Text, Boolean
+from sqlalchemy.orm import relationship
+from app.database import Base
+
+class UserRole(str, enum.Enum):
+    CREATOR = "Creator"
+    AGENCY = "Agency"
+    MARKETING_TEAM = "Marketing Team"
+    ADMIN = "Administrator"
+
+class User(Base):
+    __tablename__ = "users"
+
+    id = Column(String, primary_key=True, default=lambda: str(uuid.uuid4()))
+    email = Column(String, unique=True, nullable=False, index=True)
+    full_name = Column(String, nullable=True, default="Creator User")
+    hashed_password = Column(String, nullable=False)
+    role = Column(Enum(UserRole), default=UserRole.CREATOR, nullable=False)
+    avatar_url = Column(String, nullable=True)
+    created_at = Column(DateTime, default=datetime.utcnow)
+
+    social_accounts = relationship("SocialAccount", back_populates="user", cascade="all, delete-orphan")
+    posts = relationship("ContentPost", back_populates="user", cascade="all, delete-orphan")
+    revenue_records = relationship("RevenueRecord", back_populates="user", cascade="all, delete-orphan")
+
+class SocialAccount(Base):
+    __tablename__ = "social_accounts"
+
+    id = Column(String, primary_key=True, default=lambda: str(uuid.uuid4()))
+    user_id = Column(String, ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
+    platform = Column(String, nullable=False)  # "instagram", "youtube", "linkedin"
+    account_handle = Column(String, nullable=False)
+    display_name = Column(String, nullable=True)
+    avatar_url = Column(String, nullable=True)
+    follower_count = Column(Integer, default=0)
+    access_token = Column(Text, nullable=True)
+    refresh_token = Column(Text, nullable=True)
+    connected_at = Column(DateTime, default=datetime.utcnow)
+    is_active = Column(Boolean, default=True)
+
+    user = relationship("User", back_populates="social_accounts")
+
+class ContentPost(Base):
+    __tablename__ = "content_posts"
+
+    id = Column(String, primary_key=True, default=lambda: str(uuid.uuid4()))
+    user_id = Column(String, ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
+    platform = Column(String, nullable=False)  # instagram, youtube, linkedin
+    title = Column(String, nullable=False)
+    post_url = Column(String, nullable=True)
+    thumbnail_url = Column(String, nullable=True)
+    views = Column(Integer, default=0)
+    likes = Column(Integer, default=0)
+    comments = Column(Integer, default=0)
+    shares = Column(Integer, default=0)
+    engagement_rate = Column(Float, default=0.0)
+    published_at = Column(DateTime, default=datetime.utcnow)
+
+    user = relationship("User", back_populates="posts")
+
+class RevenueRecord(Base):
+    __tablename__ = "revenue_records"
+
+    id = Column(String, primary_key=True, default=lambda: str(uuid.uuid4()))
+    user_id = Column(String, ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
+    title = Column(String, nullable=False)
+    source_type = Column(String, nullable=False) # "Sponsorship", "AdSense", "Affiliate", "Merch"
+    amount = Column(Float, nullable=False, default=0.0)
+    brand_name = Column(String, nullable=True)
+    status = Column(String, default="Completed") # "Pending", "Completed", "Processing"
+    deal_date = Column(DateTime, default=datetime.utcnow)
+
+    user = relationship("User", back_populates="revenue_records")
+
+class AgencyClient(Base):
+    __tablename__ = "agency_clients"
+
+    id = Column(String, primary_key=True, default=lambda: str(uuid.uuid4()))
+    agency_id = Column(String, ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
+    creator_id = Column(String, ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
+    client_name = Column(String, nullable=False)
+    channel_handle = Column(String, nullable=False)
+    tier = Column(String, default="Tier 1 - VIP")
+    monthly_views = Column(Integer, default=1500000)
+    commission_pct = Column(Float, default=15.0)
+    monthly_revenue = Column(Float, default=12500.0)
+    status = Column(String, default="Active")
