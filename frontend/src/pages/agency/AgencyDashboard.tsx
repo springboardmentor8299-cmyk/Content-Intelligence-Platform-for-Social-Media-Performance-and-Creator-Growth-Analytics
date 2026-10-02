@@ -65,7 +65,9 @@ export default function AgencyDashboard() {
             <RefreshCw className={`h-4 w-4 ${loading ? 'animate-spin' : ''}`} />
             Refresh
           </button>
-          <button className="flex items-center gap-2 px-4 py-2 rounded-lg bg-cyan-600 text-white text-sm font-medium hover:bg-cyan-700 transition-colors">
+          <button 
+            onClick={() => window.open('http://localhost:8000/api/v1/creators/export-roster-csv', '_blank')}
+            className="flex items-center gap-2 px-4 py-2 rounded-lg bg-cyan-600 text-white text-sm font-medium hover:bg-cyan-700 transition-colors shadow-sm">
             <Download className="h-4 w-4" />
             Export Roster Report
           </button>

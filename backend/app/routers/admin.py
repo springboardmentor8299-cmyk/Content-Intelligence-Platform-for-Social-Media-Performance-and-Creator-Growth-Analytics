@@ -1,8 +1,11 @@
-from fastapi import APIRouter, HTTPException, Depends
+import uuid
+import io
+import csv
+from fastapi import APIRouter, HTTPException, Depends, Response
 from sqlalchemy.orm import Session
 from datetime import datetime, timezone
 from typing import List, Optional
-from pydantic import BaseModel
+from pydantic import BaseModel, EmailStr
 from app.database import get_db
 from app.models import ConnectedAccount
 from app.routers.auth import MOCK_USERS
@@ -12,6 +15,12 @@ router = APIRouter()
 class UserRoleUpdate(BaseModel):
     role: str
     is_active: bool
+
+class UserCreate(BaseModel):
+    email: str
+    full_name: str
+    role: str
+    password: Optional[str] = "password123"
 
 AUDIT_LOGS = [
     {
@@ -66,6 +75,43 @@ def get_all_users():
             "created_at": user["created_at"].isoformat() if hasattr(user["created_at"], "isoformat") else str(user["created_at"]),
         })
     return users_list
+
+@router.post("/users")
+def create_new_user(payload: UserCreate):
+    email = payload.email.strip().lower()
+    if email in MOCK_USERS:
+        raise HTTPException(status_code=400, detail="User with this email already exists")
+        
+    user_id = f"usr-{uuid.uuid4().hex[:8]}"
+    new_user = {
+        "id": user_id,
+        "email": email,
+        "password": payload.password or "password123",
+        "full_name": payload.full_name,
+        "role": payload.role,
+        "avatar_url": f"https://api.dicebear.com/7.x/avataaars/svg?seed={payload.full_name.replace(' ', '')}",
+        "is_active": True,
+        "created_at": datetime.now(timezone.utc)
+    }
+    MOCK_USERS[email] = new_user
+    
+    AUDIT_LOGS.insert(0, {
+        "id": f"aud-{datetime.now(timezone.utc).timestamp()}",
+        "timestamp": datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S UTC"),
+        "actor": "admin@creatoriq.com",
+        "action": f"USER_PROVISION_{payload.role.upper()}",
+        "resource": f"Created user {email}",
+        "status": "SUCCESS",
+        "ip_address": "127.0.0.1"
+    })
+    
+    return {"status": "success", "user": {
+        "id": new_user["id"],
+        "email": new_user["email"],
+        "full_name": new_user["full_name"],
+        "role": new_user["role"],
+        "is_active": new_user["is_active"]
+    }}
 
 @router.patch("/users/{user_id}/status")
 def update_user_status(user_id: str, payload: UserRoleUpdate):
@@ -132,3 +178,25 @@ def get_system_health(db: Session = Depends(get_db)):
 @router.get("/audit-logs")
 def get_audit_logs():
     return AUDIT_LOGS
+
+@router.get("/export-audit-csv")
+def export_audit_csv():
+    output = io.StringIO()
+    writer = csv.writer(output)
+    writer.writerow(["CreatorIQ Enterprise Security & Audit Log"])
+    writer.writerow(["Exported At", datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S UTC")])
+    writer.writerow([])
+    writer.writerow(["Event ID", "Timestamp", "Actor", "Action", "Target Resource", "Status", "IP Address"])
+    for a in AUDIT_LOGS:
+        writer.writerow([
+            a["id"], a["timestamp"], a["actor"], a["action"],
+            a["resource"], a["status"], a["ip_address"]
+        ])
+        
+    filename = f"creatoriq_audit_log_{datetime.now().strftime('%Y%m%d')}.csv"
+    return Response(
+        content=output.getvalue(),
+        media_type="text/csv",
+        headers={"Content-Disposition": f"attachment; filename=\"{filename}\""}
+    )
+

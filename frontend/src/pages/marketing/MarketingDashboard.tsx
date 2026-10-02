@@ -48,6 +48,41 @@ export default function MarketingDashboard() {
   const [inviting, setInviting] = useState(false);
   const [inviteSuccess, setInviteSuccess] = useState<string | null>(null);
 
+  // New Campaign Modal State
+  const [isNewCampOpen, setIsNewCampOpen] = useState(false);
+  const [campTitle, setCampTitle] = useState('');
+  const [campBrand, setCampBrand] = useState('');
+  const [campBudget, setCampBudget] = useState('25000');
+  const [campTarget, setCampTarget] = useState('Jane Doe, Alex Chen');
+  const [creatingCamp, setCreatingCamp] = useState(false);
+
+  const handleCreateCampaign = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setCreatingCamp(true);
+    try {
+      const res = await fetch('http://localhost:8000/api/v1/monetization/campaigns', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          title: campTitle,
+          brand: campBrand,
+          budget: parseFloat(campBudget) || 15000,
+          target_creators: campTarget.split(',').map(s => s.trim()).filter(Boolean)
+        })
+      });
+      if (res.ok) {
+        setIsNewCampOpen(false);
+        setCampTitle('');
+        setCampBrand('');
+        fetchMarketingData();
+      }
+    } catch (err) {
+      console.error('Failed to create campaign:', err);
+    } finally {
+      setCreatingCamp(false);
+    }
+  };
+
   useEffect(() => {
     fetchMarketingData();
   }, []);
@@ -143,8 +178,15 @@ export default function MarketingDashboard() {
             Refresh
           </button>
           <button 
-            onClick={() => handleTabChange('campaigns')}
-            className="flex items-center gap-2 px-4 py-2 rounded-lg bg-amber-600 text-white text-sm font-medium hover:bg-amber-700 transition-colors">
+            onClick={() => window.open('http://localhost:8000/api/v1/monetization/export-campaigns-csv', '_blank')}
+            className="flex items-center gap-2 px-4 py-2 rounded-lg border text-sm font-medium hover:bg-gray-50 transition-colors"
+            style={{ borderColor: 'var(--color-border)', color: 'var(--color-foreground-secondary)' }}>
+            <Download className="h-4 w-4" />
+            Export CSV
+          </button>
+          <button 
+            onClick={() => setIsNewCampOpen(true)}
+            className="flex items-center gap-2 px-4 py-2 rounded-lg bg-amber-600 text-white text-sm font-medium hover:bg-amber-700 transition-colors shadow-sm">
             <Megaphone className="h-4 w-4" />
             Launch Campaign
           </button>
@@ -560,6 +602,111 @@ export default function MarketingDashboard() {
                   </div>
                 </form>
               )}
+            </div>
+          </div>
+        )}
+
+        {/* Launch Campaign Modal */}
+        {isNewCampOpen && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
+            <div className="bg-white rounded-2xl max-w-lg w-full p-6 shadow-2xl border" style={{ borderColor: 'var(--color-border)' }}>
+              <div className="flex items-center justify-between pb-4 border-b" style={{ borderColor: 'var(--color-border)' }}>
+                <div className="flex items-center gap-2">
+                  <Megaphone className="h-5 w-5 text-amber-600" />
+                  <h3 className="text-lg font-bold text-gray-900">Launch Brand Campaign</h3>
+                </div>
+                <button
+                  onClick={() => setIsNewCampOpen(false)}
+                  className="p-1 rounded-lg hover:bg-gray-100 text-gray-400 hover:text-gray-600"
+                >
+                  <X className="h-5 w-5" />
+                </button>
+              </div>
+
+              <form onSubmit={handleCreateCampaign} className="mt-4 space-y-4">
+                <div>
+                  <label className="block text-xs font-semibold text-gray-700 uppercase mb-1">Campaign Title *</label>
+                  <input
+                    type="text"
+                    required
+                    placeholder="e.g. Q4 Flagship Product Launch"
+                    value={campTitle}
+                    onChange={e => setCampTitle(e.target.value)}
+                    className="w-full text-sm border rounded-lg px-3 py-2 outline-none focus:ring-2 focus:ring-amber-200"
+                    style={{ borderColor: 'var(--color-border)' }}
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-xs font-semibold text-gray-700 uppercase mb-1">Brand Sponsor *</label>
+                  <input
+                    type="text"
+                    required
+                    placeholder="e.g. Figma, Adobe, Shopify"
+                    value={campBrand}
+                    onChange={e => setCampBrand(e.target.value)}
+                    className="w-full text-sm border rounded-lg px-3 py-2 outline-none focus:ring-2 focus:ring-amber-200"
+                    style={{ borderColor: 'var(--color-border)' }}
+                  />
+                </div>
+
+                <div className="grid grid-cols-2 gap-3">
+                  <div>
+                    <label className="block text-xs font-semibold text-gray-700 uppercase mb-1">Allocated Budget ($) *</label>
+                    <input
+                      type="number"
+                      step="100"
+                      required
+                      placeholder="25000"
+                      value={campBudget}
+                      onChange={e => setCampBudget(e.target.value)}
+                      className="w-full text-sm border rounded-lg px-3 py-2 outline-none focus:ring-2 focus:ring-amber-200"
+                      style={{ borderColor: 'var(--color-border)' }}
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-semibold text-gray-700 uppercase mb-1">Brand Safety Target</label>
+                    <input
+                      type="text"
+                      disabled
+                      value="98.5% (Audited)"
+                      className="w-full text-sm border rounded-lg px-3 py-2 bg-gray-50 text-gray-500"
+                      style={{ borderColor: 'var(--color-border)' }}
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-xs font-semibold text-gray-700 uppercase mb-1">Target Talent / Creators</label>
+                  <input
+                    type="text"
+                    placeholder="Comma separated creator handles or names"
+                    value={campTarget}
+                    onChange={e => setCampTarget(e.target.value)}
+                    className="w-full text-sm border rounded-lg px-3 py-2 outline-none focus:ring-2 focus:ring-amber-200"
+                    style={{ borderColor: 'var(--color-border)' }}
+                  />
+                  <p className="text-[11px] text-gray-400 mt-1">E.g. Jane Doe, Alex Chen, Marcus Brody</p>
+                </div>
+
+                <div className="pt-3 border-t flex justify-end gap-2" style={{ borderColor: 'var(--color-border)' }}>
+                  <button
+                    type="button"
+                    onClick={() => setIsNewCampOpen(false)}
+                    className="px-4 py-2 text-sm font-medium rounded-lg border hover:bg-gray-50"
+                    style={{ borderColor: 'var(--color-border)' }}
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    disabled={creatingCamp}
+                    className="px-4 py-2 text-sm font-semibold rounded-lg bg-amber-600 text-white hover:bg-amber-700 transition-colors shadow"
+                  >
+                    {creatingCamp ? 'Launching...' : 'Confirm & Launch Flight'}
+                  </button>
+                </div>
+              </form>
             </div>
           </div>
         )}

@@ -1,5 +1,8 @@
+import io
+import csv
+from datetime import datetime, timezone
 from typing import List
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, Response
 from sqlalchemy.orm import Session
 from app.database import get_db
 from app.models import ConnectedAccount
@@ -143,6 +146,32 @@ def get_talent_payouts(db: Session = Depends(get_db)):
             "payout_date": "2026-09-30"
         })
     return payouts
+
+@router.get("/export-roster-csv")
+def export_roster_csv(db: Session = Depends(get_db)):
+    creators = get_live_creators(db)
+    output = io.StringIO()
+    writer = csv.writer(output)
+    writer.writerow(["CreatorIQ Agency Talent Roster Export"])
+    writer.writerow(["Exported At", datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S UTC")])
+    writer.writerow([])
+    writer.writerow([
+        "Creator Name", "Handle", "Niche", "Followers", "Avg Engagement Rate (%)",
+        "Monthly Views", "Monthly Revenue ($)", "Commission Rate (%)", "Contract Status"
+    ])
+    for c in creators:
+        writer.writerow([
+            c["name"], c["handle"], c["niche"], c["total_followers"],
+            c["avg_engagement"], c["monthly_views"], f"{c['monthly_revenue']:.2f}",
+            c["commission_rate"], c["contract_status"]
+        ])
+        
+    filename = f"creatoriq_agency_roster_{datetime.now().strftime('%Y%m%d')}.csv"
+    return Response(
+        content=output.getvalue(),
+        media_type="text/csv",
+        headers={"Content-Disposition": f"attachment; filename=\"{filename}\""}
+    )
 
 @router.get("/")
 def list_creators(db: Session = Depends(get_db)):

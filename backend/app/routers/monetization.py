@@ -1,7 +1,9 @@
 import uuid
+import io
+import csv
 from typing import List, Optional
 from datetime import datetime, timezone
-from fastapi import APIRouter, Depends, HTTPException, Query
+from fastapi import APIRouter, Depends, HTTPException, Query, Response
 from sqlalchemy.orm import Session
 from pydantic import BaseModel
 
@@ -451,3 +453,69 @@ def invite_creator_to_campaign(req: InviteRequest):
             "status": "Invitation Sent"
         }
     }
+
+class CampaignCreate(BaseModel):
+    title: str
+    brand: str
+    budget: float
+    target_creators: Optional[List[str]] = []
+    brand_safety_score: Optional[float] = 98.5
+
+@router.post("/campaigns")
+def create_marketing_campaign(req: CampaignCreate, db: Session = Depends(get_db)):
+    new_cmp = {
+        "id": f"cmp-{uuid.uuid4().hex[:6]}",
+        "title": req.title,
+        "brand": req.brand,
+        "budget": req.budget,
+        "spend": 0.0,
+        "impressions": 0,
+        "clicks": 0,
+        "conversions": 0,
+        "roi_multiplier": 3.5,
+        "status": "Active",
+        "target_creators": req.target_creators or [],
+        "brand_safety_score": req.brand_safety_score or 98.5
+    }
+    CAMPAIGNS_DB.insert(0, new_cmp)
+    
+    # Generate system notification for the marketing campaign launch
+    notif = Notification(
+        id=f"notif-camp-{uuid.uuid4().hex[:6]}",
+        title=f"🎯 New Marketing Campaign: {req.title}",
+        message=f"Campaign launched for {req.brand} with an allocated budget of ${req.budget:,.2f}.",
+        type="milestone",
+        category="revenue",
+        action_url="/dashboard?tab=campaigns",
+        timestamp="Just now"
+    )
+    db.add(notif)
+    db.commit()
+    
+    return {"status": "success", "campaign": new_cmp}
+
+@router.get("/export-campaigns-csv")
+def export_campaigns_csv():
+    output = io.StringIO()
+    writer = csv.writer(output)
+    writer.writerow(["CreatorIQ Marketing Campaigns Ledger"])
+    writer.writerow(["Exported At", datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S UTC")])
+    writer.writerow([])
+    writer.writerow([
+        "Campaign ID", "Title", "Brand", "Budget ($)", "Spend ($)",
+        "Impressions", "Clicks", "Conversions", "ROI Multiplier", "Status", "Brand Safety Score (%)"
+    ])
+    for c in CAMPAIGNS_DB:
+        writer.writerow([
+            c["id"], c["title"], c["brand"], f"{c['budget']:.2f}", f"{c['spend']:.2f}",
+            c["impressions"], c["clicks"], c["conversions"], f"{c['roi_multiplier']}x",
+            c["status"], f"{c['brand_safety_score']}%"
+        ])
+        
+    filename = f"creatoriq_campaigns_report_{datetime.now().strftime('%Y%m%d')}.csv"
+    return Response(
+        content=output.getvalue(),
+        media_type="text/csv",
+        headers={"Content-Disposition": f"attachment; filename=\"{filename}\""}
+    )
+

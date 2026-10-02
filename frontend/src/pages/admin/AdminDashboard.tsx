@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router';
 import { DashboardLayout } from '@/components/layout/DashboardLayout';
-import { Shield, Server, Users, Key, AlertTriangle, RefreshCw, CheckCircle, Clock, Activity, Lock, UserCheck } from 'lucide-react';
+import { Shield, Server, Users, Key, AlertTriangle, RefreshCw, CheckCircle, Clock, Activity, Lock, UserCheck, Plus, Download, X } from 'lucide-react';
 
 export default function AdminDashboard() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -23,6 +23,46 @@ export default function AdminDashboard() {
   const [health, setHealth] = useState<any>(null);
   const [logs, setLogs] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+
+  // Provision User Modal State
+  const [isNewUserOpen, setIsNewUserOpen] = useState(false);
+  const [newEmail, setNewEmail] = useState('');
+  const [newName, setNewName] = useState('');
+  const [newRole, setNewRole] = useState('creator');
+  const [newPassword, setNewPassword] = useState('password123');
+  const [creatingUser, setCreatingUser] = useState(false);
+  const [userError, setUserError] = useState<string | null>(null);
+
+  const handleCreateUser = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setCreatingUser(true);
+    setUserError(null);
+    try {
+      const res = await fetch('http://localhost:8000/api/v1/admin/users', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email: newEmail,
+          full_name: newName,
+          role: newRole,
+          password: newPassword
+        })
+      });
+      if (res.ok) {
+        setIsNewUserOpen(false);
+        setNewEmail('');
+        setNewName('');
+        fetchAdminData();
+      } else {
+        const err = await res.json();
+        setUserError(err.detail || 'Failed to create user');
+      }
+    } catch (err) {
+      setUserError('Network error');
+    } finally {
+      setCreatingUser(false);
+    }
+  };
 
   useEffect(() => {
     fetchAdminData();
@@ -67,14 +107,31 @@ export default function AdminDashboard() {
       title="System Administration & Governance"
       subtitle="Full administrative oversight over user accounts, role access control, API rate limits, and audit logs."
       headerActions={
-        <button
-          onClick={fetchAdminData}
-          className="flex items-center gap-2 px-4 py-2 rounded-lg border text-sm font-medium hover:bg-gray-50 transition-colors"
-          style={{ borderColor: 'var(--color-border)', color: 'var(--color-foreground-secondary)' }}
-        >
-          <RefreshCw className={`h-4 w-4 ${loading ? 'animate-spin' : ''}`} />
-          Refresh Status
-        </button>
+        <div className="flex items-center gap-2">
+          <button
+            onClick={fetchAdminData}
+            className="flex items-center gap-2 px-4 py-2 rounded-lg border text-sm font-medium hover:bg-gray-50 transition-colors"
+            style={{ borderColor: 'var(--color-border)', color: 'var(--color-foreground-secondary)' }}
+          >
+            <RefreshCw className={`h-4 w-4 ${loading ? 'animate-spin' : ''}`} />
+            Refresh Status
+          </button>
+          <button
+            onClick={() => window.open('http://localhost:8000/api/v1/admin/export-audit-csv', '_blank')}
+            className="flex items-center gap-2 px-4 py-2 rounded-lg border text-sm font-medium hover:bg-gray-50 transition-colors"
+            style={{ borderColor: 'var(--color-border)', color: 'var(--color-foreground-secondary)' }}
+          >
+            <Download className="h-4 w-4" />
+            Export Audit Log
+          </button>
+          <button
+            onClick={() => setIsNewUserOpen(true)}
+            className="flex items-center gap-2 px-4 py-2 rounded-lg bg-red-600 text-white text-sm font-medium hover:bg-red-700 transition-colors shadow-sm"
+          >
+            <Plus className="h-4 w-4" />
+            Provision User
+          </button>
+        </div>
       }
     >
       <div className="flex flex-col gap-6">
@@ -335,6 +392,105 @@ export default function AdminDashboard() {
                   ))}
                 </tbody>
               </table>
+            </div>
+          </div>
+        )}
+
+        {/* Provision User Modal */}
+        {isNewUserOpen && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4">
+            <div className="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border" style={{ borderColor: 'var(--color-border)' }}>
+              <div className="flex items-center justify-between pb-4 border-b" style={{ borderColor: 'var(--color-border)' }}>
+                <div className="flex items-center gap-2">
+                  <UserCheck className="h-5 w-5 text-red-600" />
+                  <h3 className="text-lg font-bold text-gray-900">Provision Platform Account</h3>
+                </div>
+                <button
+                  onClick={() => setIsNewUserOpen(false)}
+                  className="p-1 rounded-lg hover:bg-gray-100 text-gray-400 hover:text-gray-600"
+                >
+                  <X className="h-5 w-5" />
+                </button>
+              </div>
+
+              {userError && (
+                <div className="mt-3 p-3 rounded-lg bg-red-50 text-red-700 text-xs font-medium border border-red-200">
+                  {userError}
+                </div>
+              )}
+
+              <form onSubmit={handleCreateUser} className="mt-4 space-y-4">
+                <div>
+                  <label className="block text-xs font-semibold text-gray-700 uppercase mb-1">Full Name *</label>
+                  <input
+                    type="text"
+                    required
+                    placeholder="e.g. Sarah Connor"
+                    value={newName}
+                    onChange={e => setNewName(e.target.value)}
+                    className="w-full text-sm border rounded-lg px-3 py-2 outline-none focus:ring-2 focus:ring-red-200"
+                    style={{ borderColor: 'var(--color-border)' }}
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-xs font-semibold text-gray-700 uppercase mb-1">Email Address *</label>
+                  <input
+                    type="email"
+                    required
+                    placeholder="e.g. sarah@creatoriq.com"
+                    value={newEmail}
+                    onChange={e => setNewEmail(e.target.value)}
+                    className="w-full text-sm border rounded-lg px-3 py-2 outline-none focus:ring-2 focus:ring-red-200"
+                    style={{ borderColor: 'var(--color-border)' }}
+                  />
+                </div>
+
+                <div className="grid grid-cols-2 gap-3">
+                  <div>
+                    <label className="block text-xs font-semibold text-gray-700 uppercase mb-1">Assigned Role</label>
+                    <select
+                      value={newRole}
+                      onChange={e => setNewRole(e.target.value)}
+                      className="w-full text-sm border rounded-lg px-3 py-2 outline-none bg-white text-gray-700"
+                      style={{ borderColor: 'var(--color-border)' }}
+                    >
+                      <option value="creator">Creator (🎨 Purple)</option>
+                      <option value="agency">Agency (🏢 Cyan)</option>
+                      <option value="marketing_team">Marketing (🎯 Amber)</option>
+                      <option value="admin">Administrator (⚙️ Red)</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label className="block text-xs font-semibold text-gray-700 uppercase mb-1">Initial Password</label>
+                    <input
+                      type="text"
+                      value={newPassword}
+                      onChange={e => setNewPassword(e.target.value)}
+                      className="w-full text-sm border rounded-lg px-3 py-2 outline-none focus:ring-2 focus:ring-red-200"
+                      style={{ borderColor: 'var(--color-border)' }}
+                    />
+                  </div>
+                </div>
+
+                <div className="pt-3 border-t flex justify-end gap-2" style={{ borderColor: 'var(--color-border)' }}>
+                  <button
+                    type="button"
+                    onClick={() => setIsNewUserOpen(false)}
+                    className="px-4 py-2 text-sm font-medium rounded-lg border hover:bg-gray-50"
+                    style={{ borderColor: 'var(--color-border)' }}
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    disabled={creatingUser}
+                    className="px-4 py-2 text-sm font-semibold rounded-lg bg-red-600 text-white hover:bg-red-700 transition-colors shadow"
+                  >
+                    {creatingUser ? 'Creating...' : 'Provision User'}
+                  </button>
+                </div>
+              </form>
             </div>
           </div>
         )}
