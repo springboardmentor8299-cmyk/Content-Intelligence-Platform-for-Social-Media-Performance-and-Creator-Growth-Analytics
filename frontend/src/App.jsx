@@ -11,7 +11,18 @@ import AudienceInsights from './components/AudienceInsights';
 import SocialIntegrations from './components/SocialIntegrations';
 import AccountSettingsModal from './components/AccountSettingsModal';
 import AuthPage from './components/AuthPage';
-import { fetchOverview, fetchTrends, fetchContent, fetchUserProfile, switchRole } from './api';
+import RevenueAnalytics from './components/RevenueAnalytics';
+import ReportsPage from './components/ReportsPage';
+import NotificationsPage from './components/NotificationsPage';
+import { 
+  fetchOverview, 
+  fetchTrends, 
+  fetchContent, 
+  fetchUserProfile, 
+  switchRole,
+  fetchNotifications,
+  fetchKPISummary 
+} from './api';
 import { 
   RefreshCw, 
   Eye, 
@@ -35,8 +46,8 @@ export default function App() {
   const [authChecking, setAuthChecking] = useState(true);
   const [currentRole, setCurrentRole] = useState('creator');
 
-  // Dashboard Navigation State (6 core items)
-  const [currentTab, setCurrentTab] = useState('overview'); // overview, content, audience, growth, integrations
+  // Dashboard Navigation State (all 9 items supported)
+  const [currentTab, setCurrentTab] = useState('overview'); // overview, content, audience, growth, integrations, revenue, reports, notifications
   const [selectedPlatform, setSelectedPlatform] = useState('all');
   const [days, setDays] = useState(30);
 
@@ -45,6 +56,7 @@ export default function App() {
   const [trends, setTrends] = useState([]);
   const [contentList, setContentList] = useState([]);
   const [selectedComparisonIds, setSelectedComparisonIds] = useState([1, 2]); // default top 2 for comparison
+  const [unreadNotifs, setUnreadNotifs] = useState(0);
 
   const [loading, setLoading] = useState(false);
   const [dataError, setDataError] = useState(null);
@@ -89,14 +101,18 @@ export default function App() {
     setLoading(true);
     setDataError(null);
     try {
-      const [overviewRes, trendsRes, contentRes] = await Promise.all([
+      const [overviewRes, trendsRes, contentRes, notifsRes] = await Promise.all([
         fetchOverview(selectedPlatform),
         fetchTrends(days, selectedPlatform),
-        fetchContent({ platform: selectedPlatform })
+        fetchContent({ platform: selectedPlatform }),
+        fetchNotifications()
       ]);
       setOverview(overviewRes.data);
       setTrends(trendsRes.data.trends || []);
       setContentList(contentRes.data || []);
+      
+      const unreadCount = (notifsRes.data || []).filter(n => !n.is_read).length;
+      setUnreadNotifs(unreadCount);
       
       // If comparison has invalid items, select first two
       if (contentRes.data.length >= 2 && selectedComparisonIds.length === 0) {
@@ -207,17 +223,20 @@ export default function App() {
         onOpenSettings={() => setShowSettingsModal(true)}
         currentUser={currentUser}
         onLogout={handleLogout}
+        onSelectTab={(tab) => setCurrentTab(tab)}
+        unreadNotifsCount={unreadNotifs}
       />
 
       {/* Main Layout Body */}
       <div className="flex-1 flex max-w-7xl w-full mx-auto">
         
-        {/* Sidebar Navigation (Exact 6 Items) */}
+        {/* Sidebar Navigation (All 9 Items) */}
         <Sidebar 
           currentTab={currentTab} 
           onSelectTab={(tab) => setCurrentTab(tab)} 
           role={currentRole}
           onOpenSettings={() => setShowSettingsModal(true)}
+          unreadNotifsCount={unreadNotifs}
         />
 
         {/* Primary Content View Area */}
@@ -347,39 +366,43 @@ export default function App() {
                     </button>
                   </div>
 
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3.5">
                     {overview.platforms
-                      .filter((p) => ['youtube', 'instagram'].includes(p.platform.toLowerCase()))
-                      .map((p) => (
-                      <div
-                        key={p.platform}
-                        onClick={() => setSelectedPlatform(p.platform)}
-                        className={`p-4 rounded-xl border transition cursor-pointer bg-white shadow-2xs ${
-                          selectedPlatform === p.platform
-                            ? 'border-indigo-600 ring-1 ring-indigo-600'
-                            : 'border-slate-200 hover:border-slate-300'
-                        }`}
-                      >
-                        <div className="flex items-center justify-between">
-                          <span className="text-xs font-bold text-slate-800 capitalize">{p.platform}</span>
-                          <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded border ${
-                            p.platform === 'youtube'
-                              ? 'text-emerald-700 bg-emerald-50 border-emerald-200'
-                              : 'text-slate-600 bg-slate-50 border-slate-200'
-                          }`}>
-                            {p.platform === 'youtube' ? `${p.engagement_rate}%` : 'Available'}
-                          </span>
-                        </div>
-                        <div className="mt-2 text-base font-extrabold text-slate-900 font-display">
-                          {p.platform === 'youtube' ? '1.42M' : 'Connect Account'}
-                        </div>
-                        <div className="text-[10px] text-slate-400 mt-0.5 truncate">
-                          {p.platform === 'youtube' 
-                            ? `${(p.views / 1000000).toFixed(1)}M public views • ${p.posts_count} items` 
-                            : 'Instagram connector available • Manage in Integrations'}
-                        </div>
-                      </div>
-                    ))}
+                      .filter((p) => ['youtube', 'instagram', 'facebook', 'x', 'linkedin'].includes(p.platform.toLowerCase()))
+                      .map((p) => {
+                        const isYt = p.platform === 'youtube';
+                        const displayName = p.platform.toLowerCase() === 'x' ? 'X' : p.platform;
+                        return (
+                          <div
+                            key={p.platform}
+                            onClick={() => setSelectedPlatform(p.platform)}
+                            className={`p-4 rounded-xl border transition cursor-pointer bg-white shadow-2xs ${
+                              selectedPlatform === p.platform
+                                ? 'border-indigo-600 ring-1 ring-indigo-600'
+                                : 'border-slate-200 hover:border-slate-300'
+                            }`}
+                          >
+                            <div className="flex items-center justify-between">
+                              <span className="text-xs font-bold text-slate-800 capitalize">{displayName}</span>
+                              <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded border ${
+                                isYt
+                                  ? 'text-emerald-700 bg-emerald-50 border-emerald-200'
+                                  : 'text-amber-800 bg-amber-50 border-amber-200'
+                              }`}>
+                                {isYt ? `${p.engagement_rate}%` : 'Not Connected'}
+                              </span>
+                            </div>
+                            <div className="mt-2 text-base font-extrabold text-slate-900 font-display">
+                              {isYt ? '1.42M' : 'Configuration Required'}
+                            </div>
+                            <div className="text-[10px] text-slate-400 mt-0.5 truncate">
+                              {isYt 
+                                ? `${(p.views / 1000000).toFixed(1)}M views • ${p.posts_count} items` 
+                                : 'Integration Ready • Pending OAuth setup'}
+                            </div>
+                          </div>
+                        );
+                      })}
                   </div>
                 </div>
               )}
@@ -521,9 +544,26 @@ export default function App() {
             <GrowthTrends platform={selectedPlatform} />
           )}
 
-          {/* TAB 5: SOCIAL INTEGRATIONS */}
+          {/* TAB 5: SOCIAL INTEGRATIONS & PLATFORM COMPARISON */}
           {currentTab === 'integrations' && (
             <SocialIntegrations />
+          )}
+
+          {/* TAB 6: REVENUE ANALYTICS */}
+          {currentTab === 'revenue' && (
+            <RevenueAnalytics />
+          )}
+
+          {/* TAB 7: REPORTS & EXPORT */}
+          {currentTab === 'reports' && (
+            <ReportsPage />
+          )}
+
+          {/* TAB 8: NOTIFICATIONS & ALERTS */}
+          {currentTab === 'notifications' && (
+            <NotificationsPage 
+              onUnreadCountChange={(c) => setUnreadNotifs(c)} 
+            />
           )}
 
         </main>

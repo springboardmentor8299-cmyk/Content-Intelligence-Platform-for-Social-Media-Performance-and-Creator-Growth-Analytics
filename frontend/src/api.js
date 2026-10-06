@@ -62,17 +62,41 @@ export const fetchAudienceDemographics = (platform = 'all') =>
 export const fetchFollowerGrowth = (days = 30) =>
   api.get(`/audience/growth?days=${days}`);
 
+export const fetchKPISummary = () =>
+  api.get('/analytics/kpi-summary');
+
+// Revenue Analytics (M3)
+export const fetchRevenue = (params = {}) =>
+  api.get('/revenue', { params });
+
 export const fetchRevenueSummary = () =>
   api.get('/revenue/summary');
 
+export const fetchRevenueTrends = () =>
+  api.get('/revenue/trends');
+
+export const createRevenueRecord = (data) =>
+  api.post('/revenue', data);
+
+export const updateRevenueRecord = (id, data) =>
+  api.put(`/revenue/${id}`, data);
+
+export const deleteRevenueRecord = (id) =>
+  api.delete(`/revenue/${id}`);
+
+// Backward compatibility for existing components
 export const fetchDeals = (status = 'all') =>
-  api.get(`/revenue/deals?status=${status}`);
+  api.get(`/revenue?status=${status}`);
 
 export const createDeal = (dealData) =>
-  api.post('/revenue/deals', dealData);
+  api.post('/revenue', dealData);
 
+// Social Media Integrations
 export const fetchSocialAccounts = () =>
   api.get('/social/accounts');
+
+export const fetchPlatformsStatus = () =>
+  api.get('/social/platforms/status');
 
 export const syncSocialAccount = (id) =>
   api.post(`/social/accounts/${id}/sync`);
@@ -80,15 +104,50 @@ export const syncSocialAccount = (id) =>
 export const toggleSocialAccount = (id) =>
   api.post(`/social/accounts/${id}/toggle`);
 
-export const fetchNotifications = () =>
-  api.get('/notifications');
+// Notifications (M3)
+export const fetchNotifications = (params = {}) =>
+  api.get('/notifications', { params });
+
+export const fetchUnreadNotificationsCount = () =>
+  api.get('/notifications/unread-count');
 
 export const markNotificationRead = (id) =>
-  api.post(`/notifications/${id}/read`);
+  api.patch(`/notifications/${id}/read`);
 
 export const markAllNotificationsRead = () =>
-  api.post('/notifications/mark-all-read');
+  api.patch('/notifications/read-all');
 
+// Reports & Export (M3)
+export const fetchReportPreview = (reportType = 'analytics_summary', period = '30d') =>
+  api.get(`/reports/preview?report_type=${reportType}&period=${period}`);
+
+export const getReportExportUrl = (reportType = 'analytics_summary', period = '30d', format = 'csv') =>
+  `${API_BASE}/reports/export?report_type=${reportType}&period=${period}&format=${format}`;
+
+export const downloadReportFile = async (reportType = 'analytics_summary', period = '30d', format = 'csv') => {
+  const response = await api.get(`/reports/export?report_type=${reportType}&period=${period}&format=${format}`, {
+    responseType: 'blob'
+  });
+  const blob = new Blob([response.data], {
+    type: format === 'xlsx'
+      ? 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+      : 'text/csv'
+  });
+  const url = window.URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `CreatorIQ_${reportType}_${period}.${format}`;
+  document.body.appendChild(a);
+  a.click();
+  window.URL.revokeObjectURL(url);
+  document.body.removeChild(a);
+};
+
+export const exportCSV = (type = 'content') =>
+  `${API_BASE}/reports/export-csv?report_type=${type}`;
+
+
+// User & Role Switching
 export const switchRole = (role) =>
   api.post(`/auth/switch-role/${role}`);
 
@@ -109,6 +168,3 @@ export const fetchHashtagAnalysis = (platform = 'all') =>
 
 export const fetchRecommendations = () =>
   api.get('/analytics/recommendations');
-
-export const exportCSV = (type = 'content') =>
-  `${API_BASE}/reports/export-csv?report_type=${type}`;

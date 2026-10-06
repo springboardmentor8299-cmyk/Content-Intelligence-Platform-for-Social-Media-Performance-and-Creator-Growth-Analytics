@@ -60,16 +60,8 @@ HONEST_SOCIAL_ACCOUNTS_DATA = [
         "platform": "instagram",
         "account_handle": "@rawtalkswithvk",
         "account_name": "Raw Talks With VK",
-        "followers_count": 0,  # Unverified public count -> Creator Access Required
+        "followers_count": 0,  # Unverified public count -> Configuration Required
         "profile_url": "https://instagram.com/rawtalkswithvk",
-        "is_connected": False
-    },
-    {
-        "platform": "tiktok",
-        "account_handle": "@rawtalks_clips",
-        "account_name": "Raw Talks Clips",
-        "followers_count": 0,
-        "profile_url": "https://tiktok.com/@rawtalks_clips",
         "is_connected": False
     },
     {
@@ -81,7 +73,7 @@ HONEST_SOCIAL_ACCOUNTS_DATA = [
         "is_connected": False
     },
     {
-        "platform": "twitter",
+        "platform": "x",
         "account_handle": "@rawtalks_vk",
         "account_name": "Raw Talks With VK",
         "followers_count": 0,
@@ -589,13 +581,238 @@ def seed_database(db: Session, force: bool = False):
         )
         db.add(content)
 
+    # 4. Insert Demo Revenue Records (Clearly labeled demo data for M3)
+    db.query(RevenueRecord).filter(RevenueRecord.user_id == primary_creator.id).delete()
+    demo_revenue_items = [
+        # Sponsorships
+        {
+            "source": "sponsorship",
+            "title": "Title Sponsorship - Tech Telugu Series Season 2",
+            "brand_name": "Zerodha / Coin",
+            "amount": 8500.0,
+            "status": "paid",
+            "days_ago": 28,
+            "notes": "Main segment integration, 60s host-read sponsor slot"
+        },
+        {
+            "source": "sponsorship",
+            "title": "Mid-Roll Integration - Entrepreneurship Special",
+            "brand_name": "Hostinger",
+            "amount": 4200.0,
+            "status": "paid",
+            "days_ago": 19,
+            "notes": "Custom promo link with 10% discount coupon code"
+        },
+        {
+            "source": "sponsorship",
+            "title": "Exclusive Studio Setup & Mic Sponsor",
+            "brand_name": "Rode Microphones",
+            "amount": 6500.0,
+            "status": "contracted",
+            "days_ago": 5,
+            "notes": "Quarterly studio branding and hardware showcase in description & desk placement"
+        },
+        # Ad Revenue
+        {
+            "source": "ad_revenue",
+            "title": "YouTube Partner Program - Q3 Estimated Payout",
+            "brand_name": "Google AdSense",
+            "amount": 7100.0,
+            "status": "paid",
+            "days_ago": 12,
+            "notes": "AdSense performance revenue from 26 verified episodes and shorts"
+        },
+        {
+            "source": "ad_revenue",
+            "title": "YouTube Partner Program - October Projected Pool",
+            "brand_name": "Google AdSense",
+            "amount": 3400.0,
+            "status": "pending",
+            "days_ago": 2,
+            "notes": "Pending end-of-month AdSense cycle payout"
+        },
+        # Affiliate Marketing
+        {
+            "source": "affiliate",
+            "title": "Creator Tech Stack Affiliate Commissions",
+            "brand_name": "Amazon Associates",
+            "amount": 1450.0,
+            "status": "paid",
+            "days_ago": 22,
+            "notes": "Microphone, podcast lighting and camera gear referrals"
+        },
+        {
+            "source": "affiliate",
+            "title": "Book Recommendations & Reading List",
+            "brand_name": "Audible India",
+            "amount": 1200.0,
+            "status": "pending",
+            "days_ago": 8,
+            "notes": "Guest recommended reading affiliates and audiobook signups"
+        },
+        # Brand Collaborations
+        {
+            "source": "brand_deal",
+            "title": "3-Part Thought Leadership Video Series",
+            "brand_name": "T-Hub Hyderabad",
+            "amount": 9500.0,
+            "status": "contracted",
+            "days_ago": 6,
+            "notes": "In-depth startup ecosystem conversations and founder interviews"
+        },
+        {
+            "source": "brand_deal",
+            "title": "Innovation Summit Media Partnership",
+            "brand_name": "Telangana Digital Media",
+            "amount": 5000.0,
+            "status": "paid",
+            "days_ago": 35,
+            "notes": "Keynote coverage, creator panel moderation, and founder interviews"
+        },
+        # Subscription Revenue
+        {
+            "source": "subscription",
+            "title": "YouTube Channel Memberships (Inner Circle)",
+            "brand_name": "Raw Talks Members",
+            "amount": 1850.0,
+            "status": "paid",
+            "days_ago": 15,
+            "notes": "Exclusive behind-the-scenes member community and badges"
+        },
+        {
+            "source": "subscription",
+            "title": "Discord & Community Exclusive Access",
+            "brand_name": "Substack / Members",
+            "amount": 950.0,
+            "status": "paid",
+            "days_ago": 10,
+            "notes": "Early access to full unedited podcast cuts and community AMA"
+        }
+    ]
+
+    for rev in demo_revenue_items:
+        record = RevenueRecord(
+            user_id=primary_creator.id,
+            source=rev["source"],
+            title=rev["title"],
+            brand_name=rev["brand_name"],
+            amount=rev["amount"],
+            currency="USD",
+            status=rev["status"],
+            notes=rev["notes"],
+            date=now - timedelta(days=rev["days_ago"])
+        )
+        db.add(record)
+
+    # 5. Insert M3 Notifications Across Required Categories
+    db.query(Notification).filter(Notification.user_id == primary_creator.id).delete()
+    demo_notifications = [
+        {
+            "title": "Milestone: 1,420,000 Subscribers",
+            "message": "Raw Talks With VK has reached 1.42M subscribers on the official YouTube channel (@RawTalksWithVK).",
+            "notification_type": "milestone",
+            "severity": "success",
+            "is_read": False,
+            "days_ago": 1
+        },
+        {
+            "title": "High Engagement: Episode Ft Adivi Sesh",
+            "message": "Podcast episode crossed 1,000,000+ views with an exceptional 6.16% engagement rate across likes and comments.",
+            "notification_type": "threshold",
+            "severity": "success",
+            "is_read": False,
+            "days_ago": 3
+        },
+        {
+            "title": "Weekly Content Velocity Update",
+            "message": "Observed cumulative catalog views reached over 11.5M views across 26 verified podcast episodes and shorts.",
+            "notification_type": "engagement",
+            "severity": "info",
+            "is_read": True,
+            "days_ago": 5
+        },
+        {
+            "title": "Sponsorship Payout Reminder: Hostinger",
+            "message": "Follow up on pending payout for Hostinger Mid-Roll campaign ($4,200). Invoice scheduled for processing.",
+            "notification_type": "sponsorship",
+            "severity": "warning",
+            "is_read": False,
+            "days_ago": 2
+        },
+        {
+            "title": "Revenue Pipeline Milestone: $49,650 Tracked",
+            "message": "Recorded revenue deals across all 5 streams (Sponsorships, Ad Revenue, Affiliates, Brand Deals, Subscriptions).",
+            "notification_type": "revenue",
+            "severity": "info",
+            "is_read": True,
+            "days_ago": 7
+        },
+        {
+            "title": "API Configuration: Instagram & Facebook Ready",
+            "message": "Meta App ID and Secret required to connect live Instagram and Facebook insights. Ready for post-presentation onboarding.",
+            "notification_type": "config_warning",
+            "severity": "warning",
+            "is_read": False,
+            "days_ago": 4
+        },
+        {
+            "title": "LinkedIn API Service Boundary Active",
+            "message": "LinkedIn OAuth connector staged. Set LINKEDIN_CLIENT_ID and LINKEDIN_CLIENT_SECRET to activate live sync.",
+            "notification_type": "integration",
+            "severity": "info",
+            "is_read": True,
+            "days_ago": 6
+        },
+        {
+            "title": "X (Twitter) Connector Staged",
+            "message": "X Developer API credentials required (X_CLIENT_ID, X_CLIENT_SECRET) to activate live sync.",
+            "notification_type": "config_warning",
+            "severity": "info",
+            "is_read": True,
+            "days_ago": 5
+        }
+    ]
+
+    for notif in demo_notifications:
+        n = Notification(
+            user_id=primary_creator.id,
+            title=notif["title"],
+            message=notif["message"],
+            notification_type=notif["notification_type"],
+            severity=notif["severity"],
+            is_read=notif["is_read"],
+            created_at=now - timedelta(days=notif["days_ago"])
+        )
+        db.add(n)
+
+    # 6. Insert Scheduled Reports
+    db.query(ScheduledReport).filter(ScheduledReport.user_id == primary_creator.id).delete()
+    db.add(ScheduledReport(
+        user_id=primary_creator.id,
+        report_name="Weekly Content Performance Digest",
+        frequency="weekly",
+        format="pdf",
+        email_recipient="creator@creatoriq.io",
+        is_active=True,
+        last_generated_at=now - timedelta(days=3)
+    ))
+    db.add(ScheduledReport(
+        user_id=primary_creator.id,
+        report_name="Monthly Sponsorship & Revenue Audit",
+        frequency="monthly",
+        format="csv",
+        email_recipient="creator@creatoriq.io",
+        is_active=True,
+        last_generated_at=now - timedelta(days=12)
+    ))
+
     # Note: Private Audience Demographics (Age, Gender, Geographic, Active Hours)
     # are intentionally NOT populated with synthetic fake percentages.
     # The application honestly displays that creator OAuth access is required for private studio telemetry.
     db.query(AudienceDemographic).filter(AudienceDemographic.user_id == primary_creator.id).delete()
 
     db.commit()
-    print("--- Successfully Seeded CreatorIQ with 26 Verified Raw Talks With VK Items! ---")
+    print("--- Successfully Seeded CreatorIQ with 26 Verified Items, Demo Revenue & Notifications! ---")
 
 
 if __name__ == "__main__":

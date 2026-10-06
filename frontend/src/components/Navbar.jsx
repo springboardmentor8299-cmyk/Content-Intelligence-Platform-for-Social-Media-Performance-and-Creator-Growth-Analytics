@@ -8,7 +8,8 @@ import {
   Zap,
   Settings,
   LogOut,
-  Sparkles
+  Sparkles,
+  Bell
 } from 'lucide-react';
 import { switchRole } from '../api';
 
@@ -17,7 +18,9 @@ export default function Navbar({
   onRoleChange, 
   onOpenSettings,
   currentUser,
-  onLogout
+  onLogout,
+  onSelectTab,
+  unreadNotifsCount = 0
 }) {
   const [showRoleMenu, setShowRoleMenu] = useState(false);
 
@@ -61,12 +64,12 @@ export default function Navbar({
                 <span className="text-lg font-extrabold tracking-tight text-slate-900 font-display">
                   Creator<span className="text-indigo-600">IQ</span>
                 </span>
-                <span className="hidden sm:inline-block px-2 py-0.5 text-[10px] font-semibold tracking-wide bg-slate-100 text-slate-600 border border-slate-200 rounded-md">
-                  M1 + M2
+                <span className="hidden sm:inline-block px-2 py-0.5 text-[10px] font-semibold tracking-wide bg-indigo-50 text-indigo-700 border border-indigo-200 rounded-md">
+                  Milestone 3
                 </span>
               </div>
               <p className="text-[11px] text-slate-500 hidden sm:block -mt-0.5">
-                Creator Analytics & Content Dashboard
+                Creator Analytics & Content Performance Dashboard
               </p>
             </div>
           </div>
@@ -136,10 +139,24 @@ export default function Navbar({
             )}
           </div>
 
+          {/* Notification Trigger */}
+          <button
+            onClick={() => onSelectTab && onSelectTab('notifications')}
+            className="p-2 rounded-lg text-slate-500 hover:text-slate-800 bg-slate-50 hover:bg-slate-100 border border-slate-200 transition relative cursor-pointer"
+            title="Notifications & Alerts"
+          >
+            <Bell className="w-4 h-4" />
+            {unreadNotifsCount > 0 && (
+              <span className="absolute -top-1 -right-1 w-4 h-4 bg-indigo-600 text-white text-[9px] font-bold rounded-full flex items-center justify-center shadow-xs">
+                {unreadNotifsCount}
+              </span>
+            )}
+          </button>
+
           {/* Account Settings Trigger */}
           <button
             onClick={onOpenSettings}
-            className="p-2 rounded-lg text-slate-500 hover:text-slate-800 bg-slate-50 hover:bg-slate-100 border border-slate-200 transition"
+            className="p-2 rounded-lg text-slate-500 hover:text-slate-800 bg-slate-50 hover:bg-slate-100 border border-slate-200 transition cursor-pointer"
             title="Account & Profile Settings"
           >
             <Settings className="w-4 h-4" />

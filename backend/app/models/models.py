@@ -49,7 +49,7 @@ class SocialAccount(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     user_id = Column(Integer, ForeignKey("users.id"), nullable=False)
-    platform = Column(String(50), nullable=False)  # youtube, instagram, tiktok, linkedin, twitter, facebook
+    platform = Column(String(50), nullable=False)  # youtube, instagram, facebook, x, linkedin
     account_handle = Column(String(100), nullable=False)
     account_name = Column(String(255), nullable=False)
     followers_count = Column(Integer, default=0)
@@ -65,7 +65,7 @@ class ContentItem(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     user_id = Column(Integer, ForeignKey("users.id"), nullable=False)
-    platform = Column(String(50), nullable=False)  # youtube, instagram, tiktok, linkedin, twitter
+    platform = Column(String(50), nullable=False)  # youtube, instagram, facebook, x, linkedin
     title = Column(String(500), nullable=False)
     content_type = Column(String(50), default="video")  # video, reel, short, post
     url = Column(String(500), nullable=True)
@@ -89,7 +89,7 @@ class AudienceDemographic(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     user_id = Column(Integer, ForeignKey("users.id"), nullable=False)
-    platform = Column(String(50), default="all")  # all, youtube, instagram, tiktok, linkedin
+    platform = Column(String(50), default="all")  # all, youtube, instagram, facebook, x, linkedin
     category = Column(String(50), nullable=False)  # age, gender, country, device, active_hour
     label = Column(String(100), nullable=False)
     percentage = Column(Float, default=0.0)
@@ -110,6 +110,7 @@ class RevenueRecord(Base):
     currency = Column(String(10), default="USD")
     date = Column(DateTime, default=datetime.utcnow)
     status = Column(String(50), default="paid")  # paid, pending, contracted
+    notes = Column(Text, nullable=True)
 
     user = relationship("User", back_populates="revenue_records")
 
@@ -121,7 +122,8 @@ class Notification(Base):
     user_id = Column(Integer, ForeignKey("users.id"), nullable=False)
     title = Column(String(255), nullable=False)
     message = Column(Text, nullable=False)
-    notification_type = Column(String(50), default="alert")  # alert, milestone, report, payment
+    notification_type = Column(String(50), default="alert")  # engagement, threshold, milestone, revenue, sponsorship, integration, config_warning
+    severity = Column(String(20), default="info")  # info, warning, success
     is_read = Column(Boolean, default=False)
     created_at = Column(DateTime, default=datetime.utcnow)
 

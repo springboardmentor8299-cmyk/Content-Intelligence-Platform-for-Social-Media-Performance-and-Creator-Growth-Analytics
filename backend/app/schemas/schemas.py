@@ -141,16 +141,27 @@ class AudienceDemographicSchema(BaseModel):
 
 # Revenue Schemas
 class RevenueRecordBase(BaseModel):
-    source: str
+    source: str  # sponsorship, ad_revenue, affiliate, brand_deal, subscription
     title: str
     brand_name: Optional[str] = None
     amount: float
     currency: str = "USD"
-    status: str = "paid"
+    status: str = "paid"  # paid, pending, contracted
+    notes: Optional[str] = None
 
 
 class RevenueRecordCreate(RevenueRecordBase):
     pass
+
+
+class RevenueRecordUpdate(BaseModel):
+    source: Optional[str] = None
+    title: Optional[str] = None
+    brand_name: Optional[str] = None
+    amount: Optional[float] = None
+    currency: Optional[str] = None
+    status: Optional[str] = None
+    notes: Optional[str] = None
 
 
 class RevenueRecordResponse(RevenueRecordBase):
@@ -167,6 +178,7 @@ class NotificationResponse(BaseModel):
     title: str
     message: str
     notification_type: str
+    severity: str = "info"
     is_read: bool
     created_at: datetime
 

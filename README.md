@@ -1,7 +1,7 @@
 # CreatorIQ — Creator Analytics & Content Performance Dashboard
-**Milestone 1 + Milestone 2 Complete**
+**Milestone 3 Complete**
 
-CreatorIQ is a full-stack creator analytics and content performance platform engineered for digital creators, agencies, and marketing teams. It unifies cross-platform telemetry across **YouTube, Instagram, TikTok, Facebook, X (Twitter), and LinkedIn** into a clean, modern, light-themed analytics dashboard featuring content metrics, multi-post comparison, audience demographics, growth trends, and role-based access control (RBAC).
+CreatorIQ is a full-stack creator analytics and content performance platform engineered for digital creators, agencies, and marketing teams. It unifies cross-platform telemetry across **YouTube, Instagram, Facebook, X, and LinkedIn** into a clean, modern, light-themed analytics dashboard featuring content metrics, multi-post comparison, audience demographics, growth trends, revenue analytics, notifications & alerts, executive reports & export, KPI monitoring, and role-based access control (RBAC).
 
 ---
 
@@ -73,12 +73,16 @@ CreatorIQ follows a clean, decoupled client-server architecture:
   - Follower, content, reach, and engagement trend tracking.
   - Simple forward projection labeled **Demo Forecast (Sample Trajectory)**.
   - Hashtag and discovery performance analysis.
-- **Social Integrations (6 platforms only)**:
-  - YouTube, Instagram, TikTok, Facebook, X (Twitter), LinkedIn.
-  - Clear **Demo Connector / Demo Sync** workflow.
-  - Connect / Disconnect and Sync actions that simulate live telemetry updates.
+- **Social Integrations (5 platforms)**:
+  - YouTube, Instagram, Facebook, X, and LinkedIn (TikTok is strictly excluded).
+  - Clear honest integration states (Public Data Available, Configuration Required, Not Connected).
+  - Clean service boundary connectors in `backend/app/integrations/`.
+- **Milestone 3 Capabilities**:
+  - Revenue Analytics & Sponsorship Tracking (Sponsorships, Ad Revenue, Affiliates, Brand Deals, Subscriptions).
+  - Notifications & Alerts Engine (Milestones, velocity alerts, sponsorship reminders, config warnings).
+  - Executive Reports & Export (CSV, Excel XLSX, PDF printable).
+  - Multi-Platform KPI Monitoring across all 8 project dimensions.
 
-*(Milestone 3 & 4 features such as revenue pipeline, sponsorship contracts, notifications, reports export, and complex AI engines are omitted from the showcase).*
 
 ---
 
@@ -170,8 +174,8 @@ npm run build
    - Inspect the topic and hashtag performance table (`#RawTalksWithVK`, `#TeluguPodcast`, etc.).
 8. **Open Social Integrations**:
    - Click **Social Integrations** in the sidebar.
-   - Review the 6 required platforms: YouTube, Instagram, TikTok, Facebook, X, LinkedIn.
-   - Click **Demo Sync** on YouTube: observe the sync spinner, updated timestamp, and green success banner.
+   - Review the 5 supported platforms: YouTube, Instagram, Facebook, X, and LinkedIn.
+   - Click **Refresh Public Observation** on YouTube: observe the telemetry refresh and verified snapshot.
    - Demonstrate the **Connect / Disconnect** toggle.
 9. **Open Account Settings**:
    - Click **Account Settings** in the sidebar or navbar.
