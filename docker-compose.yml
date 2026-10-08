@@ -1,0 +1,78 @@
+services:
+  # Database Service (PostgreSQL 15 for production and cloud deployments)
+  db:
+    image: postgres:15-alpine
+    container_name: creatoriq-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-creatoriq_user}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-creatoriq_secure_pass}
+      POSTGRES_DB: ${POSTGRES_DB:-creatoriq_db}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-creatoriq_user} -d ${POSTGRES_DB:-creatoriq_db}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - creatoriq-network
+
+  # Backend Service (FastAPI)
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: creatoriq-backend
+    restart: unless-stopped
+    environment:
+      DATABASE_URL: ${DATABASE_URL:-postgresql+psycopg://creatoriq_user:creatoriq_secure_pass@db:5432/creatoriq_db}
+      SECRET_KEY: ${SECRET_KEY:-creatoriq-production-secret-change-me}
+      FRONTEND_URL: ${FRONTEND_URL:-http://localhost:3000,http://localhost:80}
+      PORT: 8000
+      # Social API Credentials (Supplied via environment / .env)
+      YOUTUBE_API_KEY: ${YOUTUBE_API_KEY:-}
+      RAPIDAPI_KEY: ${RAPIDAPI_KEY:-}
+      X_BEARER_TOKEN: ${X_BEARER_TOKEN:-}
+      LINKEDIN_ACCESS_TOKEN: ${LINKEDIN_ACCESS_TOKEN:-}
+    ports:
+      - "8000:8000"
+    depends_on:
+      db:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:8000/health || exit 1"]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+    networks:
+      - creatoriq-network
+
+  # Frontend Service (React SPA served via Nginx)
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: creatoriq-frontend
+    restart: unless-stopped
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://localhost:80/ || exit 1"]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+    networks:
+      - creatoriq-network
+
+volumes:
+  postgres_data:
+    driver: local
+
+networks:
+  creatoriq-network:
+    driver: bridge

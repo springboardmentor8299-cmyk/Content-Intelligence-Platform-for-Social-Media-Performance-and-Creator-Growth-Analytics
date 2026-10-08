@@ -193,10 +193,10 @@ export default function KPICards({ data, kpiSummary }) {
           <div className="flex items-center gap-2">
             <span className="w-2 h-2 rounded-full bg-indigo-600" />
             <h3 className="text-xs font-bold text-slate-900 uppercase tracking-wider font-display">
-              Milestone 3 KPI Monitoring (8 Areas)
+              CreatorIQ Core KPI Monitoring (8 Dimensions)
             </h3>
-            <span className="text-[10px] font-semibold text-indigo-700 bg-indigo-50 px-2 py-0.5 rounded border border-indigo-100">
-              Live Health Status
+            <span className="text-[10px] font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">
+              Verified Health Status
             </span>
           </div>
 

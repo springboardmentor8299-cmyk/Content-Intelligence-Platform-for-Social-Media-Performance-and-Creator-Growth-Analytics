@@ -38,6 +38,7 @@ class Settings(BaseSettings):
     FACEBOOK_CLIENT_SECRET: str = os.getenv("FACEBOOK_CLIENT_SECRET", "")
 
     # X (Twitter) API Integration
+    X_BEARER_TOKEN: str = os.getenv("X_BEARER_TOKEN", "")
     X_CLIENT_ID: str = os.getenv("X_CLIENT_ID", "")
     X_CLIENT_SECRET: str = os.getenv("X_CLIENT_SECRET", "")
     X_API_KEY: str = os.getenv("X_API_KEY", "")
@@ -45,6 +46,7 @@ class Settings(BaseSettings):
     X_REDIRECT_URI: str = os.getenv("X_REDIRECT_URI", "")
 
     # LinkedIn Marketing & Community Management API
+    LINKEDIN_ACCESS_TOKEN: str = os.getenv("LINKEDIN_ACCESS_TOKEN", "")
     LINKEDIN_CLIENT_ID: str = os.getenv("LINKEDIN_CLIENT_ID", "")
     LINKEDIN_CLIENT_SECRET: str = os.getenv("LINKEDIN_CLIENT_SECRET", "")
     LINKEDIN_REDIRECT_URI: str = os.getenv("LINKEDIN_REDIRECT_URI", "")

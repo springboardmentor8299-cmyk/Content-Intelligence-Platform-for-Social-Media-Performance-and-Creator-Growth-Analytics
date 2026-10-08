@@ -19,6 +19,7 @@ def get_content_list(
     content_type: Optional[str] = Query("all"),
     sort_by: str = Query("published_at"),  # published_at, views, likes, engagement_rate, shares
     order: str = Query("desc"),
+    skip: int = Query(0, ge=0),
     limit: int = Query(50, le=100),
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user)
@@ -43,7 +44,7 @@ def get_content_list(
     else:
         query = query.order_by(sort_column)
 
-    return query.limit(limit).all()
+    return query.offset(skip).limit(limit).all()
 
 
 @router.get("/top", response_model=List[ContentItemResponse])

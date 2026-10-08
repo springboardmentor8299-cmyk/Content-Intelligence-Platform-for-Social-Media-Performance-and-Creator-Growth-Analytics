@@ -1,17 +1,27 @@
 # CreatorIQ — Creator Analytics & Content Performance Dashboard
-**Milestone 3 Complete**
+**Milestone 4 Complete: Testing, Responsive Optimization, Dockerization & Cloud Deployment Readiness**
 
-CreatorIQ is a full-stack creator analytics and content performance platform engineered for digital creators, agencies, and marketing teams. It unifies cross-platform telemetry across **YouTube, Instagram, Facebook, X, and LinkedIn** into a clean, modern, light-themed analytics dashboard featuring content metrics, multi-post comparison, audience demographics, growth trends, revenue analytics, notifications & alerts, executive reports & export, KPI monitoring, and role-based access control (RBAC).
+CreatorIQ is a full-stack creator analytics and content performance platform engineered for digital creators, agencies, and marketing teams. Focused on the verified public channel of **Raw Talks With VK / Vamshi Kurapati**, the platform unifies cross-platform telemetry across **YouTube, Instagram, Facebook, X, and LinkedIn** (with TikTok strictly excluded).
+
+The platform features:
+- **Authentication & RBAC**: JWT Bearer tokens, salted BCrypt hashing, and 4 role personas (Creator, Agency, Marketing Team, Administrator).
+- **Core Dashboard**: 8-dimension KPI monitoring, public performance curves, and supported platform matrices.
+- **Content Analytics**: 26 verified episodes & shorts, multi-item comparison engine (2 to 4 items), format filters, and sorting.
+- **Audience Analytics**: Honest telemetry status, public subscriber trajectory, and private studio access indicators.
+- **Growth & Trends**: 30-day continuous view velocity trends and 3/6-month analytical projections.
+- **Revenue Analytics**: Full CRUD pipeline for sponsorships and brand deals ($49,650 pipeline) with monthly breakdowns.
+- **Notifications & Alerts**: Filterable notification center with unread count badges and mark-as-read workflows.
+- **Reports & Exports**: Previews for 6 executive report types across 4 time periods, RFC-4180 CSV export, and styled OpenPyXL Excel (`.xlsx`) export.
+- **Dockerization**: Production-ready `Dockerfile` for backend, multi-stage Nginx `Dockerfile` for frontend, and PostgreSQL `docker-compose.yml`.
+- **System Optimization**: Code-split vendor chunks (`vendor-react`, `vendor-recharts`, `vendor-lucide`), responsive mobile drawer navigation, error boundaries, and connection pool resilience.
 
 ---
 
 ## 1. System Architecture
 
-CreatorIQ follows a clean, decoupled client-server architecture:
-
 ```
 ┌──────────────────────────────────────────────────────────┐
-│             React 19 + Vite Frontend SPA                │
+│              React 19 + Vite Frontend SPA                │
 │    (Tailwind CSS, Recharts, Lucide Icons, Axios API)     │
 └────────────────────────────┬─────────────────────────────┘
                              │ JWT Bearer Authentication
@@ -32,74 +42,40 @@ CreatorIQ follows a clean, decoupled client-server architecture:
 ## 2. Technology Stack
 
 - **Frontend**: React 19, Vite, Tailwind CSS, Recharts, Lucide React, Axios
-- **Backend**: FastAPI, Python 3.11+, Uvicorn, SQLAlchemy 2.0, Pydantic Settings
-- **Authentication & Security**: JSON Web Tokens (JWT via Jose HS256), Direct BCrypt salted password hashing, Bearer Token authorization, Strict 401 Unauthenticated enforcement, Granular RBAC
-- **Database**: SQLite default (`creator_iq.db`), with PostgreSQL support via `DATABASE_URL` environment variable
+- **Backend**: FastAPI, Python 3.11+, Uvicorn, SQLAlchemy 2.0, Pydantic Settings, OpenPyXL
+- **Authentication & Security**: JSON Web Tokens (JWT via Jose HS256), BCrypt password hashing, Granular RBAC
+- **Database**: SQLite default (`creator_iq.db`) for zero-config local run, PostgreSQL supported via `DATABASE_URL`
+- **Containers & Deployment**: Docker, Docker Compose, Nginx (Alpine), Multi-stage builds, Gzip compression
 
 ---
 
-## 3. Scope: Milestone 1 + Milestone 2 Only
+## 3. Truthful Social Integration Status
 
-### Milestone 1 — User Management & Core Dashboard
-- **Authentication**: User Registration, Login, Logout, JWT tokens, Protected routes.
-- **Security**: BCrypt password hashing, session expiration handling, strict 401 on unauthenticated access (no insecure fallbacks).
-- **Role-Based Access Control (RBAC)**:
-  1. Creator (Channel analytics & studio)
-  2. Agency (Talent management & cross-channel oversight)
-  3. Marketing Team (Campaign ROI & reach benchmarks)
-  4. Administrator (Full platform oversight)
-- **Profiles & Settings**: Creator profile, agency roster, account settings, password change.
-- **Creator Dashboard**:
-  - Exactly 4 primary KPI cards: **Total Followers**, **Total Views**, **Total Reach**, **Avg Engagement Rate** (no Revenue KPI).
-  - Performance Trends chart (views & engagement over 7D/14D/30D).
-  - Supported Platforms breakdown (6 platforms).
-  - Top Performing Content table.
+In strict adherence to data authenticity rules:
 
-### Milestone 2 — Content, Audience, Trends & Multi-Platform Integration
-- **Content Analytics**:
-  - Full metrics summary: Views, Likes, Comments, Shares, Saves, Watch Time, Reach, Engagement Rate.
-  - Performance and engagement trends.
-  - Filterable, sortable content table.
-  - Side-by-side **Content Comparison** workflow (compare 2 to 4 items).
-- **Audience Analytics**:
-  - Follower growth trajectory.
-  - Age distribution (18–24, 25–34, 35–44, 45–54, 55+).
-  - Gender split (Male, Female, Non-binary / Other).
-  - Geographic distribution (Regional & global diaspora).
-  - Device usage (Mobile, Desktop, Tablet).
-  - Active audience hours (peak engagement windows).
-  - Reach & impressions overview.
-- **Growth & Trends**:
-  - Follower, content, reach, and engagement trend tracking.
-  - Simple forward projection labeled **Demo Forecast (Sample Trajectory)**.
-  - Hashtag and discovery performance analysis.
-- **Social Integrations (5 platforms)**:
-  - YouTube, Instagram, Facebook, X, and LinkedIn (TikTok is strictly excluded).
-  - Clear honest integration states (Public Data Available, Configuration Required, Not Connected).
-  - Clean service boundary connectors in `backend/app/integrations/`.
-- **Milestone 3 Capabilities**:
-  - Revenue Analytics & Sponsorship Tracking (Sponsorships, Ad Revenue, Affiliates, Brand Deals, Subscriptions).
-  - Notifications & Alerts Engine (Milestones, velocity alerts, sponsorship reminders, config warnings).
-  - Executive Reports & Export (CSV, Excel XLSX, PDF printable).
-  - Multi-Platform KPI Monitoring across all 8 project dimensions.
+| Platform | Architectural Status | Connection State | Provenance / Implementation |
+|---|---|---|---|
+| **YouTube** | Public Channel Monitored | **LIVE / VERIFIED** | Verified public channel queries for `@RawTalksWithVK` (1.42M subscribers, 26 verified episodes/shorts, 11.54M views, 6.18% avg engagement). |
+| **Instagram** | Connector Implemented | **CREDENTIAL MISSING** | Displays **Configuration Required / Not Connected**. Connectable via `RAPIDAPI_KEY` for Glavier Instagram API. |
+| **X** | Connector Implemented | **CREDENTIAL MISSING** | Displays **Configuration Required / Not Connected**. Connectable via `X_BEARER_TOKEN` for X Developer API v2. |
+| **LinkedIn** | Connector Implemented | **CREDENTIAL MISSING** | Displays **Configuration Required / Not Connected**. Connectable via `LINKEDIN_ACCESS_TOKEN` for LinkedIn Community API. |
+| **Facebook** | Architecture Ready | **NOT LIVE** | Displays **Configuration Required / Not Connected**. Architecture prepared for Meta Graph API. |
+| **TikTok** | **STRICTLY EXCLUDED** | **NONE** | Completely excluded from all endpoints, models, views, and schemas. |
 
+### Private Telemetry Honesty:
+Private creator-only metrics remain strictly unavailable unless connected via creator-authenticated OAuth:
+- Reach & Impressions: Clearly labeled "Creator access required" / 0
+- Saves & Watch Time: Labeled "Private" (Creator Studio access required)
+- Demographics (Age, Gender, Geography, Device): Labeled "Configuration Required / Requires YouTube Studio OAuth"
 
 ---
 
-## 4. Sample Demo Creator Identity
-
-- **Channel Identity**: **Raw Talks With VK**
-- **Format**: Telugu podcast discussions, long-form interviews, startup journeys, and viral short-form clips.
-- **Honesty Note**: Data is realistic sample/demo data engineered for project demonstration. Simulated connectors are clearly labeled as "Demo Connector" and "Demo Forecast".
-
----
-
-## 5. Seeded Demo Accounts
+## 4. Seeded Demo Accounts
 
 | Role | Email | Password | Primary Demonstration Focus |
 |---|---|---|---|
 | **Creator** | `creator@creatoriq.io` | `Creator@123` | Full creator dashboard, content studio, comparisons & profile edit |
-| **Agency** | `agency@creatoriq.io` | `Agency@123` | Talent management view, multi-creator roster |
+| **Agency** | `agency@creatoriq.io` | `Agency@123` | Talent management view, multi-channel portfolio oversight |
 | **Marketing Team** | `marketing@creatoriq.io` | `Marketing@123` | Campaign reach analytics, audience benchmarks |
 | **Administrator** | `admin@creatoriq.io` | `Admin@123` | Superuser platform privileges & session inspection |
 
@@ -107,79 +83,109 @@ CreatorIQ follows a clean, decoupled client-server architecture:
 
 ---
 
+## 5. Prerequisites & Environment Setup
+
+### Prerequisites
+- Python 3.11+
+- Node.js 18+ and npm
+- Docker and Docker Compose (optional for containerized deployment)
+
+### Environment Configuration
+Copy environment templates and configure values as needed:
+```bash
+# Root
+cp .env.example .env
+
+# Backend
+cp backend/.env.example backend/.env
+
+# Frontend
+cp frontend/.env.example frontend/.env
+```
+*(No secrets are committed to version control; `.env` files are tracked in `.gitignore`).*
+
+---
+
 ## 6. How to Run Locally
 
-### 1. Backend Startup
+### Option A: Local Development Server
 
+#### 1. Backend Startup
 ```powershell
-# Open terminal in backend directory
-cd CreatorIQ/backend
-
-# Activate virtual environment
-.\venv\Scripts\Activate.ps1
-
-# Run Uvicorn server
+cd backend
+.\venv\Scripts\Activate.ps1   # Or source venv/bin/activate on Unix
 uvicorn app.main:app --reload --host 127.0.0.1 --port 8000
 ```
 - API Root: `http://127.0.0.1:8000/`
+- API Health Check: `http://127.0.0.1:8000/health`
 - Interactive Swagger Documentation: `http://127.0.0.1:8000/docs`
 
-### 2. Frontend Startup
-
+#### 2. Frontend Startup
 ```powershell
-# Open terminal in frontend directory
-cd CreatorIQ/frontend
-
-# Install dependencies (if needed)
+cd frontend
 npm install
-
-# Start Vite dev server
 npm run dev -- --host 127.0.0.1 --port 5173
 ```
 - Web Application: `http://127.0.0.1:5173/`
 
-### 3. Production Build Validation
+---
 
-```powershell
-npm run build
+### Option B: Docker Compose (Full Stack + PostgreSQL)
+
+```bash
+docker compose up --build
 ```
-*(Build executes cleanly with 0 errors).*
+- Frontend Application: `http://localhost:3000`
+- Backend API Docs: `http://localhost:8000/docs`
+- Health Probe: `http://localhost:8000/health`
 
 ---
 
-## 7. Step-by-Step Mentor Demonstration Flow (5–10 Minutes)
+## 7. Running the Automated Test Suites
 
-1. **Open CreatorIQ**: Open `http://127.0.0.1:5173/`.
-2. **Show Login Page**: Observe the clean, light, pastel-accented interface with 1-click mentor login tiles.
-3. **Login as Creator**: Click the **Creator** 1-click tile (or enter `creator@creatoriq.io` / `Creator@123`) and click **Sign In to Dashboard**.
-4. **Show Dashboard**:
-   - Header shows **Raw Talks With VK** with **Demo Channel** badge.
-   - Explain the 4 primary KPIs: **Total Followers (1.52M)**, **Total Views (1.87M)**, **Total Reach (2.46M)**, **Avg Engagement Rate (7.68%)**. (Note absence of revenue clutter).
-   - Explain the **Performance Trends** area chart with 7D/14D/30D toggles.
-   - Show the **Supported Platforms** breakdown cards.
-   - Inspect the **Top Performing Content** list.
-5. **Open Content Analytics**:
-   - Click **Content Analytics** in the sidebar.
-   - Review the 8-metric summary strip (Views, Likes, Comments, Shares, Saves, Watch Time, Reach, Eng. Rate).
-   - Filter the table by content type (`video`, `reel`, `post`) or platform.
-   - Click the **Compare** icon on two different episodes.
-   - Scroll down to the **Content Comparison** section: explain the side-by-side metric rows, top performer identification, and retention takeaways.
-6. **Open Audience Analytics**:
-   - Click **Audience Analytics** in the sidebar.
-   - Explain the **Follower Growth Trajectory** chart.
-   - Review the demographic distributions: Age (core 18–34), Gender split, Device usage (76.5% Mobile), Geographic distribution (India 74.2%, US 12.4%, etc.), and Peak Active Hours (6 PM – 8:30 PM).
-7. **Open Growth & Trends**:
-   - Click **Growth & Trends** in the sidebar.
-   - Review the 90-day / 180-day **Demo Forecast (Sample Trajectory)** chart and upcoming milestones.
-   - Inspect the topic and hashtag performance table (`#RawTalksWithVK`, `#TeluguPodcast`, etc.).
-8. **Open Social Integrations**:
-   - Click **Social Integrations** in the sidebar.
-   - Review the 5 supported platforms: YouTube, Instagram, Facebook, X, and LinkedIn.
-   - Click **Refresh Public Observation** on YouTube: observe the telemetry refresh and verified snapshot.
-   - Demonstrate the **Connect / Disconnect** toggle.
-9. **Open Account Settings**:
-   - Click **Account Settings** in the sidebar or navbar.
-   - Review the **Creator Profile** (Raw Talks With VK bio, niche, website).
-   - Switch to **Roles & Permissions** to demonstrate RBAC personas.
-10. **Logout**:
-    - Click **Sign Out**. The JWT token is wiped from client storage and the user is redirected to the login page.
+From the `backend` directory:
+```powershell
+cd backend
+
+# Run Milestone 3 verification suite
+.\venv\Scripts\python test_m3_verification.py
+
+# Run Milestone 4 comprehensive workflow & health suite
+.\venv\Scripts\python test_m4_verification.py
+```
+*(Both test suites achieve 100% pass rate).*
+
+---
+
+## 8. Cloud Deployment Readiness
+
+CreatorIQ is configured for containerized cloud deployment on AWS ECS, Google Cloud Run, Render, Railway, or DigitalOcean:
+- **Host & Port**: Backend binds dynamically to `0.0.0.0` and reads `$PORT`.
+- **CORS Configuration**: Dynamically handles `FRONTEND_URL` while preserving localhost defaults.
+- **Database Resilience**: PostgreSQL connection pool pre-ping enabled (`pool_pre_ping=True`) to handle cloud connection drops.
+- **Health Endpoint**: Dedicated `/health` probe for cloud load balancer health checks.
+
+> [!NOTE]
+> Cloud deployment requires external cloud account/configuration and credentials; the project is deployment-ready.
+
+---
+
+## 9. Complete 14-Step Final Demo Workflow
+
+1. **Login**: Sign in at `http://localhost:5173` using `creator@creatoriq.io` / `Creator@123`.
+2. **Creator Dashboard**: View personalized welcome banner for *Vamshi Kurapati (VK)* with verified channel provenance badge.
+3. **KPI Overview**: Examine the 3 core public KPI cards (1.42M Subscribers, 11.5M Views, 6.18% Engagement) and toggle the 8-dimension KPI monitoring strip.
+4. **Content Analytics**: Navigate to Content Analytics tab to review the 26 verified episodes/shorts catalog and aggregated engagement summary.
+5. **Content Performance / Comparison**: Sort content by views or engagement rate; select 2 to 4 episodes and trigger the side-by-side comparison engine.
+6. **Audience Analytics**: Review public subscriber baseline and honest indicators explaining creator studio telemetry requirements.
+7. **Growth / Trend Analytics**: Review 30-day continuous view velocity trends and switch between 90-day and 6-month forward analytical estimates.
+8. **Revenue Analytics**: Inspect tracked sponsorships and deals ($49,650 pipeline); demonstrate adding, updating, and filtering a deal.
+9. **Notifications & Alerts**: View system alerts across milestone, velocity, and sponsorship categories; demonstrate marking notifications as read.
+10. **Reports & Exports**: Preview the 6 executive report types across 7D, 30D, 90D, and all-time periods.
+11. **CSV & XLSX Download**: Click "Download CSV" and "Download Excel (.xlsx)" to verify instantaneous file generation and download.
+12. **Social Integrations / Status**: Review the multi-platform hub verifying YouTube public channel monitoring and honest "Configuration Required" states for Instagram, X, LinkedIn, and Facebook (with zero TikTok references).
+13. **Settings / Profile & RBAC**: Open Account Settings modal to edit bio/details; switch roles to Agency or Marketing Team to demonstrate RBAC persona tailoring.
+14. **Logout**: Click the Logout button in the header to securely clear session tokens and return to the login interface.
+
+---
+*Documentation maintained for CreatorIQ.*

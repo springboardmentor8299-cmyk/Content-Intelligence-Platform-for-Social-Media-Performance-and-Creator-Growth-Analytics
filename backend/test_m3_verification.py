@@ -194,6 +194,18 @@ def run_tests():
     assert ig_sync.status_code == 200
     print("[PASS] 8d. Instagram Sync clean behavior verified")
 
+    # Sync X (clean non-crashing configuration response)
+    x_acc = next(a for a in accounts if a["platform"] == "x")
+    x_sync = client.post(f"/api/v1/social/accounts/{x_acc['id']}/sync", headers=auth_headers)
+    assert x_sync.status_code == 200
+    print("[PASS] 8e. X Sync clean behavior verified")
+
+    # Sync LinkedIn (clean non-crashing configuration response)
+    li_acc = next(a for a in accounts if a["platform"] == "linkedin")
+    li_sync = client.post(f"/api/v1/social/accounts/{li_acc['id']}/sync", headers=auth_headers)
+    assert li_sync.status_code == 200
+    print("[PASS] 8f. LinkedIn Sync clean behavior verified")
+
     # 9. Individual Service Unit Inspections
     yt_svc = YouTubeIntegrationService()
     yt_info = yt_svc.fetch_public_channel_data()
@@ -203,6 +215,7 @@ def run_tests():
     ig_svc = InstagramIntegrationService()
     ig_info = ig_svc.fetch_profile_and_posts()
     assert ig_info["status"] == "Configuration Required / Not Connected"
+    assert ig_info["is_live"] is False
     print(f"[PASS] 9b. InstagramIntegrationService (RapidAPI): {ig_info['status']}")
 
     fb_svc = FacebookIntegrationService()
@@ -213,11 +226,17 @@ def run_tests():
     x_svc = XIntegrationService()
     x_status = x_svc.get_status()
     assert x_status["status"] == "Configuration Required / Not Connected"
+    x_metrics = x_svc.get_account_metrics()
+    assert x_metrics["status"] == "Configuration Required / Not Connected"
+    assert x_metrics["is_live"] is False
     print(f"[PASS] 9d. XIntegrationService: {x_status['status']}")
 
     li_svc = LinkedInIntegrationService()
     li_status = li_svc.get_status()
     assert li_status["status"] == "Configuration Required / Not Connected"
+    li_metrics = li_svc.get_organization_page_analytics()
+    assert li_metrics["status"] == "Configuration Required / Not Connected"
+    assert li_metrics["is_live"] is False
     print(f"[PASS] 9e. LinkedInIntegrationService: {li_status['status']}")
 
     # Restore clean state

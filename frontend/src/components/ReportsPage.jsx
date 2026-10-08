@@ -88,8 +88,8 @@ export default function ReportsPage() {
               <FileSpreadsheet className="w-5 h-5" />
             </div>
             <h2 className="text-xl font-bold text-slate-900 font-display">Reports & Export</h2>
-            <span className="px-2 py-0.5 rounded-md text-[10px] font-semibold bg-slate-100 text-slate-600 border border-slate-200">
-              Milestone 3
+            <span className="px-2 py-0.5 rounded-md text-[10px] font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">
+              Milestone 4
             </span>
           </div>
           <p className="text-xs text-slate-500 mt-1 max-w-2xl leading-relaxed">

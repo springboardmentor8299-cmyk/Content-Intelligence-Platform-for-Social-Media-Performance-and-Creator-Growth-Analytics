@@ -74,7 +74,7 @@ export default function SocialIntegrations() {
   }, []);
 
   const handleSync = async (account) => {
-    if (account.platform !== 'youtube' && !account.is_connected) {
+    if (!account.is_connected) {
       setActivePlatformModal(account.platform);
       setShowConfigModal(true);
       return;
@@ -148,8 +148,8 @@ export default function SocialIntegrations() {
           color: 'text-slate-900',
           bg: 'bg-slate-100',
           border: 'border-slate-200',
-          envVars: ['X_CLIENT_ID', 'X_CLIENT_SECRET', 'X_API_KEY', 'X_API_SECRET'],
-          desc: 'Architecture ready for X Developer API v2. Connect account to retrieve live tweet & audience metrics.'
+          envVars: ['X_BEARER_TOKEN', 'X_CLIENT_ID', 'X_CLIENT_SECRET'],
+          desc: 'Official X API v2. Connect account via X_BEARER_TOKEN in backend/.env to retrieve live public profile.'
         };
       case 'linkedin':
         return {
@@ -162,8 +162,8 @@ export default function SocialIntegrations() {
           color: 'text-sky-600',
           bg: 'bg-sky-50',
           border: 'border-sky-100',
-          envVars: ['LINKEDIN_CLIENT_ID', 'LINKEDIN_CLIENT_SECRET', 'LINKEDIN_REDIRECT_URI'],
-          desc: 'Architecture ready for LinkedIn Community API. Connect account to retrieve live analytics.'
+          envVars: ['LINKEDIN_ACCESS_TOKEN', 'LINKEDIN_CLIENT_ID', 'LINKEDIN_CLIENT_SECRET'],
+          desc: 'LinkedIn Marketing & Community API. Connect account via LINKEDIN_ACCESS_TOKEN in backend/.env.'
         };
       default:
         return {
@@ -259,11 +259,12 @@ export default function SocialIntegrations() {
 
                     <div className="flex items-center gap-2">
                       <span className="text-[10px] font-semibold text-slate-500 bg-slate-100 px-2 py-0.5 rounded-md border border-slate-200">
-                        {details.connectorStatus}
+                        {acc.is_connected ? 'Connected' : details.connectorStatus}
                       </span>
-                      {isYt ? (
+                      {acc.is_connected ? (
                         <span className="flex items-center gap-1 text-[10px] font-bold text-emerald-700 bg-emerald-50 px-2.5 py-0.5 rounded-full border border-emerald-200">
-                          <CheckCircle2 className="w-3 h-3 text-emerald-600" /> Public Data Available
+                          <CheckCircle2 className="w-3 h-3 text-emerald-600" />
+                          {isYt ? 'Public Data Available' : 'Connected / Live API'}
                         </span>
                       ) : (
                         <span className="flex items-center gap-1 text-[10px] font-medium text-amber-800 bg-amber-50 px-2.5 py-0.5 rounded-full border border-amber-200">
@@ -287,9 +288,9 @@ export default function SocialIntegrations() {
                   <div className="mt-4 pt-3 border-t border-slate-100 space-y-2">
                     <div className="flex items-center justify-between text-xs">
                       <span className="text-slate-500">Audience / Followers:</span>
-                      {isYt ? (
+                      {acc.is_connected ? (
                         <span className="font-extrabold text-slate-900 font-display text-sm">
-                          1,420,000 (1.42M)
+                          {acc.followers_count ? Number(acc.followers_count).toLocaleString() : 'Connected (0)'}
                         </span>
                       ) : (
                         <span className="text-[11px] font-medium text-amber-700 bg-amber-50 px-2 py-0.5 rounded border border-amber-200">
@@ -303,16 +304,20 @@ export default function SocialIntegrations() {
                       {isYt ? (
                         <span className="font-bold text-slate-700">26 Verified Episodes & Shorts</span>
                       ) : (
-                        <span className="text-slate-400 text-[11px]">Connect account to retrieve</span>
+                        <span className="text-slate-500 text-[11px]">
+                          {acc.is_connected ? 'Live Sync Active' : 'Connect account to retrieve'}
+                        </span>
                       )}
                     </div>
 
                     <div className="flex items-center justify-between text-[10px] text-slate-400 pt-1">
                       <span>Data Provenance:</span>
                       <span className="truncate max-w-[240px]">
-                        {isYt 
-                          ? 'Source: Public YouTube channel observation (@RawTalksWithVK)' 
-                          : 'Integration Ready • Pending OAuth setup'}
+                        {acc.is_connected 
+                          ? (isYt 
+                              ? 'Source: Public YouTube channel observation (@RawTalksWithVK)' 
+                              : `Live Connected API (${details.name})`)
+                          : 'Integration Ready • Configuration Required'}
                       </span>
                     </div>
                   </div>
@@ -320,14 +325,14 @@ export default function SocialIntegrations() {
 
                 {/* Card Action Footer */}
                 <div className="mt-5 pt-3 border-t border-slate-100 flex items-center justify-between gap-2">
-                  {isYt ? (
+                  {acc.is_connected ? (
                     <button
                       onClick={() => handleSync(acc)}
                       disabled={syncingId === acc.id}
                       className="w-full py-2 rounded-xl text-xs font-semibold text-center bg-slate-50 hover:bg-slate-100 text-slate-700 border border-slate-200 transition cursor-pointer flex items-center justify-center gap-1.5"
                     >
                       <RefreshCw className={`w-3.5 h-3.5 ${syncingId === acc.id ? 'animate-spin text-indigo-600' : 'text-slate-500'}`} />
-                      <span>{syncingId === acc.id ? 'Refreshing Snapshot...' : 'Refresh Public Observation'}</span>
+                      <span>{syncingId === acc.id ? 'Refreshing Snapshot...' : (isYt ? 'Refresh Public Observation' : 'Sync Live Telemetry')}</span>
                     </button>
                   ) : (
                     <button
@@ -383,128 +388,57 @@ export default function SocialIntegrations() {
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100">
-              
-              {/* 1. YouTube */}
-              <tr className="hover:bg-slate-50/50">
-                <td className="py-3.5 px-4 font-bold text-slate-900 flex items-center gap-2">
-                  <YoutubeIcon className="w-4 h-4 text-red-600" />
-                  <span>YouTube</span>
-                </td>
-                <td className="py-3.5 px-4 font-mono text-slate-700">@RawTalksWithVK</td>
-                <td className="py-3.5 px-4 font-extrabold text-slate-900 font-display">1,420,000</td>
-                <td className="py-3.5 px-4 font-semibold text-slate-700">26 Videos / Shorts</td>
-                <td className="py-3.5 px-4 text-right font-extrabold text-slate-900 font-display">11,540,290</td>
-                <td className="py-3.5 px-4 text-center font-bold text-emerald-700">6.18%</td>
-                <td className="py-3.5 px-4">
-                  <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200 flex items-center gap-1 w-fit">
-                    <CheckCircle2 className="w-3 h-3 text-emerald-600" /> Public Channel Monitored
-                  </span>
-                </td>
-                <td className="py-3.5 px-4 text-slate-500 text-[11px]">
-                  Public YouTube channel observation
-                </td>
-              </tr>
+              {accounts.map((acc) => {
+                const details = getPlatformDetails(acc.platform);
+                const Icon = details.icon;
+                const isYt = acc.platform === 'youtube';
 
-              {/* 2. Instagram */}
-              <tr className="hover:bg-slate-50/50 bg-slate-50/30">
-                <td className="py-3.5 px-4 font-bold text-slate-900 flex items-center gap-2">
-                  <InstagramIcon className="w-4 h-4 text-pink-600" />
-                  <span>Instagram</span>
-                </td>
-                <td className="py-3.5 px-4 font-mono text-slate-500">@rawtalkswithvk</td>
-                <td className="py-3.5 px-4">
-                  <span className="px-2 py-0.5 rounded text-[10px] font-medium bg-amber-50 text-amber-700 border border-amber-200">
-                    Configuration Required
-                  </span>
-                </td>
-                <td className="py-3.5 px-4 text-slate-400 text-[11px]">Configuration Required</td>
-                <td className="py-3.5 px-4 text-right text-slate-400 text-[11px]">Configuration Required</td>
-                <td className="py-3.5 px-4 text-center text-slate-400 text-[11px]">Configuration Required</td>
-                <td className="py-3.5 px-4">
-                  <span className="px-2 py-0.5 rounded-full text-[10px] font-medium bg-amber-50 text-amber-800 border border-amber-200 flex items-center gap-1 w-fit">
-                    Integration Ready / Not Connected
-                  </span>
-                </td>
-                <td className="py-3.5 px-4 text-slate-400 text-[11px]">
-                  Requires RapidAPI key
-                </td>
-              </tr>
-
-              {/* 3. Facebook */}
-              <tr className="hover:bg-slate-50/50 bg-slate-50/30">
-                <td className="py-3.5 px-4 font-bold text-slate-900 flex items-center gap-2">
-                  <FacebookIcon className="w-4 h-4 text-blue-600" />
-                  <span>Facebook</span>
-                </td>
-                <td className="py-3.5 px-4 font-mono text-slate-500">rawtalkswithvk</td>
-                <td className="py-3.5 px-4">
-                  <span className="px-2 py-0.5 rounded text-[10px] font-medium bg-amber-50 text-amber-700 border border-amber-200">
-                    Configuration Required
-                  </span>
-                </td>
-                <td className="py-3.5 px-4 text-slate-400 text-[11px]">Configuration Required</td>
-                <td className="py-3.5 px-4 text-right text-slate-400 text-[11px]">Configuration Required</td>
-                <td className="py-3.5 px-4 text-center text-slate-400 text-[11px]">Configuration Required</td>
-                <td className="py-3.5 px-4">
-                  <span className="px-2 py-0.5 rounded-full text-[10px] font-medium bg-amber-50 text-amber-800 border border-amber-200 flex items-center gap-1 w-fit">
-                    Integration Ready / Not Connected
-                  </span>
-                </td>
-                <td className="py-3.5 px-4 text-slate-400 text-[11px]">
-                  Requires Facebook App credentials
-                </td>
-              </tr>
-
-              {/* 4. X */}
-              <tr className="hover:bg-slate-50/50 bg-slate-50/30">
-                <td className="py-3.5 px-4 font-bold text-slate-900 flex items-center gap-2">
-                  <XIcon className="w-4 h-4 text-slate-900" />
-                  <span>X</span>
-                </td>
-                <td className="py-3.5 px-4 font-mono text-slate-500">@rawtalks_vk</td>
-                <td className="py-3.5 px-4">
-                  <span className="px-2 py-0.5 rounded text-[10px] font-medium bg-amber-50 text-amber-700 border border-amber-200">
-                    Configuration Required
-                  </span>
-                </td>
-                <td className="py-3.5 px-4 text-slate-400 text-[11px]">Configuration Required</td>
-                <td className="py-3.5 px-4 text-right text-slate-400 text-[11px]">Configuration Required</td>
-                <td className="py-3.5 px-4 text-center text-slate-400 text-[11px]">Configuration Required</td>
-                <td className="py-3.5 px-4">
-                  <span className="px-2 py-0.5 rounded-full text-[10px] font-medium bg-amber-50 text-amber-800 border border-amber-200 flex items-center gap-1 w-fit">
-                    Integration Ready / Not Connected
-                  </span>
-                </td>
-                <td className="py-3.5 px-4 text-slate-400 text-[11px]">
-                  Requires X Developer credentials
-                </td>
-              </tr>
-
-              {/* 5. LinkedIn */}
-              <tr className="hover:bg-slate-50/50 bg-slate-50/30">
-                <td className="py-3.5 px-4 font-bold text-slate-900 flex items-center gap-2">
-                  <LinkedinIcon className="w-4 h-4 text-sky-600" />
-                  <span>LinkedIn</span>
-                </td>
-                <td className="py-3.5 px-4 font-mono text-slate-500">raw-talks-with-vk</td>
-                <td className="py-3.5 px-4">
-                  <span className="px-2 py-0.5 rounded text-[10px] font-medium bg-amber-50 text-amber-700 border border-amber-200">
-                    Configuration Required
-                  </span>
-                </td>
-                <td className="py-3.5 px-4 text-slate-400 text-[11px]">Configuration Required</td>
-                <td className="py-3.5 px-4 text-right text-slate-400 text-[11px]">Configuration Required</td>
-                <td className="py-3.5 px-4 text-center text-slate-400 text-[11px]">Configuration Required</td>
-                <td className="py-3.5 px-4">
-                  <span className="px-2 py-0.5 rounded-full text-[10px] font-medium bg-amber-50 text-amber-800 border border-amber-200 flex items-center gap-1 w-fit">
-                    Integration Ready / Not Connected
-                  </span>
-                </td>
-                <td className="py-3.5 px-4 text-slate-400 text-[11px]">
-                  Requires LinkedIn App credentials
-                </td>
-              </tr>
-
+                return (
+                  <tr key={acc.platform} className={`hover:bg-slate-50/50 ${acc.is_connected ? '' : 'bg-slate-50/30'}`}>
+                    <td className="py-3.5 px-4 font-bold text-slate-900 flex items-center gap-2">
+                      <Icon className={`w-4 h-4 ${details.color}`} />
+                      <span>{details.name}</span>
+                    </td>
+                    <td className="py-3.5 px-4 font-mono text-slate-700">{acc.account_handle}</td>
+                    <td className="py-3.5 px-4">
+                      {acc.is_connected ? (
+                        <span className="font-extrabold text-slate-900 font-display">
+                          {acc.followers_count ? Number(acc.followers_count).toLocaleString() : 'Connected (0)'}
+                        </span>
+                      ) : (
+                        <span className="px-2 py-0.5 rounded text-[10px] font-medium bg-amber-50 text-amber-700 border border-amber-200">
+                          Configuration Required
+                        </span>
+                      )}
+                    </td>
+                    <td className="py-3.5 px-4 font-semibold text-slate-700">
+                      {isYt ? '26 Videos / Shorts' : (acc.is_connected ? 'Observed Posts' : <span className="text-slate-400 text-[11px] font-normal">Configuration Required</span>)}
+                    </td>
+                    <td className="py-3.5 px-4 text-right font-extrabold text-slate-900 font-display">
+                      {isYt ? '11,540,290' : (acc.is_connected ? 'Live Sync' : <span className="text-slate-400 text-[11px] font-normal">Configuration Required</span>)}
+                    </td>
+                    <td className="py-3.5 px-4 text-center font-bold text-emerald-700">
+                      {isYt ? '6.18%' : (acc.is_connected ? 'Active' : <span className="text-slate-400 text-[11px] font-normal">Configuration Required</span>)}
+                    </td>
+                    <td className="py-3.5 px-4">
+                      {acc.is_connected ? (
+                        <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200 flex items-center gap-1 w-fit">
+                          <CheckCircle2 className="w-3 h-3 text-emerald-600" /> {isYt ? 'Public Channel Monitored' : 'Live API Active'}
+                        </span>
+                      ) : (
+                        <span className="px-2 py-0.5 rounded-full text-[10px] font-medium bg-amber-50 text-amber-800 border border-amber-200 flex items-center gap-1 w-fit">
+                          Integration Ready / Not Connected
+                        </span>
+                      )}
+                    </td>
+                    <td className="py-3.5 px-4 text-slate-500 text-[11px]">
+                      {acc.is_connected 
+                        ? (isYt ? 'Public YouTube channel observation' : `Live API Query (${details.name})`) 
+                        : `Requires ${details.envVars[0]}`}
+                    </td>
+                  </tr>
+                );
+              })}
             </tbody>
           </table>
         </div>
@@ -559,10 +493,12 @@ export default function SocialIntegrations() {
                 <div>FACEBOOK_CLIENT_SECRET=your_facebook_client_secret</div>
 
                 <div className="text-slate-800 pt-2"># X (Twitter) Developer API v2</div>
+                <div>X_BEARER_TOKEN=your_x_bearer_token</div>
                 <div>X_CLIENT_ID=your_x_client_id</div>
                 <div>X_CLIENT_SECRET=your_x_client_secret</div>
 
                 <div className="text-sky-700 pt-2"># LinkedIn Marketing API</div>
+                <div>LINKEDIN_ACCESS_TOKEN=your_linkedin_access_token</div>
                 <div>LINKEDIN_CLIENT_ID=your_linkedin_client_id</div>
                 <div>LINKEDIN_CLIENT_SECRET=your_linkedin_client_secret</div>
               </div>

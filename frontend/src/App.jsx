@@ -14,6 +14,7 @@ import AuthPage from './components/AuthPage';
 import RevenueAnalytics from './components/RevenueAnalytics';
 import ReportsPage from './components/ReportsPage';
 import NotificationsPage from './components/NotificationsPage';
+import ErrorBoundary from './components/ErrorBoundary';
 import { 
   fetchOverview, 
   fetchTrends, 
@@ -50,6 +51,7 @@ export default function App() {
   const [currentTab, setCurrentTab] = useState('overview'); // overview, content, audience, growth, integrations, revenue, reports, notifications
   const [selectedPlatform, setSelectedPlatform] = useState('all');
   const [days, setDays] = useState(30);
+  const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
 
   // Data State
   const [overview, setOverview] = useState(null);
@@ -223,24 +225,38 @@ export default function App() {
         onOpenSettings={() => setShowSettingsModal(true)}
         currentUser={currentUser}
         onLogout={handleLogout}
-        onSelectTab={(tab) => setCurrentTab(tab)}
+        onSelectTab={(tab) => {
+          setCurrentTab(tab);
+          setMobileSidebarOpen(false);
+        }}
         unreadNotifsCount={unreadNotifs}
+        onToggleMobileMenu={() => setMobileSidebarOpen(!mobileSidebarOpen)}
+        mobileMenuOpen={mobileSidebarOpen}
       />
 
       {/* Main Layout Body */}
       <div className="flex-1 flex max-w-7xl w-full mx-auto">
         
-        {/* Sidebar Navigation (All 9 Items) */}
+        {/* Sidebar Navigation (Desktop Persistent + Mobile Drawer) */}
         <Sidebar 
           currentTab={currentTab} 
-          onSelectTab={(tab) => setCurrentTab(tab)} 
+          onSelectTab={(tab) => {
+            setCurrentTab(tab);
+            setMobileSidebarOpen(false);
+          }} 
           role={currentRole}
-          onOpenSettings={() => setShowSettingsModal(true)}
+          onOpenSettings={() => {
+            setShowSettingsModal(true);
+            setMobileSidebarOpen(false);
+          }}
           unreadNotifsCount={unreadNotifs}
+          mobileOpen={mobileSidebarOpen}
+          onCloseMobile={() => setMobileSidebarOpen(false)}
         />
 
         {/* Primary Content View Area */}
         <main className="flex-1 p-4 sm:p-6 lg:p-8 space-y-6 overflow-hidden">
+          <ErrorBoundary onReset={loadData}>
           
           {/* Top Control Bar: Platform Filter & Refresh */}
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-3.5 rounded-2xl border border-slate-200 shadow-2xs">
@@ -566,6 +582,7 @@ export default function App() {
             />
           )}
 
+          </ErrorBoundary>
         </main>
       </div>
 

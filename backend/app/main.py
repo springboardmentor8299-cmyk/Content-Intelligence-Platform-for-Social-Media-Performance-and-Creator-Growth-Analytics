@@ -1,5 +1,8 @@
+import os
+from datetime import datetime
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from sqlalchemy import text
 
 from app.core.config import settings
 from app.core.database import engine, Base, SessionLocal
@@ -45,6 +48,28 @@ def root():
     }
 
 
+@app.get("/health")
+@app.get("/api/v1/health")
+def health():
+    db_status = "connected"
+    try:
+        with SessionLocal() as db_session:
+            db_session.execute(text("SELECT 1"))
+    except Exception as e:
+        db_status = f"unhealthy: {str(e)}"
+
+    return {
+        "status": "healthy" if db_status == "connected" else "degraded",
+        "database": db_status,
+        "app": settings.PROJECT_NAME,
+        "version": settings.VERSION,
+        "environment": "cloud_ready",
+        "timestamp": datetime.utcnow().isoformat()
+    }
+
+
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run("app.main:app", host="0.0.0.0", port=8000, reload=True)
+    port = int(os.getenv("PORT", 8000))
+    host = os.getenv("HOST", "0.0.0.0")
+    uvicorn.run("app.main:app", host=host, port=port, reload=True)

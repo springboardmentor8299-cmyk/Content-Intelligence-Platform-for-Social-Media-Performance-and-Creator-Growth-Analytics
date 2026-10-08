@@ -167,6 +167,25 @@ def create_revenue_record(
     return record
 
 
+@router.get("/{revenue_id}", response_model=RevenueRecordResponse)
+def get_revenue_record(
+    revenue_id: int,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
+    target_user_id = _get_target_user_id(db, current_user)
+    record = db.query(RevenueRecord).filter(
+        RevenueRecord.id == revenue_id,
+        RevenueRecord.user_id == target_user_id
+    ).first()
+    if not record:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"Revenue record with ID {revenue_id} not found."
+        )
+    return record
+
+
 @router.put("/{revenue_id}", response_model=RevenueRecordResponse)
 def update_revenue_record(
     revenue_id: int,

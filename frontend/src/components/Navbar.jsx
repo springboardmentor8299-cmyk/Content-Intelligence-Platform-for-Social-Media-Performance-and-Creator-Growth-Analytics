@@ -9,7 +9,8 @@ import {
   Settings,
   LogOut,
   Sparkles,
-  Bell
+  Bell,
+  Menu
 } from 'lucide-react';
 import { switchRole } from '../api';
 
@@ -20,7 +21,9 @@ export default function Navbar({
   currentUser,
   onLogout,
   onSelectTab,
-  unreadNotifsCount = 0
+  unreadNotifsCount = 0,
+  onToggleMobileMenu,
+  mobileMenuOpen
 }) {
   const [showRoleMenu, setShowRoleMenu] = useState(false);
 
@@ -55,6 +58,16 @@ export default function Navbar({
         
         {/* Brand & Creator Identity */}
         <div className="flex items-center gap-4">
+          {/* Mobile Menu Hamburger (Visible on < lg) */}
+          <button
+            onClick={onToggleMobileMenu}
+            className="p-2 rounded-xl text-slate-600 hover:text-slate-900 hover:bg-slate-100 border border-slate-200 lg:hidden cursor-pointer"
+            title="Toggle Navigation Menu"
+            aria-label="Toggle Navigation Menu"
+          >
+            <Menu className="w-5 h-5" />
+          </button>
+
           <div className="flex items-center gap-2.5">
             <div className="w-9 h-9 rounded-xl bg-indigo-600 flex items-center justify-center shadow-xs shadow-indigo-200">
               <Zap className="w-5 h-5 text-white" />
@@ -65,7 +78,7 @@ export default function Navbar({
                   Creator<span className="text-indigo-600">IQ</span>
                 </span>
                 <span className="hidden sm:inline-block px-2 py-0.5 text-[10px] font-semibold tracking-wide bg-indigo-50 text-indigo-700 border border-indigo-200 rounded-md">
-                  Milestone 3
+                  Milestone 4
                 </span>
               </div>
               <p className="text-[11px] text-slate-500 hidden sm:block -mt-0.5">
