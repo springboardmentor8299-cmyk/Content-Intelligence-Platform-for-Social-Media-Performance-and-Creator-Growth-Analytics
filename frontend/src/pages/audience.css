@@ -1,0 +1,1462 @@
+/* =====================================================
+   CREATORIQ - AUDIENCE ANALYTICS
+   Navy / Dark Blue Theme
+===================================================== */
+
+* {
+  box-sizing: border-box;
+}
+
+.audience-page {
+  min-height: 100vh;
+  display: flex;
+  background: #eef4fa;
+  color: #102a47;
+  font-family: Inter, Arial, sans-serif;
+}
+
+
+/* =====================================================
+   SIDEBAR
+===================================================== */
+
+.audience-sidebar {
+  width: 250px;
+  min-height: 100vh;
+  position: fixed;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  z-index: 20;
+
+  display: flex;
+  flex-direction: column;
+
+  padding: 28px 18px;
+
+  background: #0b2039;
+  color: #ffffff;
+}
+
+.audience-logo {
+  height: 55px;
+
+  display: flex;
+  align-items: center;
+
+  gap: 10px;
+  padding: 0 14px;
+
+  margin-bottom: 35px;
+
+  font-size: 24px;
+  font-weight: 800;
+  letter-spacing: -0.7px;
+
+  cursor: pointer;
+}
+
+.audience-logo-mark {
+  color: #8dbce8;
+  font-size: 29px;
+}
+
+
+/* =====================================================
+   NAVIGATION
+===================================================== */
+
+.audience-navigation {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.audience-nav-item {
+  min-height: 50px;
+
+  display: flex;
+  align-items: center;
+
+  gap: 14px;
+
+  padding: 0 17px;
+
+  border-radius: 12px;
+
+  color: #a9bdd3;
+
+  font-size: 15px;
+  font-weight: 500;
+
+  cursor: pointer;
+
+  transition:
+    background 0.2s ease,
+    color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.audience-nav-item span {
+  width: 22px;
+
+  display: inline-flex;
+  justify-content: center;
+
+  font-size: 18px;
+}
+
+.audience-nav-item:hover {
+  background: #17395e;
+  color: #ffffff;
+}
+
+.audience-nav-item.active {
+  background: #28547f;
+  color: #ffffff;
+
+  box-shadow:
+    inset 4px 0 0 #9bc8f0;
+}
+
+
+/* =====================================================
+   SIDEBAR BOTTOM
+===================================================== */
+
+.audience-sidebar-bottom {
+  margin-top: auto;
+}
+
+.audience-profile {
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+
+  padding: 20px 10px;
+
+  display: flex;
+  align-items: center;
+
+  gap: 12px;
+}
+
+.audience-profile-avatar {
+  width: 40px;
+  height: 40px;
+
+  flex-shrink: 0;
+
+  border-radius: 50%;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: #dbeaf7;
+  color: #173f6f;
+
+  font-size: 15px;
+  font-weight: 800;
+}
+
+.audience-profile strong {
+  display: block;
+
+  color: #ffffff;
+
+  font-size: 14px;
+}
+
+.audience-profile span {
+  display: block;
+
+  margin-top: 3px;
+
+  color: #8fa7c0;
+
+  font-size: 12px;
+}
+
+
+/* =====================================================
+   MAIN
+===================================================== */
+
+.audience-main {
+  width: calc(100% - 250px);
+
+  margin-left: 250px;
+
+  padding: 42px 48px 70px;
+
+  min-width: 0;
+}
+
+
+/* =====================================================
+   HEADER
+===================================================== */
+
+.audience-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+
+  gap: 25px;
+
+  margin-bottom: 30px;
+}
+
+.audience-page-label {
+  margin-bottom: 8px;
+
+  color: #35668f;
+
+  font-size: 11px;
+  font-weight: 800;
+
+  letter-spacing: 2px;
+}
+
+.audience-header h1 {
+  margin: 0;
+
+  color: #102a47;
+
+  font-size: 34px;
+  line-height: 1.2;
+
+  font-weight: 800;
+
+  letter-spacing: -0.8px;
+}
+
+.audience-header p {
+  max-width: 700px;
+
+  margin: 10px 0 0;
+
+  color: #68819b;
+
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+
+/* =====================================================
+   LIVE STATUS
+===================================================== */
+
+.audience-live {
+  flex-shrink: 0;
+
+  display: flex;
+  align-items: center;
+
+  gap: 9px;
+
+  padding: 11px 17px;
+
+  border: 1px solid #cbddeb;
+  border-radius: 25px;
+
+  background: #dcebf8;
+
+  color: #214f78;
+
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.audience-live-dot {
+  width: 8px;
+  height: 8px;
+
+  border-radius: 50%;
+
+  background: #3976a9;
+}
+
+
+/* =====================================================
+   ERROR
+===================================================== */
+
+.audience-error {
+  margin-bottom: 20px;
+
+  padding: 14px 17px;
+
+  border: 1px solid #e1bfc5;
+  border-radius: 12px;
+
+  background: #fff4f5;
+
+  color: #9b3945;
+
+  font-size: 13px;
+}
+
+
+/* =====================================================
+   LOADING
+===================================================== */
+
+.audience-loading {
+  min-height: 450px;
+
+  display: flex;
+  flex-direction: column;
+
+  align-items: center;
+  justify-content: center;
+
+  text-align: center;
+}
+
+.audience-spinner {
+  width: 38px;
+  height: 38px;
+
+  border: 4px solid #d7e4ef;
+  border-top-color: #173f6f;
+
+  border-radius: 50%;
+
+  animation: audience-spin 0.8s linear infinite;
+
+  margin-bottom: 18px;
+}
+
+@keyframes audience-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.audience-loading h2 {
+  margin: 0;
+
+  color: #17344f;
+
+  font-size: 20px;
+}
+
+.audience-loading p {
+  margin-top: 8px;
+
+  color: #7890a6;
+
+  font-size: 13px;
+}
+
+
+/* =====================================================
+   KPI GRID
+===================================================== */
+
+.audience-kpi-grid {
+  display: grid;
+
+  grid-template-columns:
+    repeat(4, minmax(0, 1fr));
+
+  gap: 18px;
+
+  margin-bottom: 22px;
+}
+
+.audience-kpi-card {
+  min-width: 0;
+  min-height: 150px;
+
+  padding: 22px;
+
+  background: #ffffff;
+
+  border: 1px solid #dce7f1;
+  border-radius: 16px;
+
+  box-shadow:
+    0 5px 18px rgba(20, 53, 84, 0.05);
+}
+
+.audience-kpi-top {
+  display: flex;
+
+  justify-content: space-between;
+  align-items: center;
+
+  gap: 10px;
+}
+
+.audience-kpi-top > span {
+  color: #71879d;
+
+  font-size: 10px;
+  font-weight: 800;
+
+  letter-spacing: 1.2px;
+}
+
+.audience-kpi-icon {
+  width: 38px;
+  height: 38px;
+
+  flex-shrink: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 10px;
+
+  background: #e3eef8;
+  color: #214f78;
+
+  font-size: 18px;
+}
+
+.audience-kpi-card h2 {
+  margin: 15px 0 5px;
+
+  color: #102a47;
+
+  font-size: 27px;
+  font-weight: 800;
+
+  letter-spacing: -0.5px;
+}
+
+.audience-kpi-card p {
+  margin: 0;
+
+  color: #7890a6;
+
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.audience-positive {
+  color: #315f88 !important;
+  font-weight: 700;
+}
+
+.audience-positive span {
+  margin-left: 6px;
+
+  color: #7890a6;
+
+  font-weight: 400;
+}
+
+
+/* =====================================================
+   COMMON CARD
+===================================================== */
+
+.audience-card {
+  min-width: 0;
+
+  background: #ffffff;
+
+  border: 1px solid #dce7f1;
+  border-radius: 18px;
+
+  padding: 25px;
+
+  box-shadow:
+    0 5px 18px rgba(20, 53, 84, 0.05);
+}
+
+.audience-section-header {
+  display: flex;
+
+  justify-content: space-between;
+  align-items: flex-start;
+
+  gap: 20px;
+
+  margin-bottom: 15px;
+}
+
+.audience-section-label {
+  margin-bottom: 7px;
+
+  color: #467298;
+
+  font-size: 10px;
+  font-weight: 800;
+
+  letter-spacing: 1.7px;
+}
+
+.audience-section-header h2 {
+  margin: 0;
+
+  color: #102a47;
+
+  font-size: 19px;
+  line-height: 1.3;
+
+  font-weight: 800;
+}
+
+.audience-section-header p {
+  max-width: 600px;
+
+  margin: 7px 0 0;
+
+  color: #7890a6;
+
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.audience-filter {
+  flex-shrink: 0;
+
+  padding: 7px 12px;
+
+  border: 1px solid #d5e2ed;
+  border-radius: 8px;
+
+  color: #315f88;
+
+  background: #f5f9fc;
+
+  font-size: 12px;
+  font-weight: 700;
+}
+
+
+/* =====================================================
+   MAIN ANALYTICS GRID
+===================================================== */
+
+.audience-main-grid {
+  display: grid;
+
+  grid-template-columns:
+    minmax(0, 1.55fr)
+    minmax(320px, 0.85fr);
+
+  gap: 20px;
+
+  margin-bottom: 20px;
+
+  align-items: stretch;
+}
+
+
+/* =====================================================
+   AGE / BAR CHART
+===================================================== */
+
+.demographic-card {
+  min-width: 0;
+}
+
+.audience-bar-chart {
+  width: 100%;
+  min-width: 0;
+
+  padding-top: 5px;
+}
+
+.audience-bar-chart .recharts-responsive-container {
+  min-width: 0;
+}
+
+.audience-bar-chart svg {
+  overflow: visible;
+}
+
+
+/* =====================================================
+   GENDER
+===================================================== */
+
+.gender-card {
+  min-width: 0;
+}
+
+.gender-chart {
+  width: 100%;
+  height: 270px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  overflow: visible;
+}
+
+.gender-chart .recharts-wrapper {
+  max-width: 100%;
+}
+
+.gender-chart svg {
+  overflow: visible;
+}
+
+.gender-list {
+  display: flex;
+  flex-direction: column;
+
+  gap: 0;
+
+  margin-top: 2px;
+}
+
+.gender-row {
+  min-height: 43px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 15px;
+
+  border-bottom: 1px solid #edf2f7;
+}
+
+.gender-row:last-child {
+  border-bottom: none;
+}
+
+.gender-row > div {
+  display: flex;
+  align-items: center;
+
+  gap: 9px;
+
+  color: #3e5871;
+
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.gender-dot {
+  width: 9px;
+  height: 9px;
+
+  flex-shrink: 0;
+
+  border-radius: 50%;
+}
+
+.gender-row strong {
+  color: #173f6f;
+
+  font-size: 13px;
+  font-weight: 800;
+}
+
+
+/* =====================================================
+   COUNTRY + ACTIVITY
+===================================================== */
+
+.audience-bottom-grid {
+  display: grid;
+
+  grid-template-columns:
+    minmax(0, 1fr)
+    minmax(0, 1fr);
+
+  gap: 20px;
+
+  margin-bottom: 20px;
+
+  align-items: stretch;
+}
+
+
+/* =====================================================
+   COUNTRY
+===================================================== */
+
+.country-card {
+  min-width: 0;
+}
+
+.country-list {
+  display: flex;
+  flex-direction: column;
+
+  gap: 2px;
+
+  margin-top: 7px;
+}
+
+.country-item {
+  padding: 11px 0;
+
+  border-bottom: 1px solid #edf2f7;
+}
+
+.country-item:last-child {
+  border-bottom: none;
+}
+
+.country-info {
+  display: flex;
+
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 15px;
+
+  margin-bottom: 7px;
+}
+
+.country-info > div {
+  min-width: 0;
+
+  display: flex;
+  align-items: center;
+
+  gap: 10px;
+}
+
+.country-rank {
+  width: 27px;
+  height: 27px;
+
+  flex-shrink: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 8px;
+
+  background: #e5eff8;
+  color: #28547f;
+
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.country-info strong {
+  overflow: hidden;
+
+  color: #193651;
+
+  font-size: 13px;
+  font-weight: 700;
+
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.country-info > span {
+  flex-shrink: 0;
+
+  color: #315f88;
+
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.country-progress {
+  width: 100%;
+  height: 6px;
+
+  overflow: hidden;
+
+  border-radius: 20px;
+
+  background: #edf3f8;
+}
+
+.country-progress-fill {
+  height: 100%;
+
+  border-radius: 20px;
+
+  background:
+    linear-gradient(
+      90deg,
+      #102a47,
+      #315f88
+    );
+
+  transition: width 0.4s ease;
+}
+
+
+/* =====================================================
+   ONLINE ACTIVITY
+===================================================== */
+
+.activity-card {
+  min-width: 0;
+}
+
+.activity-grid {
+  width: 100%;
+
+  display: grid;
+
+  grid-template-columns:
+    repeat(7, minmax(0, 1fr));
+
+  grid-auto-rows: 30px;
+
+  gap: 7px;
+
+  margin-top: 20px;
+
+  padding: 3px;
+}
+
+.activity-cell {
+  width: 100%;
+  height: 30px;
+
+  border-radius: 6px;
+
+  background: #edf3f8;
+
+  transition:
+    transform 0.15s ease,
+    opacity 0.15s ease;
+}
+
+.activity-cell:hover {
+  transform: scale(1.05);
+}
+
+.activity-cell.level-0 {
+  background: #edf3f8;
+}
+
+.activity-cell.level-1 {
+  background: #d4e3ef;
+}
+
+.activity-cell.level-2 {
+  background: #9ebed9;
+}
+
+.activity-cell.level-3 {
+  background: #557fa5;
+}
+
+.activity-cell.level-4 {
+  background: #173f6f;
+}
+
+.activity-days {
+  display: grid;
+
+  grid-template-columns:
+    repeat(7, minmax(0, 1fr));
+
+  gap: 7px;
+
+  margin-top: 10px;
+
+  padding: 0 3px;
+}
+
+.activity-days span {
+  text-align: center;
+
+  color: #7b91a6;
+
+  font-size: 10px;
+  font-weight: 700;
+}
+
+
+/* =====================================================
+   INSIGHTS
+===================================================== */
+
+.audience-insights {
+  width: 100%;
+
+  padding: 28px;
+
+  margin-top: 0;
+
+  background:
+    linear-gradient(
+      135deg,
+      #f8fbfe 0%,
+      #eef5fb 100%
+    );
+
+  border: 1px solid #dce7f1;
+  border-radius: 18px;
+
+  box-shadow:
+    0 5px 18px rgba(20, 53, 84, 0.04);
+}
+
+.audience-insights > h2 {
+  margin: 0 0 20px;
+
+  color: #102a47;
+
+  font-size: 21px;
+  font-weight: 800;
+}
+
+.insight-grid {
+  display: grid;
+
+  grid-template-columns:
+    repeat(3, minmax(0, 1fr));
+
+  gap: 16px;
+}
+
+.insight-item {
+  min-width: 0;
+
+  display: flex;
+  align-items: flex-start;
+
+  gap: 14px;
+
+  padding: 20px;
+
+  background: #ffffff;
+
+  border: 1px solid #dce7f1;
+  border-radius: 14px;
+
+  box-shadow:
+    0 4px 14px rgba(20, 53, 84, 0.04);
+}
+
+.insight-icon {
+  width: 42px;
+  height: 42px;
+
+  flex-shrink: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 11px;
+
+  background: #e3eef8;
+  color: #214f78;
+
+  font-size: 18px;
+  font-weight: 800;
+}
+
+.insight-item strong {
+  display: block;
+
+  margin-top: 1px;
+
+  color: #17344f;
+
+  font-size: 14px;
+  font-weight: 800;
+}
+
+.insight-item p {
+  margin: 7px 0 0;
+
+  color: #7890a6;
+
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+
+/* =====================================================
+   CHART TOOLTIP
+===================================================== */
+
+.recharts-tooltip-wrapper {
+  outline: none;
+}
+
+.recharts-default-tooltip {
+  border-radius: 10px !important;
+}
+
+.recharts-cartesian-axis-tick-value {
+  fill: #56708f;
+}
+
+
+/* =====================================================
+   RESPONSIVE - 1200px
+===================================================== */
+
+@media (max-width: 1200px) {
+
+  .audience-main {
+    padding: 35px 30px 60px;
+  }
+
+  .audience-kpi-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .audience-main-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .audience-bottom-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .insight-grid {
+    grid-template-columns: 1fr;
+  }
+
+}
+
+
+/* =====================================================
+   RESPONSIVE - 850px
+===================================================== */
+
+@media (max-width: 850px) {
+
+  .audience-sidebar {
+    width: 210px;
+  }
+
+  .audience-main {
+    width: calc(100% - 210px);
+
+    margin-left: 210px;
+
+    padding: 28px 20px 50px;
+  }
+
+  .audience-header {
+    flex-direction: column;
+  }
+
+  .audience-live {
+    align-self: flex-start;
+  }
+
+  .audience-kpi-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+}
+
+
+/* =====================================================
+   RESPONSIVE - 650px
+===================================================== */
+
+@media (max-width: 650px) {
+
+  .audience-sidebar {
+    width: 72px;
+
+    padding: 20px 9px;
+  }
+
+  .audience-logo {
+    justify-content: center;
+
+    padding: 0;
+
+    margin-bottom: 25px;
+
+    font-size: 0;
+  }
+
+  .audience-logo-mark {
+    font-size: 27px;
+  }
+
+  .audience-navigation {
+    gap: 6px;
+  }
+
+  .audience-nav-item {
+    justify-content: center;
+
+    padding: 0;
+
+    gap: 0;
+  }
+
+  .audience-nav-item span {
+    width: auto;
+
+    font-size: 18px;
+  }
+
+  .audience-nav-item {
+    font-size: 0;
+  }
+
+  .audience-sidebar-bottom {
+    display: none;
+  }
+
+  .audience-main {
+    width: calc(100% - 72px);
+
+    margin-left: 72px;
+
+    padding: 25px 14px 40px;
+  }
+
+  .audience-header h1 {
+    font-size: 28px;
+  }
+
+  .audience-header p {
+    font-size: 13px;
+  }
+
+  .audience-kpi-grid {
+    grid-template-columns: 1fr;
+
+    gap: 12px;
+  }
+
+  .audience-kpi-card {
+    min-height: 135px;
+  }
+
+  .audience-card {
+    padding: 19px;
+  }
+
+  .audience-section-header {
+    flex-direction: column;
+
+    gap: 10px;
+  }
+
+  .audience-filter {
+    align-self: flex-start;
+  }
+
+  .audience-main-grid,
+  .audience-bottom-grid {
+    gap: 14px;
+  }
+
+  .gender-chart {
+    height: 240px;
+  }
+
+  .activity-grid {
+    gap: 5px;
+  }
+
+  .activity-cell {
+    height: 24px;
+
+    border-radius: 5px;
+  }
+
+  .activity-days {
+    gap: 5px;
+  }
+
+  .activity-days span {
+    font-size: 8px;
+  }
+
+  .audience-insights {
+    padding: 20px;
+  }
+
+  .insight-grid {
+    gap: 12px;
+  }
+
+  .insight-item {
+    padding: 16px;
+  }
+
+}
+/* =====================================================
+   DEMOGRAPHIC PIE CHART
+===================================================== */
+
+.demographic-pie-wrapper {
+  width: 100%;
+  min-height: 330px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 35px;
+  box-sizing: border-box;
+  padding: 10px 5px;
+}
+
+.demographic-pie {
+  width: 300px;
+  height: 300px;
+  flex-shrink: 0;
+}
+
+.demographic-legend {
+  width: 190px;
+  display: flex;
+  flex-direction: column;
+  gap: 13px;
+}
+
+.demographic-legend-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+  padding: 8px 0;
+  border-bottom: 1px solid #edf2f7;
+}
+
+.demographic-legend-row:last-child {
+  border-bottom: none;
+}
+
+.demographic-legend-name {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  min-width: 0;
+}
+
+.demographic-legend-name span:last-child {
+  color: #3e5871;
+  font-size: 13px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.demographic-legend-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.demographic-legend-row strong {
+  color: #173f6f;
+  font-size: 13px;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+
+/* =====================================================
+   DEMOGRAPHIC RESPONSIVE
+===================================================== */
+
+@media (max-width: 1100px) {
+
+  .demographic-pie-wrapper {
+    gap: 20px;
+  }
+
+  .demographic-pie {
+    width: 260px;
+    height: 260px;
+  }
+
+  .demographic-legend {
+    width: 170px;
+  }
+
+}
+
+
+@media (max-width: 850px) {
+
+  .demographic-pie-wrapper {
+    flex-direction: column;
+    min-height: auto;
+    padding: 10px 0 5px;
+  }
+
+  .demographic-pie {
+    width: 280px;
+    height: 280px;
+  }
+
+  .demographic-legend {
+    width: 100%;
+    max-width: 300px;
+  }
+
+}
+
+
+@media (max-width: 500px) {
+
+  .demographic-pie {
+    width: 240px;
+    height: 240px;
+  }
+
+  .demographic-legend {
+    max-width: 100%;
+  }
+
+}
+/* =====================================================
+   GENDER PIE CHART
+===================================================== */
+
+.gender-card {
+  min-height: 520px;
+  display: flex;
+  flex-direction: column;
+}
+
+.gender-chart-wrapper {
+  width: 100%;
+  height: 280px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 10px 0 8px;
+}
+
+.gender-list {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  margin-top: 2px;
+}
+
+.gender-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 48px;
+  padding: 0 4px;
+  border-bottom: 1px solid #edf2f7;
+}
+
+.gender-row:last-child {
+  border-bottom: none;
+}
+
+.gender-name {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #193651;
+  font-size: 14px;
+  font-weight: 650;
+}
+
+.gender-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.gender-value {
+  color: #173f6f;
+  font-size: 14px;
+  font-weight: 800;
+}
+
+/* =====================================================
+   SECTION SPACING
+   Keeps proper space between all audience sections
+===================================================== */
+
+/* Space between sections/cards inside the main audience page */
+.audience-main > * {
+  margin-bottom: 24px;
+}
+
+/* Selected Creator section */
+.selected-creator-card {
+  margin-bottom: 24px !important;
+}
+
+/* KPI section */
+.audience-kpi-grid {
+  margin-bottom: 24px !important;
+}
+
+/* Audience Insights */
+.audience-insights {
+  margin-top: 24px !important;
+  margin-bottom: 24px !important;
+}
+
+/* Audience Behaviour */
+.audience-behaviour,
+.audience-behavior,
+.audience-behaviour-card,
+.audience-behavior-card {
+  margin-top: 24px !important;
+  margin-bottom: 24px !important;
+}
+
+/* Engagement Distribution */
+.engagement-distribution,
+.engagement-distribution-card {
+  margin-top: 24px !important;
+  margin-bottom: 24px !important;
+}
+
+/* Audience Summary */
+.audience-summary,
+.audience-summary-card {
+  margin-top: 24px !important;
+  margin-bottom: 24px !important;
+}
+
+/* Common spacing for cards that come one after another */
+.audience-card + .audience-card {
+  margin-top: 24px;
+}
+
+/* Main grids should also have clear separation */
+.audience-main-grid {
+  margin-bottom: 24px !important;
+}
+
+.audience-bottom-grid {
+  margin-bottom: 24px !important;
+}
+
+/* Extra breathing room for insight section */
+.insight-grid {
+  margin-top: 20px;
+}
+
+/* Mobile spacing */
+@media (max-width: 650px) {
+
+  .audience-main > * {
+    margin-bottom: 18px;
+  }
+
+  .selected-creator-card,
+  .audience-insights,
+  .audience-behaviour,
+  .audience-behavior,
+  .audience-behaviour-card,
+  .audience-behavior-card,
+  .engagement-distribution,
+  .engagement-distribution-card,
+  .audience-summary,
+  .audience-summary-card {
+    margin-top: 18px !important;
+    margin-bottom: 18px !important;
+  }
+
+}

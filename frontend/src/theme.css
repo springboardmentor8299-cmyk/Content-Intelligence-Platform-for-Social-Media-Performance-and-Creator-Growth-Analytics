@@ -1,0 +1,138 @@
+body.dark-mode {
+  background: #111827;
+  color: #e5e7eb;
+  color-scheme: dark;
+}
+
+body.dark-mode .content-page,
+body.dark-mode .audience-page,
+body.dark-mode .growth-page,
+body.dark-mode .earnings-page,
+body.dark-mode .social-page {
+  background: #0f172a;
+  color: #e5e7eb;
+}
+
+body.dark-mode .content-page [class*="card"],
+body.dark-mode .audience-page [class*="card"],
+body.dark-mode .growth-page [class*="card"],
+body.dark-mode .earnings-page [class*="card"],
+body.dark-mode .social-page [class*="card"] {
+  background-color: #1e293b;
+  border-color: #334155;
+  color: #e5e7eb;
+}
+
+body.dark-mode .content-page [class*="card"] :is(h1, h2, h3, h4, p, span, strong, small, label, td, th),
+body.dark-mode .audience-page [class*="card"] :is(h1, h2, h3, h4, p, span, strong, small, label, td, th),
+body.dark-mode .growth-page [class*="card"] :is(h1, h2, h3, h4, p, span, strong, small, label, td, th),
+body.dark-mode .earnings-page [class*="card"] :is(h1, h2, h3, h4, p, span, strong, small, label, td, th),
+body.dark-mode .social-page [class*="card"] :is(h1, h2, h3, h4, p, span, strong, small, label, td, th) {
+  color: #e5e7eb;
+}
+
+body.dark-mode .content-page main :is(h1, h2, h3, h4),
+body.dark-mode .audience-page main :is(h1, h2, h3, h4),
+body.dark-mode .growth-page main :is(h1, h2, h3, h4),
+body.dark-mode .earnings-page main :is(h1, h2, h3, h4),
+body.dark-mode .social-page main :is(h1, h2, h3, h4) {
+  color: #f8fafc;
+}
+
+body.dark-mode .content-page main :is(p, small, label, td),
+body.dark-mode .audience-page main :is(p, small, label, td),
+body.dark-mode .growth-page main :is(p, small, label, td),
+body.dark-mode .earnings-page main :is(p, small, label, td),
+body.dark-mode .social-page main :is(p, small, label, td) {
+  color: #cbd5e1;
+}
+
+body.dark-mode .content-page main :is(input, select, textarea),
+body.dark-mode .audience-page main :is(input, select, textarea),
+body.dark-mode .growth-page main :is(input, select, textarea),
+body.dark-mode .earnings-page main :is(input, select, textarea),
+body.dark-mode .social-page main :is(input, select, textarea) {
+  background-color: #111827;
+  border-color: #475569;
+  color: #f8fafc;
+  color-scheme: dark;
+}
+
+body.dark-mode .content-page main table th,
+body.dark-mode .audience-page main table th,
+body.dark-mode .growth-page main table th,
+body.dark-mode .earnings-page main table th,
+body.dark-mode .social-page main table th {
+  background-color: #111827;
+  color: #cbd5e1;
+}
+
+body.dark-mode .content-page .content-empty-state,
+body.dark-mode .earnings-page .earnings-empty-state {
+  background-color: #1e293b;
+  border-color: #334155;
+  color: #cbd5e1;
+}
+
+body.dark-mode .content-sidebar,
+body.dark-mode .audience-sidebar,
+body.dark-mode .growth-sidebar,
+body.dark-mode .earnings-sidebar,
+body.dark-mode .social-sidebar {
+  background: #020617;
+  border-right-color: rgba(148, 163, 184, 0.18);
+  box-shadow: inset -1px 0 0 rgba(148, 163, 184, 0.18);
+}
+
+body.dark-mode .content-logo,
+body.dark-mode .audience-logo,
+body.dark-mode .growth-logo,
+body.dark-mode .earnings-logo,
+body.dark-mode .social-logo {
+  color: #f8fafc;
+}
+
+body.dark-mode .content-nav-item,
+body.dark-mode .audience-nav-item,
+body.dark-mode .growth-nav-item,
+body.dark-mode .earnings-nav-item,
+body.dark-mode .social-nav-item {
+  color: #cbd5e1;
+  background: transparent;
+}
+
+body.dark-mode .content-nav-item span,
+body.dark-mode .audience-nav-item span,
+body.dark-mode .growth-nav-item span,
+body.dark-mode .earnings-nav-item span,
+body.dark-mode .social-nav-item span {
+  color: inherit;
+}
+
+body.dark-mode .content-nav-item:hover,
+body.dark-mode .audience-nav-item:hover,
+body.dark-mode .growth-nav-item:hover,
+body.dark-mode .earnings-nav-item:hover,
+body.dark-mode .social-nav-item:hover {
+  background: #1e293b;
+  color: #ffffff;
+}
+
+body.dark-mode .content-nav-item.active,
+body.dark-mode .audience-nav-item.active,
+body.dark-mode .growth-nav-item.active,
+body.dark-mode .earnings-nav-item.active,
+body.dark-mode .social-nav-item.active {
+  background: #334155;
+  color: #ffffff;
+  box-shadow: inset 4px 0 0 #93c5fd;
+}
+
+body.dark-mode .settings-nav-item {
+  color: #d1d5db;
+}
+
+body.dark-mode .settings-nav-item:hover {
+  background: #374151;
+  color: #a5b4fc;
+}

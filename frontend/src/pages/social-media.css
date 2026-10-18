@@ -1,0 +1,1078 @@
+/* =====================================================
+   SOCIAL MEDIA PAGE
+===================================================== */
+
+.social-page {
+
+  min-height: 100vh;
+
+  display: flex;
+
+  background: #eef4fa;
+
+  color: #102a47;
+
+  font-family: Inter, Arial, sans-serif;
+
+}
+
+
+/* =====================================================
+   SIDEBAR
+===================================================== */
+
+.social-sidebar {
+
+  width: 250px;
+
+  min-height: 100vh;
+
+  background: #0b2039;
+
+  color: #ffffff;
+
+  position: fixed;
+
+  left: 0;
+
+  top: 0;
+
+  bottom: 0;
+
+  display: flex;
+
+  flex-direction: column;
+
+  padding: 28px 18px;
+
+  box-sizing: border-box;
+
+}
+
+.social-logo {
+
+  height: 55px;
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 10px;
+
+  padding: 0 14px;
+
+  font-size: 24px;
+
+  font-weight: 800;
+
+  letter-spacing: -0.7px;
+
+  cursor: pointer;
+
+  margin-bottom: 35px;
+
+}
+
+.social-logo .logo-mark {
+
+  font-size: 29px;
+
+  color: #8dbce8;
+
+}
+
+
+/* =====================================================
+   NAVIGATION
+===================================================== */
+
+.social-navigation {
+
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 8px;
+
+}
+
+.social-nav-item {
+
+  min-height: 50px;
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 15px;
+
+  padding: 0 17px;
+
+  border-radius: 12px;
+
+  color: #a9bdd3;
+
+  font-size: 15px;
+
+  font-weight: 500;
+
+  cursor: pointer;
+
+  transition: all 0.2s ease;
+
+  box-sizing: border-box;
+
+}
+
+.social-nav-item span {
+
+  width: 22px;
+
+  text-align: center;
+
+  font-size: 18px;
+
+}
+
+.social-nav-item:hover {
+
+  background: #17395e;
+
+  color: #ffffff;
+
+}
+
+.social-nav-item.active {
+
+  background: #28547f;
+
+  color: #ffffff;
+
+  box-shadow: inset 4px 0 0 #9bc8f0;
+
+}
+
+
+/* =====================================================
+   SIDEBAR BOTTOM
+===================================================== */
+
+.social-sidebar-bottom {
+
+  margin-top: auto;
+
+}
+
+.social-creator-card {
+
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+
+  padding: 22px 10px;
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 12px;
+
+}
+
+.social-avatar {
+
+  width: 38px;
+
+  height: 38px;
+
+  border-radius: 50%;
+
+  background: #dbeaf7;
+
+  color: #173f6f;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  font-weight: 800;
+
+}
+
+.social-creator-card strong {
+
+  display: block;
+
+  font-size: 14px;
+
+  color: #ffffff;
+
+}
+
+.social-creator-card span {
+
+  display: block;
+
+  margin-top: 3px;
+
+  color: #8fa7c0;
+
+  font-size: 12px;
+
+}
+
+
+/* =====================================================
+   MAIN
+===================================================== */
+
+.social-main {
+
+  margin-left: 250px;
+
+  width: calc(100% - 250px);
+
+  padding: 42px 48px 60px;
+
+  box-sizing: border-box;
+
+}
+
+
+/* =====================================================
+   HEADER
+===================================================== */
+
+.social-header {
+
+  display: flex;
+
+  justify-content: space-between;
+
+  align-items: flex-start;
+
+  margin-bottom: 30px;
+
+}
+
+.social-header .page-label {
+
+  color: #35668f;
+
+  font-size: 12px;
+
+  font-weight: 800;
+
+  letter-spacing: 2px;
+
+  margin-bottom: 8px;
+
+}
+
+.social-header h1 {
+
+  margin: 0;
+
+  color: #102a47;
+
+  font-size: 34px;
+
+  line-height: 1.2;
+
+  font-weight: 800;
+
+  letter-spacing: -0.8px;
+
+}
+
+.social-header p {
+
+  margin: 10px 0 0;
+
+  color: #68819b;
+
+  font-size: 15px;
+
+}
+
+
+/* =====================================================
+   LIVE STATUS
+===================================================== */
+
+.social-live-status {
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 9px;
+
+  padding: 11px 17px;
+
+  border-radius: 25px;
+
+  background: #dcebf8;
+
+  color: #214f78;
+
+  font-size: 13px;
+
+  font-weight: 700;
+
+}
+
+.social-live-dot {
+
+  width: 8px;
+
+  height: 8px;
+
+  border-radius: 50%;
+
+  background: #3976a9;
+
+}
+
+
+/* =====================================================
+   PLATFORM CARDS
+===================================================== */
+
+.social-platform-grid {
+
+  display: grid;
+
+  grid-template-columns: repeat(3, 1fr);
+
+  gap: 18px;
+
+  margin-bottom: 22px;
+
+}
+
+.social-platform-card {
+
+  background: #ffffff;
+
+  border: 1px solid #dce7f1;
+
+  border-radius: 18px;
+
+  padding: 22px;
+
+  box-sizing: border-box;
+
+  box-shadow: 0 5px 18px rgba(20, 53, 84, 0.05);
+
+}
+
+.social-platform-top {
+
+  display: flex;
+
+  justify-content: space-between;
+
+  align-items: center;
+
+}
+
+.social-platform-name {
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 10px;
+
+  color: #193651;
+
+  font-size: 15px;
+
+  font-weight: 800;
+
+}
+
+.social-platform-icon {
+
+  width: 42px;
+
+  height: 42px;
+
+  border-radius: 11px;
+
+  background: #e3eef8;
+
+  color: #214f78;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  font-size: 19px;
+
+  font-weight: 800;
+
+}
+
+.social-platform-status {
+
+  padding: 5px 9px;
+
+  border-radius: 20px;
+
+  background: #e7f3eb;
+
+  color: #3c7650;
+
+  font-size: 10px;
+
+  font-weight: 800;
+
+}
+
+.social-platform-card h2 {
+
+  margin: 20px 0 4px;
+
+  color: #102a47;
+
+  font-size: 27px;
+
+  font-weight: 800;
+
+}
+
+.social-platform-card p {
+
+  margin: 0;
+
+  color: #7890a6;
+
+  font-size: 12px;
+
+}
+
+
+/* =====================================================
+   COMMON CARD
+===================================================== */
+
+.social-card {
+
+  background: #ffffff;
+
+  border: 1px solid #dce7f1;
+
+  border-radius: 18px;
+
+  padding: 25px;
+
+  box-sizing: border-box;
+
+  box-shadow: 0 5px 18px rgba(20, 53, 84, 0.05);
+
+}
+
+.social-card-header {
+
+  display: flex;
+
+  justify-content: space-between;
+
+  align-items: flex-start;
+
+  margin-bottom: 20px;
+
+}
+
+.social-card-header h2 {
+
+  margin: 0;
+
+  color: #102a47;
+
+  font-size: 19px;
+
+  font-weight: 800;
+
+}
+
+.social-card-header p {
+
+  margin: 7px 0 0;
+
+  color: #7890a6;
+
+  font-size: 13px;
+
+  line-height: 1.5;
+
+}
+
+.social-section-label {
+
+  color: #467298;
+
+  font-size: 10px;
+
+  font-weight: 800;
+
+  letter-spacing: 1.7px;
+
+  margin-bottom: 7px;
+
+}
+
+
+/* =====================================================
+   TWO COLUMN
+===================================================== */
+
+.social-content-grid {
+
+  display: grid;
+
+  grid-template-columns: minmax(0, 1.55fr) minmax(300px, 0.75fr);
+
+  gap: 20px;
+
+  align-items: stretch;
+
+}
+
+
+/* =====================================================
+   SOCIAL GROWTH CHART
+===================================================== */
+
+.social-chart-card {
+
+  min-height: 410px;
+
+}
+
+.social-chart {
+
+  width: 100%;
+
+  height: 320px;
+
+}
+
+
+/* =====================================================
+   PLATFORM PERFORMANCE
+===================================================== */
+
+.platform-performance-list {
+
+  display: flex;
+
+  flex-direction: column;
+
+  gap: 17px;
+
+}
+
+.platform-performance-row {
+
+  padding: 12px 0;
+
+  border-bottom: 1px solid #edf2f7;
+
+}
+
+.platform-performance-row:last-child {
+
+  border-bottom: none;
+
+}
+
+.platform-performance-heading {
+
+  display: flex;
+
+  justify-content: space-between;
+
+  align-items: center;
+
+  margin-bottom: 8px;
+
+}
+
+.platform-performance-heading strong {
+
+  color: #193651;
+
+  font-size: 13px;
+
+}
+
+.platform-performance-heading span {
+
+  color: #315f88;
+
+  font-size: 12px;
+
+  font-weight: 800;
+
+}
+
+.platform-progress {
+
+  height: 7px;
+
+  background: #edf3f8;
+
+  border-radius: 20px;
+
+  overflow: hidden;
+
+}
+
+.platform-progress span {
+
+  display: block;
+
+  height: 100%;
+
+  background: #315f88;
+
+  border-radius: 20px;
+
+}
+
+
+/* =====================================================
+   SOCIAL ACCOUNTS
+===================================================== */
+
+.social-accounts-section {
+
+  margin-top: 20px;
+
+}
+
+.social-account-list {
+
+  display: flex;
+
+  flex-direction: column;
+
+}
+
+.social-account-row {
+
+  display: grid;
+
+  grid-template-columns: 48px minmax(0, 1fr) 120px 100px;
+
+  gap: 15px;
+
+  align-items: center;
+
+  padding: 17px 0;
+
+  border-bottom: 1px solid #edf2f7;
+
+}
+
+.social-account-row:last-child {
+
+  border-bottom: none;
+
+}
+
+.account-icon {
+
+  width: 42px;
+
+  height: 42px;
+
+  border-radius: 11px;
+
+  background: #e3eef8;
+
+  color: #214f78;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  font-size: 18px;
+
+  font-weight: 800;
+
+}
+
+.account-info strong {
+
+  display: block;
+
+  color: #193651;
+
+  font-size: 14px;
+
+}
+
+.account-info span {
+
+  display: block;
+
+  margin-top: 4px;
+
+  color: #7890a6;
+
+  font-size: 11px;
+
+}
+
+.account-stat {
+
+  text-align: right;
+
+}
+
+.account-stat span {
+
+  display: block;
+
+  color: #7b91a6;
+
+  font-size: 9px;
+
+  font-weight: 800;
+
+  letter-spacing: 0.8px;
+
+}
+
+.account-stat strong {
+
+  display: block;
+
+  margin-top: 4px;
+
+  color: #173f6f;
+
+  font-size: 21px;
+
+  font-weight: 800;
+
+}
+
+.account-growth {
+
+  text-align: right;
+
+  color: #173f6f;
+
+  font-size: 21px;
+
+  font-weight: 800;
+
+}
+
+
+/* =====================================================
+   INSIGHTS
+===================================================== */
+
+.social-insights-section {
+
+  margin-top: 20px;
+
+}
+
+.social-insights-grid {
+
+  display: grid;
+
+  grid-template-columns: repeat(3, 1fr);
+
+  gap: 16px;
+
+}
+
+.social-insight-card {
+
+  background: #ffffff;
+
+  border: 1px solid #dce7f1;
+
+  border-radius: 16px;
+
+  padding: 21px;
+
+  display: flex;
+
+  align-items: flex-start;
+
+  gap: 15px;
+
+  box-shadow: 0 5px 18px rgba(20, 53, 84, 0.04);
+
+}
+
+.social-insight-icon {
+
+  width: 42px;
+
+  height: 42px;
+
+  flex-shrink: 0;
+
+  border-radius: 11px;
+
+  background: #e3eef8;
+
+  color: #214f78;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  font-size: 18px;
+
+  font-weight: 800;
+
+}
+
+.social-insight-card h3 {
+
+  margin: 0;
+
+  color: #17344f;
+
+  font-size: 14px;
+
+  font-weight: 800;
+
+}
+
+.social-insight-card p {
+
+  margin: 7px 0 0;
+
+  color: #7890a6;
+
+  font-size: 12px;
+
+  line-height: 1.6;
+
+}
+
+
+/* =====================================================
+   BUTTON
+===================================================== */
+
+.social-connect-button {
+
+  border: none;
+
+  padding: 10px 16px;
+
+  border-radius: 10px;
+
+  background: #173f6f;
+
+  color: #ffffff;
+
+  font-size: 12px;
+
+  font-weight: 700;
+
+  cursor: pointer;
+
+  transition: 0.2s ease;
+
+}
+
+.social-connect-button:hover {
+
+  background: #28547f;
+
+  transform: translateY(-1px);
+
+}
+
+
+/* =====================================================
+   RESPONSIVE
+===================================================== */
+
+@media (max-width: 1200px) {
+
+  .social-main {
+
+    padding: 35px 30px;
+
+  }
+
+  .social-platform-grid {
+
+    grid-template-columns: repeat(2, 1fr);
+
+  }
+
+  .social-content-grid {
+
+    grid-template-columns: 1fr;
+
+  }
+
+  .social-insights-grid {
+
+    grid-template-columns: 1fr;
+
+  }
+
+}
+
+
+@media (max-width: 850px) {
+
+  .social-sidebar {
+
+    width: 210px;
+
+  }
+
+  .social-main {
+
+    margin-left: 210px;
+
+    width: calc(100% - 210px);
+
+    padding: 25px 20px;
+
+  }
+
+  .social-platform-grid {
+
+    grid-template-columns: 1fr;
+
+  }
+
+  .social-account-row {
+
+    grid-template-columns: 48px 1fr;
+
+  }
+
+  .account-stat,
+
+  .account-growth {
+
+    text-align: left;
+
+  }
+
+}
+
+
+@media (max-width: 650px) {
+
+  .social-sidebar {
+
+    width: 75px;
+
+    padding: 20px 10px;
+
+  }
+
+  .social-logo {
+
+    justify-content: center;
+
+    padding: 0;
+
+    font-size: 0;
+
+  }
+
+  .social-logo .logo-mark {
+
+    font-size: 27px;
+
+  }
+
+  .social-nav-item {
+
+    justify-content: center;
+
+    padding: 0;
+
+  }
+
+  .social-nav-item span {
+
+    margin: 0;
+
+  }
+
+  .social-nav-item {
+
+    font-size: 0;
+
+  }
+
+  .social-sidebar-bottom {
+
+    display: none;
+
+  }
+
+  .social-main {
+
+    margin-left: 75px;
+
+    width: calc(100% - 75px);
+
+    padding: 25px 15px;
+
+  }
+
+  .social-header {
+
+    flex-direction: column;
+
+    gap: 15px;
+
+  }
+
+  .social-header h1 {
+
+    font-size: 28px;
+
+  }
+
+  .social-platform-grid {
+
+    grid-template-columns: 1fr;
+
+  }
+
+  .social-account-row {
+
+    grid-template-columns: 45px 1fr;
+
+  }
+
+  .account-stat,
+
+  .account-growth {
+
+    display: none;
+
+  }
+
+}

@@ -1,0 +1,629 @@
+.settings-page {
+  min-height: 100vh;
+  padding: 40px;
+  background: #f7f8fc;
+  color: #1f2937;
+  transition: background 0.3s, color 0.3s;
+}
+
+
+/* =========================
+   SETTINGS HEADER
+========================= */
+
+.settings-header {
+  margin-bottom: 30px;
+}
+
+.settings-header h1 {
+  margin: 0;
+  font-size: 32px;
+  font-weight: 700;
+  color: #111827;
+}
+
+.settings-navigation {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 30px;
+}
+
+.settings-nav-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: #374151;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+
+.settings-nav-item:hover {
+  background: #eef2ff;
+  color: #4f46e5;
+}
+
+.settings-nav-item span {
+  font-size: 16px;
+}
+
+
+/* =========================
+   CARD
+========================= */
+
+.settings-card {
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 14px;
+  padding: 25px;
+  margin-bottom: 22px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+
+/* =========================
+   SECTION HEADINGS
+========================= */
+
+.card-title {
+  margin-bottom: 24px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.card-title h2 {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 700;
+  color: #111827;
+  letter-spacing: -0.2px;
+}
+
+
+/* =========================
+   PROFILE
+========================= */
+
+.profile-content {
+  display: flex;
+  gap: 25px;
+  align-items: flex-start;
+}
+
+.profile-avatar {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  background: #eef2ff;
+  color: #4f46e5;
+
+  font-size: 30px;
+  font-weight: 700;
+
+  flex-shrink: 0;
+}
+
+.profile-fields {
+  flex: 1;
+  max-width: 600px;
+}
+
+.form-group {
+  margin-bottom: 18px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 7px;
+
+  font-size: 14px;
+  font-weight: 600;
+  color: #374151;
+}
+
+.form-group input {
+  width: 100%;
+  box-sizing: border-box;
+
+  padding: 12px 14px;
+
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+
+  font-size: 14px;
+
+  outline: none;
+
+  background: white;
+  color: #1f2937;
+}
+
+.form-group input:focus {
+  border-color: #4f46e5;
+}
+
+.profile-value {
+  padding: 12px 14px;
+
+  background: #f9fafb;
+
+  border: 1px solid #e5e7eb;
+
+  border-radius: 8px;
+
+  font-size: 14px;
+
+  color: #374151;
+}
+
+.profile-buttons {
+  display: flex;
+  gap: 10px;
+}
+
+
+/* =========================
+   BUTTONS
+========================= */
+
+.primary-btn,
+.secondary-btn,
+.logout-btn,
+.delete-btn,
+.youtube-btn,
+.disconnect-btn,
+.disabled-btn {
+  border: none;
+
+  padding: 10px 16px;
+
+  border-radius: 8px;
+
+  font-size: 14px;
+
+  cursor: pointer;
+
+  font-weight: 600;
+
+  transition: 0.2s;
+}
+
+.primary-btn {
+  background: #4f46e5;
+  color: white;
+}
+
+.primary-btn:hover {
+  background: #4338ca;
+}
+
+.secondary-btn {
+  background: #f3f4f6;
+  color: #374151;
+}
+
+.secondary-btn:hover {
+  background: #e5e7eb;
+}
+
+
+/* =========================
+   SECURITY
+========================= */
+
+.security-row {
+  display: flex;
+
+  justify-content: space-between;
+  align-items: center;
+
+  padding-bottom: 22px;
+
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.security-row h3 {
+  margin: 0;
+
+  font-size: 15px;
+
+  font-weight: 600;
+
+  color: #374151;
+}
+
+.password-form {
+  margin-top: 22px;
+
+  padding: 20px;
+
+  background: #f9fafb;
+
+  border: 1px solid #e5e7eb;
+
+  border-radius: 10px;
+}
+
+.password-form .primary-btn {
+  margin-top: 5px;
+}
+
+.security-actions {
+  display: flex;
+
+  gap: 12px;
+
+  margin-top: 20px;
+}
+
+.logout-btn {
+  background: #f3f4f6;
+  color: #374151;
+}
+
+.logout-btn:hover {
+  background: #e5e7eb;
+}
+
+.delete-btn {
+  background: #fee2e2;
+  color: #dc2626;
+}
+
+.delete-btn:hover {
+  background: #fecaca;
+}
+
+
+/* =========================
+   SETTINGS OPTIONS
+========================= */
+
+.setting-option {
+  display: flex;
+
+  justify-content: space-between;
+  align-items: center;
+
+  padding: 18px 0;
+
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.setting-option:last-child {
+  border-bottom: none;
+}
+
+.setting-option h3 {
+  margin: 0;
+
+  font-size: 15px;
+
+  font-weight: 600;
+
+  color: #374151;
+}
+
+
+/* =========================
+   SWITCH
+========================= */
+
+.switch {
+  position: relative;
+
+  display: inline-block;
+
+  width: 48px;
+  height: 26px;
+
+  flex-shrink: 0;
+}
+
+.switch input {
+  opacity: 0;
+
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+
+  cursor: pointer;
+
+  inset: 0;
+
+  background: #d1d5db;
+
+  border-radius: 30px;
+
+  transition: 0.3s;
+}
+
+.slider:before {
+  content: "";
+
+  position: absolute;
+
+  width: 20px;
+  height: 20px;
+
+  left: 3px;
+  top: 3px;
+
+  background: white;
+
+  border-radius: 50%;
+
+  transition: 0.3s;
+}
+
+.switch input:checked + .slider {
+  background: #4f46e5;
+}
+
+.switch input:checked + .slider:before {
+  transform: translateX(22px);
+}
+
+
+/* =========================
+   SOCIAL ACCOUNTS
+========================= */
+
+.social-account {
+  display: flex;
+
+  justify-content: space-between;
+  align-items: center;
+
+  padding: 18px 0;
+
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.social-account:last-child {
+  border-bottom: none;
+}
+
+.social-info {
+  display: flex;
+
+  align-items: center;
+
+  gap: 15px;
+}
+
+.social-info h3 {
+  margin: 0;
+
+  font-size: 15px;
+
+  font-weight: 600;
+
+  color: #374151;
+}
+
+.social-info p {
+  margin: 5px 0 0;
+
+  color: #6b7280;
+
+  font-size: 13px;
+}
+
+.youtube-icon,
+.instagram-icon {
+  width: 45px;
+  height: 45px;
+
+  border-radius: 10px;
+
+  display: flex;
+
+  justify-content: center;
+  align-items: center;
+
+  font-size: 22px;
+
+  font-weight: bold;
+
+  flex-shrink: 0;
+}
+
+.youtube-icon {
+  background: #fee2e2;
+
+  color: #dc2626;
+}
+
+.instagram-icon {
+  background: #f3e8ff;
+
+  color: #9333ea;
+}
+
+.youtube-btn {
+  background: #dc2626;
+
+  color: white;
+}
+
+.youtube-btn:hover {
+  background: #b91c1c;
+}
+
+.disconnect-btn {
+  background: #f3f4f6;
+
+  color: #374151;
+}
+
+.disconnect-btn:hover {
+  background: #e5e7eb;
+}
+
+.disabled-btn {
+  background: #f3f4f6;
+
+  color: #9ca3af;
+
+  cursor: not-allowed;
+}
+
+
+/* =========================
+   DARK MODE
+========================= */
+
+body.dark-mode {
+  background: #111827;
+}
+
+body.dark-mode .settings-page {
+  background: #111827;
+
+  color: #f9fafb;
+}
+
+body.dark-mode .settings-header h1 {
+  color: #f9fafb;
+}
+
+body.dark-mode .settings-card {
+  background: #1f2937;
+
+  border-color: #374151;
+}
+
+body.dark-mode .card-title {
+  border-color: #374151;
+}
+
+body.dark-mode .card-title h2 {
+  color: #f9fafb;
+}
+
+body.dark-mode .profile-value {
+  background: #111827;
+
+  border-color: #374151;
+
+  color: #f9fafb;
+}
+
+body.dark-mode .form-group label {
+  color: #d1d5db;
+}
+
+body.dark-mode .form-group input {
+  background: #111827;
+
+  border-color: #374151;
+
+  color: white;
+}
+
+body.dark-mode .password-form {
+  background: #111827;
+
+  border-color: #374151;
+}
+
+body.dark-mode .security-row {
+  border-color: #374151;
+}
+
+body.dark-mode .security-row h3 {
+  color: #e5e7eb;
+}
+
+body.dark-mode .setting-option {
+  border-color: #374151;
+}
+
+body.dark-mode .setting-option h3 {
+  color: #e5e7eb;
+}
+
+body.dark-mode .social-account {
+  border-color: #374151;
+}
+
+body.dark-mode .social-info h3 {
+  color: #e5e7eb;
+}
+
+body.dark-mode .social-info p {
+  color: #9ca3af;
+}
+
+body.dark-mode .secondary-btn,
+body.dark-mode .logout-btn,
+body.dark-mode .disconnect-btn {
+  background: #374151;
+
+  color: #f9fafb;
+}
+
+body.dark-mode .secondary-btn:hover,
+body.dark-mode .logout-btn:hover,
+body.dark-mode .disconnect-btn:hover {
+  background: #4b5563;
+}
+
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media (max-width: 768px) {
+
+  .settings-page {
+    padding: 20px;
+  }
+
+  .settings-header h1 {
+    font-size: 28px;
+  }
+
+  .profile-content {
+    flex-direction: column;
+  }
+
+  .profile-fields {
+    width: 100%;
+    max-width: none;
+  }
+
+  .security-row {
+    flex-direction: column;
+
+    align-items: flex-start;
+
+    gap: 15px;
+  }
+
+  .social-account {
+    gap: 15px;
+
+    align-items: flex-start;
+  }
+
+  .setting-option {
+    gap: 15px;
+  }
+
+}
