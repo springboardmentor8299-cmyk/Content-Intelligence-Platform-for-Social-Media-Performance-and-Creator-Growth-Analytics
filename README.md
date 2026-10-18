@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # CreatorIQ
 
 ### Creator Analytics & Content Performance Dashboard
@@ -462,3 +463,6 @@ Then commit it:
 git add README.md
 git commit -m "Add professional README"
 git push
+=======
+# Content-Intelligence-Platform-for-Social-Media-Performance-and-Creator-Growth-Analytics
+>>>>>>> collaborator/nazroom-creatoriq
