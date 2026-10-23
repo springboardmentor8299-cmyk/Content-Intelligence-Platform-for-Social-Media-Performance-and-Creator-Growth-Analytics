@@ -119,16 +119,53 @@ def update_user_status(user_id: str, payload: UserRoleUpdate):
         if user["id"] == user_id:
             user["role"] = payload.role
             user["is_active"] = payload.is_active
+            user["updated_at"] = datetime.now(timezone.utc)
             AUDIT_LOGS.insert(0, {
                 "id": f"aud-{datetime.now(timezone.utc).timestamp()}",
                 "timestamp": datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S UTC"),
                 "actor": "admin@creatoriq.com",
                 "action": f"USER_UPDATE_{payload.role.upper()}",
-                "resource": f"User {user['email']}",
+                "resource": f"User {user['email']} (status: {'Active' if payload.is_active else 'Suspended'})",
                 "status": "SUCCESS",
                 "ip_address": "127.0.0.1"
             })
             return {"status": "success", "user": user}
+    raise HTTPException(status_code=404, detail="User not found")
+
+@router.delete("/users/{user_id}")
+def delete_user(user_id: str):
+    for email, user in list(MOCK_USERS.items()):
+        if user["id"] == user_id:
+            if user.get("role") == "admin" and email == "admin@creatoriq.com":
+                raise HTTPException(status_code=400, detail="Cannot delete primary System Administrator account")
+            del MOCK_USERS[email]
+            AUDIT_LOGS.insert(0, {
+                "id": f"aud-{datetime.now(timezone.utc).timestamp()}",
+                "timestamp": datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S UTC"),
+                "actor": "admin@creatoriq.com",
+                "action": "USER_DELETE",
+                "resource": f"Deleted user account {email}",
+                "status": "SUCCESS",
+                "ip_address": "127.0.0.1"
+            })
+            return {"status": "success", "message": f"User {email} deleted"}
+    raise HTTPException(status_code=404, detail="User not found")
+
+@router.post("/users/{user_id}/reset-password")
+def reset_user_password(user_id: str):
+    for email, user in MOCK_USERS.items():
+        if user["id"] == user_id:
+            user["password"] = "password123"
+            AUDIT_LOGS.insert(0, {
+                "id": f"aud-{datetime.now(timezone.utc).timestamp()}",
+                "timestamp": datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S UTC"),
+                "actor": "admin@creatoriq.com",
+                "action": "PASSWORD_RESET",
+                "resource": f"Reset password for {email}",
+                "status": "SUCCESS",
+                "ip_address": "127.0.0.1"
+            })
+            return {"status": "success", "message": f"Password reset to password123 for {email}"}
     raise HTTPException(status_code=404, detail="User not found")
 
 @router.get("/system-health")

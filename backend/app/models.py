@@ -95,3 +95,15 @@ class ScheduledReport(Base):
     enabled = Column(Boolean, default=True)
     created_at = Column(DateTime(timezone=True), default=utc_now)
 
+class FavoriteProfile(Base):
+    __tablename__ = "favorite_profiles"
+
+    id = Column(String, primary_key=True, default=generate_uuid)
+    platform = Column(String(50), nullable=False) # e.g. 'instagram'
+    username = Column(String(255), nullable=False)
+    platform_user_id = Column(String(255), nullable=True)
+    followers_count = Column(BigInteger, default=0)
+    profile_picture_url = Column(String, nullable=True)
+    created_at = Column(DateTime(timezone=True), default=utc_now)
+
+

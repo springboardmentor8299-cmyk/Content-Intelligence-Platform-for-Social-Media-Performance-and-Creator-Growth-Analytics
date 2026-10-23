@@ -79,7 +79,13 @@ def login(credentials: UserLogin):
                 status_code=status.HTTP_401_UNAUTHORIZED,
                 detail="Invalid email or password",
             )
-            
+
+    if not user.get("is_active", True):
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="This account has been suspended by an administrator.",
+        )
+
     # Generate mock access token
     token = f"jwt_mock_token_{user['role']}_{uuid.uuid4().hex}"
     

@@ -59,3 +59,20 @@ Thumbs.db
 .vscode/
 *.swp
 *.swo
+
+# Media & Demo Video Builds
+*.mp4
+*.mp3
+*.wav
+*.aiff
+.chrome_tmp/
+.chrome_user_data/
+audio_segments/
+live_audio/
+live_demo_build/
+video_build/
+assemble_video.py
+build_*.py
+generate_*.py
+test_*.py
+output.json

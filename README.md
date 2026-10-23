@@ -33,6 +33,8 @@ infosys/
 
 ## Quick Start
 
+For detailed step-by-step setup of **Google Cloud (YouTube API)**, **LinkedIn Developer Portal**, **Instagram (Meta & SerpApi)**, and OAuth configuration, refer to the [Full Setup Guide (SETUP.md)](SETUP.md).
+
 ### 1. Run the Backend (FastAPI)
 ```bash
 cd backend

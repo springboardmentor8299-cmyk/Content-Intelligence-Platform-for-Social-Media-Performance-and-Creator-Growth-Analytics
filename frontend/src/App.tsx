@@ -25,6 +25,7 @@ import Connections from '@/pages/Connections';
 import Notifications from '@/pages/Notifications';
 import Reports from '@/pages/Reports';
 import Settings from '@/pages/Settings';
+import Favorites from '@/pages/Favorites';
 
 export default function App() {
   return (
@@ -57,6 +58,7 @@ export default function App() {
       <Route path="/growth" element={<Growth />} />
       <Route path="/revenue" element={<Revenue />} />
       <Route path="/connections" element={<Connections />} />
+      <Route path="/favorites" element={<Favorites />} />
       <Route path="/notifications" element={<Notifications />} />
       <Route path="/reports" element={<Reports />} />
       <Route path="/settings" element={<Settings />} />

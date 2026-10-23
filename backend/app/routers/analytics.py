@@ -6,6 +6,7 @@ from app.database import get_db
 from app.models import ConnectedAccount
 from app.schemas import AnalyticsOverviewResponse, DemographicData
 from app.services.youtube import youtube_api
+from app.services.linkedin import linkedin_api
 
 router = APIRouter()
 
@@ -23,7 +24,7 @@ async def get_analytics_overview(
     # Fetch real videos from connected YouTube account if available
     recent_content = []
     yt_acc = next((a for a in accounts if a.platform == "youtube" and a.access_token), None)
-    if yt_acc:
+    if yt_acc and (platform == "all" or platform.lower() == "youtube"):
         try:
             yt_videos = await youtube_api.get_recent_videos(yt_acc.access_token, max_results=50)
             recent_content.extend(yt_videos)
@@ -31,6 +32,17 @@ async def get_analytics_overview(
                 total_views = sum(item["views"] for item in yt_videos)
         except Exception as e:
             print(f"Error loading overview videos: {e}")
+
+    # Fetch real posts from connected LinkedIn account if available
+    li_acc = next((a for a in accounts if a.platform == "linkedin" and a.access_token), None)
+    if li_acc and (platform == "all" or platform.lower() == "linkedin"):
+        try:
+            li_posts = await linkedin_api.get_recent_posts(li_acc.access_token, max_results=20)
+            recent_content.extend(li_posts)
+            if not total_views and li_posts:
+                total_views += sum(item["views"] for item in li_posts)
+        except Exception as e:
+            print(f"Error loading overview LinkedIn posts: {e}")
             
     # Calculate real average engagement rate from recent content
     if recent_content:

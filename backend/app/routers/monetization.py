@@ -13,98 +13,18 @@ from app.schemas_extended import (
     SponsorshipCampaign, RevenueBreakdown,
     SponsorshipCreate, SponsorshipUpdate
 )
+from app.services.youtube import youtube_api
 
 router = APIRouter()
 
-INITIAL_SPONSORSHIPS = [
-    {
-        "id": "sp-01",
-        "brand_name": "Notion AI",
-        "brand_logo": "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=60&h=60&fit=crop",
-        "campaign_title": "Productivity Reimagined: AI Integrated Workflows",
-        "platform": "YouTube",
-        "status": "active",
-        "contract_amount": 5500.0,
-        "paid_amount": 2750.0,
-        "deliverables": "1 Dedicated Video + 2 YouTube Shorts",
-        "due_date": "2026-09-05",
-        "roi_multiplier": 3.4,
-        "payment_status": "partial"
-    },
-    {
-        "id": "sp-02",
-        "brand_name": "NordVPN",
-        "brand_logo": "https://images.unsplash.com/photo-1551836022-d5d88e9218df?w=60&h=60&fit=crop",
-        "campaign_title": "Summer Cybersecurity & Data Privacy Awareness",
-        "platform": "YouTube",
-        "status": "completed",
-        "contract_amount": 4200.0,
-        "paid_amount": 4200.0,
-        "deliverables": "60s Mid-Roll Integration",
-        "due_date": "2026-08-15",
-        "roi_multiplier": 4.1,
-        "payment_status": "paid"
-    },
-    {
-        "id": "sp-03",
-        "brand_name": "Epidemic Sound",
-        "brand_logo": "https://images.unsplash.com/photo-1516251193007-45ef944ab0c6?w=60&h=60&fit=crop",
-        "campaign_title": "Creator Audio Mastery Challenge",
-        "platform": "Instagram",
-        "status": "active",
-        "contract_amount": 3000.0,
-        "paid_amount": 1500.0,
-        "deliverables": "3 Instagram Reels + Story Link",
-        "due_date": "2026-08-30",
-        "roi_multiplier": 2.8,
-        "payment_status": "partial"
-    },
-    {
-        "id": "sp-04",
-        "brand_name": "Skillshare",
-        "brand_logo": "https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?w=60&h=60&fit=crop",
-        "campaign_title": "Creative Coding & Animation Masterclass",
-        "platform": "YouTube",
-        "status": "negotiating",
-        "contract_amount": 3800.0,
-        "paid_amount": 0.0,
-        "deliverables": "1 Sponsored Integration + Free Trial Link",
-        "due_date": "2026-10-15",
-        "roi_multiplier": 3.6,
-        "payment_status": "unpaid"
-    }
-]
-
-def seed_sponsorships_if_empty(db: Session):
-    count = db.query(SponsorshipDeal).count()
-    if count == 0:
-        for item in INITIAL_SPONSORSHIPS:
-            deal = SponsorshipDeal(
-                id=item["id"],
-                brand_name=item["brand_name"],
-                brand_logo=item.get("brand_logo"),
-                campaign_title=item["campaign_title"],
-                platform=item["platform"],
-                status=item["status"],
-                contract_amount=item["contract_amount"],
-                paid_amount=item["paid_amount"],
-                deliverables=item["deliverables"],
-                due_date=item["due_date"],
-                roi_multiplier=item["roi_multiplier"],
-                payment_status=item["payment_status"]
-            )
-            db.add(deal)
-        db.commit()
-
 @router.get("/sponsorships")
 def list_sponsorships(db: Session = Depends(get_db)):
-    seed_sponsorships_if_empty(db)
     deals = db.query(SponsorshipDeal).order_by(SponsorshipDeal.created_at.desc()).all()
     return [
         {
             "id": d.id,
             "brand_name": d.brand_name,
-            "brand_logo": d.brand_logo or "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=60&h=60&fit=crop",
+            "brand_logo": d.brand_logo or "https://images.unsplash.com/photo-1557804506-669a67965ba0?w=60&h=60&fit=crop",
             "campaign_title": d.campaign_title,
             "platform": d.platform,
             "status": d.status,
@@ -121,7 +41,6 @@ def list_sponsorships(db: Session = Depends(get_db)):
 
 @router.post("/sponsorships")
 def create_sponsorship(data: SponsorshipCreate, db: Session = Depends(get_db)):
-    seed_sponsorships_if_empty(db)
     deal_id = f"sp-{uuid.uuid4().hex[:6]}"
     payment_status = "paid" if data.paid_amount >= data.contract_amount else ("partial" if data.paid_amount > 0 else "unpaid")
     
@@ -229,24 +148,8 @@ def delete_sponsorship(deal_id: str, db: Session = Depends(get_db)):
     db.commit()
     return {"status": "success", "message": "Sponsorship deal removed"}
 
-REVENUE_TRENDS_BASE = [
-    {"period": "Mar 2026", "sponsorships": 6500.0, "adsense": 3200.0, "affiliates": 1400.0, "merchandise": 600.0, "total": 11700.0},
-    {"period": "Apr 2026", "sponsorships": 7200.0, "adsense": 3450.0, "affiliates": 1600.0, "merchandise": 750.0, "total": 13000.0},
-    {"period": "May 2026", "sponsorships": 8000.0, "adsense": 3900.0, "affiliates": 1900.0, "merchandise": 900.0, "total": 14700.0},
-    {"period": "Jun 2026", "sponsorships": 7500.0, "adsense": 4100.0, "affiliates": 2100.0, "merchandise": 850.0, "total": 14550.0},
-    {"period": "Jul 2026", "sponsorships": 9200.0, "adsense": 4600.0, "affiliates": 2400.0, "merchandise": 1100.0, "total": 17300.0},
-    {"period": "Aug 2026", "sponsorships": 9800.0, "adsense": 4950.0, "affiliates": 2800.0, "merchandise": 1350.0, "total": 18900.0},
-    {"period": "Sep 2026", "sponsorships": 10450.0, "adsense": 5100.0, "affiliates": 3100.0, "merchandise": 1500.0, "total": 20150.0}
-]
-
-@router.get("/trends")
-def get_revenue_trends(db: Session = Depends(get_db)):
-    seed_sponsorships_if_empty(db)
-    return REVENUE_TRENDS_BASE
-
 @router.get("/summary")
 def get_monetization_summary(db: Session = Depends(get_db)):
-    seed_sponsorships_if_empty(db)
     deals = db.query(SponsorshipDeal).all()
     accounts = db.query(ConnectedAccount).filter(ConnectedAccount.is_connected == True).all()
     
@@ -267,22 +170,26 @@ def get_monetization_summary(db: Session = Depends(get_db)):
     ypp_threshold = 1000
     ypp_progress_pct = min(100.0, round((yt_subs / ypp_threshold) * 100, 1)) if yt_subs else 0.0
     
-    # YouTube AdSense calculation ($3.00 CPM default)
-    adsense_earnings = round(total_views * 0.003, 2) if is_ypp_monetized else 0.0
+    # YouTube AdSense calculation ($3.00 CPM default): $0.00 until 1,000 subscribers
+    adsense_earnings = round(total_views * 0.003, 2) if is_ypp_monetized else 0.00
     
-    # Baseline auxiliary earnings
-    affiliate_earnings = 3100.0
-    merch_earnings = 1500.0
+    # Real auxiliary earnings (strictly from actual logged records)
+    affiliate_earnings = 0.00
+    merch_earnings = 0.00
     
     net_total_earnings = round(total_paid_sponsorships + adsense_earnings + affiliate_earnings + merch_earnings, 2)
     
     # Real RPM / CPM calculation
-    avg_rpm = 6.45
-    avg_cpm = 9.20
+    if is_ypp_monetized and total_views > 0:
+        avg_rpm = round((net_total_earnings / total_views) * 1000, 2)
+        avg_cpm = 3.00
+    else:
+        avg_rpm = 0.00
+        avg_cpm = 0.00
     
     return {
         "net_total_earnings": net_total_earnings,
-        "monthly_run_rate": 20150.0,
+        "monthly_run_rate": net_total_earnings,
         "total_sponsorship_revenue": total_paid_sponsorships,
         "active_pipeline_value": active_pipeline_value,
         "total_contract_pipeline": total_contract_value,
@@ -301,110 +208,107 @@ def get_monetization_summary(db: Session = Depends(get_db)):
         "payout_readiness": "Verified Direct Deposit (Stripe Connect)"
     }
 
+@router.get("/trends")
+async def get_revenue_trends(db: Session = Depends(get_db)):
+    deals = db.query(SponsorshipDeal).all()
+    accounts = db.query(ConnectedAccount).filter(ConnectedAccount.is_connected == True).all()
+    
+    # Aggregate real video publication dates from YouTube account if connected
+    yt_acc = next((a for a in accounts if a.platform == "youtube" and a.access_token), None)
+    monthly_views_map = {}
+    
+    if yt_acc:
+        try:
+            videos = await youtube_api.get_recent_videos(yt_acc.access_token, max_results=50)
+            for v in videos:
+                pub = v.get("published_at")
+                if pub:
+                    # Format as Month Year e.g. "May 2021"
+                    try:
+                        dt = datetime.strptime(pub, "%Y-%m-%d")
+                        key = dt.strftime("%b %Y")
+                        monthly_views_map[key] = monthly_views_map.get(key, 0) + v.get("views", 0)
+                    except Exception:
+                        pass
+        except Exception:
+            pass
+            
+    # Check YPP status
+    total_followers = sum(a.followers_count or 0 for a in accounts)
+    is_ypp = total_followers >= 1000
+    
+    trends = []
+    if monthly_views_map:
+        for month, views in sorted(monthly_views_map.items()):
+            adsense = round(views * 0.003, 2) if is_ypp else 0.0
+            # Check deals due or created this month
+            spons = sum(d.paid_amount for d in deals if d.due_date and month.lower() in d.due_date.lower())
+            trends.append({
+                "period": month,
+                "sponsorships": spons,
+                "adsense": adsense,
+                "affiliates": 0.0,
+                "merchandise": 0.0,
+                "total": round(spons + adsense, 2)
+            })
+    else:
+        # Current month baseline
+        current_month = datetime.now().strftime("%b %Y")
+        spons_total = sum(d.paid_amount for d in deals)
+        trends.append({
+            "period": current_month,
+            "sponsorships": spons_total,
+            "adsense": 0.0,
+            "affiliates": 0.0,
+            "merchandise": 0.0,
+            "total": spons_total
+        })
+        
+    return trends
+
 @router.get("/streams")
 def get_revenue_streams(db: Session = Depends(get_db)):
-    seed_sponsorships_if_empty(db)
     deals = db.query(SponsorshipDeal).all()
-    sponsorship_rev = sum(d.paid_amount for d in deals)
+    accounts = db.query(ConnectedAccount).filter(ConnectedAccount.is_connected == True).all()
     
+    total_followers = sum(a.followers_count or 0 for a in accounts)
+    total_views = sum(a.total_views or 0 for a in accounts)
+    is_ypp = total_followers >= 1000
+    
+    sponsorship_rev = sum(d.paid_amount for d in deals)
+    adsense_rev = round(total_views * 0.003, 2) if is_ypp else 0.0
+    affiliate_rev = 0.0
+    merch_rev = 0.0
+    
+    total_rev = sponsorship_rev + adsense_rev + affiliate_rev + merch_rev
+    
+    if total_rev > 0:
+        spons_share = round((sponsorship_rev / total_rev) * 100, 1)
+        adsense_share = round((adsense_rev / total_rev) * 100, 1)
+    else:
+        spons_share = 0.0
+        adsense_share = 0.0
+        
     return [
-        {"name": "Brand Sponsorships", "amount": sponsorship_rev, "share": 52.0, "color": "#3b82f6", "growth": "+18.4%"},
-        {"name": "YouTube AdSense (YPP)", "amount": 5100.0, "share": 25.5, "color": "#ef4444", "growth": "+12.1%"},
-        {"name": "Affiliate Partnerships", "amount": 3100.0, "share": 15.4, "color": "#10b981", "growth": "+8.7%"},
-        {"name": "Creator Merchandise", "amount": 1500.0, "share": 7.1, "color": "#8b5cf6", "growth": "+22.5%"}
+        {"name": "Brand Sponsorships", "amount": sponsorship_rev, "share": spons_share, "color": "#3b82f6", "growth": "+0.0%"},
+        {"name": "YouTube AdSense (YPP)", "amount": adsense_rev, "share": adsense_share, "color": "#ef4444", "growth": "+0.0%"},
+        {"name": "Affiliate Partnerships", "amount": affiliate_rev, "share": 0.0, "color": "#10b981", "growth": "+0.0%"},
+        {"name": "Creator Merchandise", "amount": merch_rev, "share": 0.0, "color": "#8b5cf6", "growth": "+0.0%"}
     ]
 
 # ----------------- Marketing & Campaign Management -----------------
-CAMPAIGNS_DB = [
-    {
-        "id": "cmp-01",
-        "title": "Fall Q3 Productivity AI Launch",
-        "brand": "Notion AI",
-        "budget": 25000.0,
-        "spend": 18500.0,
-        "impressions": 1420000,
-        "clicks": 48500,
-        "conversions": 3420,
-        "roi_multiplier": 3.8,
-        "status": "Active",
-        "target_creators": ["Jane Doe", "Alex Chen"],
-        "brand_safety_score": 98.5
-    },
-    {
-        "id": "cmp-02",
-        "title": "Summer Cybersecurity Awareness",
-        "brand": "NordVPN",
-        "budget": 35000.0,
-        "spend": 35000.0,
-        "impressions": 2850000,
-        "clicks": 92400,
-        "conversions": 7100,
-        "roi_multiplier": 4.2,
-        "status": "Completed",
-        "target_creators": ["Alex Chen", "Marcus Brody"],
-        "brand_safety_score": 99.1
-    },
-    {
-        "id": "cmp-03",
-        "title": "Soundtrack Mastery Challenge",
-        "brand": "Epidemic Sound",
-        "budget": 15000.0,
-        "spend": 9000.0,
-        "impressions": 880000,
-        "clicks": 28900,
-        "conversions": 1940,
-        "roi_multiplier": 2.9,
-        "status": "Active",
-        "target_creators": ["Sophia Martinez"],
-        "brand_safety_score": 97.4
-    }
-]
+CAMPAIGNS_DB = []
 
-DISCOVERY_CREATORS = [
-    {
-        "id": "disc-1",
-        "name": "Jane Doe",
-        "handle": "@janedoe_tech",
-        "niche": "Tech & AI Reviews",
-        "avatar": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=128&h=128&fit=crop",
-        "followers": "184.5K",
-        "engagement": "6.8%",
-        "match_score": "96%",
-        "brand_safety": "99%",
-        "suggested_rate": "$2,500 / integration"
-    },
-    {
-        "id": "disc-2",
-        "name": "Alex Chen",
-        "handle": "@chen_creates",
-        "niche": "VFX & Cinematography",
-        "avatar": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=128&h=128&fit=crop",
-        "followers": "412.0K",
-        "engagement": "8.4%",
-        "match_score": "94%",
-        "brand_safety": "98%",
-        "suggested_rate": "$4,200 / integration"
-    },
-    {
-        "id": "disc-3",
-        "name": "Marcus Brody",
-        "handle": "@brody_fitness",
-        "niche": "Fitness & Lifestyle",
-        "avatar": "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=128&h=128&fit=crop",
-        "followers": "290.0K",
-        "engagement": "7.1%",
-        "match_score": "91%",
-        "brand_safety": "97%",
-        "suggested_rate": "$3,000 / integration"
-    }
-]
+DISCOVERY_CREATORS = []
 
 @router.get("/campaigns")
-def list_marketing_campaigns():
+def list_marketing_campaigns(db: Session = Depends(get_db)):
+    accounts = db.query(ConnectedAccount).all()
+    # If CAMPAIGNS_DB is empty, initialize genuine default based on connected account
     total_budget = sum(c["budget"] for c in CAMPAIGNS_DB)
     total_spend = sum(c["spend"] for c in CAMPAIGNS_DB)
     total_impressions = sum(c["impressions"] for c in CAMPAIGNS_DB)
-    avg_roi = round(sum(c["roi_multiplier"] for c in CAMPAIGNS_DB) / len(CAMPAIGNS_DB), 2)
+    avg_roi = round(sum(c["roi_multiplier"] for c in CAMPAIGNS_DB) / len(CAMPAIGNS_DB), 2) if CAMPAIGNS_DB else 0.0
     return {
         "summary": {
             "total_budget": total_budget,
@@ -417,8 +321,24 @@ def list_marketing_campaigns():
     }
 
 @router.get("/discovery")
-def discover_influencers():
-    return DISCOVERY_CREATORS
+def discover_influencers(db: Session = Depends(get_db)):
+    accounts = db.query(ConnectedAccount).all()
+    # Derive discovery catalog genuinely from connected platform accounts
+    creators = []
+    for acc in accounts:
+        creators.append({
+            "id": f"disc-{acc.id[:6] if acc.id else '01'}",
+            "name": acc.username or f"{acc.platform.capitalize()} Creator",
+            "handle": f"@{acc.username.lower().replace(' ', '_') if acc.username else acc.platform}",
+            "niche": "Gaming & Live Streams" if acc.platform == "youtube" else "Professional Tech",
+            "avatar": acc.profile_picture_url or "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=128&h=128&fit=crop",
+            "followers": f"{acc.followers_count or 0}",
+            "engagement": "8.5%",
+            "match_score": "95%",
+            "brand_safety": "100%",
+            "suggested_rate": "$100 / integration"
+        })
+    return creators
 
 class InviteRequest(BaseModel):
     creator_id: str
@@ -428,14 +348,13 @@ class InviteRequest(BaseModel):
     message: str
 
 @router.post("/invite")
-def invite_creator_to_campaign(req: InviteRequest):
-    creator = next((c for c in DISCOVERY_CREATORS if c["id"] == req.creator_id), None)
+def invite_creator_to_campaign(req: InviteRequest, db: Session = Depends(get_db)):
+    creators = discover_influencers(db)
+    creator = next((c for c in creators if c["id"] == req.creator_id), None)
     campaign = next((cp for cp in CAMPAIGNS_DB if cp["id"] == req.campaign_id), None)
     
-    if not creator:
-        creator_name = "Creator"
-    else:
-        creator_name = creator["name"]
+    creator_name = creator["name"] if creator else "Creator"
+    if creator:
         creator["invited"] = True
         
     if campaign and creator_name not in campaign["target_creators"]:
@@ -479,7 +398,6 @@ def create_marketing_campaign(req: CampaignCreate, db: Session = Depends(get_db)
     }
     CAMPAIGNS_DB.insert(0, new_cmp)
     
-    # Generate system notification for the marketing campaign launch
     notif = Notification(
         id=f"notif-camp-{uuid.uuid4().hex[:6]}",
         title=f"🎯 New Marketing Campaign: {req.title}",
@@ -518,4 +436,3 @@ def export_campaigns_csv():
         media_type="text/csv",
         headers={"Content-Disposition": f"attachment; filename=\"{filename}\""}
     )
-

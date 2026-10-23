@@ -2,7 +2,7 @@ import os
 import uvicorn
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from app.routers import auth, analytics, creators, content, social, monetization, notifications, reports, admin
+from app.routers import auth, analytics, creators, content, social, monetization, notifications, reports, admin, favorites
 from app.database import engine
 from app import models
 
@@ -33,6 +33,7 @@ app.include_router(monetization.router, prefix="/api/v1/monetization", tags=["Mo
 app.include_router(notifications.router, prefix="/api/v1/notifications", tags=["Notifications & Alerts"])
 app.include_router(reports.router, prefix="/api/v1/reports", tags=["Exportable Reports & Downloads"])
 app.include_router(admin.router, prefix="/api/v1/admin", tags=["Admin & System Governance"])
+app.include_router(favorites.router, prefix="/api/v1/favorites", tags=["Favorite Profiles Watchlist"])
 
 
 @app.get("/")

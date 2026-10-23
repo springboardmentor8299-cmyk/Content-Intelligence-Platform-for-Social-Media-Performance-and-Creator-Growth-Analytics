@@ -1,6 +1,7 @@
 import { DashboardLayout } from '@/components/layout/DashboardLayout';
 import { Download, Search, ChevronDown, TrendingUp, RefreshCw, Film, ExternalLink } from 'lucide-react';
 import { useState, useEffect } from 'react';
+import { API_BASE_URL } from '@/config/api';
 
 export default function Content() {
   const [content, setContent] = useState<any[]>([]);
@@ -16,7 +17,7 @@ export default function Content() {
     setLoading(true);
     try {
       const platformParam = filterPlatform !== 'All Platforms' ? `?platform=${filterPlatform.toLowerCase()}` : '';
-      const res = await fetch(`http://localhost:8000/api/v1/content/${platformParam}`);
+      const res = await fetch(`${API_BASE_URL}/api/v1/content/${platformParam}`);
       if (res.ok) {
         const data = await res.json();
         setContent(data);
@@ -160,7 +161,13 @@ export default function Content() {
                             ) : (
                               <div className="text-sm font-medium line-clamp-1" style={{ color: 'var(--color-foreground)' }}>{item.title}</div>
                             )}
-                            <span className="text-[11px] font-semibold px-1.5 py-0.5 rounded bg-red-50 text-red-600 inline-block mt-0.5">
+                            <span className={`text-[11px] font-semibold px-2 py-0.5 rounded inline-block mt-0.5 ${
+                              item.platform.toLowerCase() === 'linkedin'
+                                ? 'bg-blue-50 text-blue-700 border border-blue-200'
+                                : item.platform.toLowerCase() === 'instagram'
+                                ? 'bg-pink-50 text-pink-700 border border-pink-200'
+                                : 'bg-red-50 text-red-600 border border-red-200'
+                            }`}>
                               {item.platform}
                             </span>
                           </div>
@@ -184,7 +191,7 @@ export default function Content() {
                             rel="noopener noreferrer"
                             className="inline-flex items-center gap-1 px-3 py-1 rounded-md text-xs font-semibold bg-blue-50 text-blue-600 hover:bg-blue-100 hover:text-blue-700 transition-colors"
                           >
-                            Open Video
+                            {item.platform.toLowerCase() === 'linkedin' ? 'Open Post' : 'Open Video'}
                             <ExternalLink className="h-3 w-3" />
                           </a>
                         ) : (

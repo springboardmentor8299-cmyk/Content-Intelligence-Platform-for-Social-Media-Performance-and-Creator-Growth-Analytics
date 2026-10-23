@@ -13,7 +13,8 @@ import {
   LogOut,
   Target,
   Shield,
-  Server
+  Server,
+  Star
 } from 'lucide-react';
 
 const CREATOR_NAV = [
@@ -22,6 +23,7 @@ const CREATOR_NAV = [
   { name: 'Audience', href: '/audience', icon: Users },
   { name: 'Revenue', href: '/revenue', icon: DollarSign },
   { name: 'Social Integration', href: '/connections', icon: Share2 },
+  { name: 'Favorites', href: '/favorites', icon: Star },
   { name: 'Notifications & Reports', href: '/notifications', icon: Bell },
 ];
 
@@ -30,6 +32,7 @@ const AGENCY_NAV = [
   { name: 'Talent Roster', href: '/dashboard?tab=roster', icon: Users },
   { name: 'Benchmarking', href: '/dashboard?tab=benchmarks', icon: BarChart2 },
   { name: 'Financial Payouts', href: '/dashboard?tab=payouts', icon: DollarSign },
+  { name: 'Favorites', href: '/favorites', icon: Star },
   { name: 'Notifications & Alerts', href: '/notifications', icon: Bell },
 ];
 
@@ -38,6 +41,7 @@ const MARKETING_NAV = [
   { name: 'Influencer Discovery', href: '/dashboard?tab=discovery', icon: Sparkles },
   { name: 'Brand Safety Audit', href: '/dashboard?tab=safety', icon: Shield },
   { name: 'Audience Demographics', href: '/audience', icon: Users },
+  { name: 'Favorites', href: '/favorites', icon: Star },
   { name: 'Notifications & Alerts', href: '/notifications', icon: Bell },
 ];
 
